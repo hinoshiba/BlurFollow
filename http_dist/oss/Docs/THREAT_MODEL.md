@@ -1,7 +1,7 @@
 # Threat model
 
-Last reviewed: 2026-08-16<br>
-Baseline: BlurFollow 0.1.0 on macOS 14 and later
+Last reviewed: 2026-08-17<br>
+Baseline: BlurFollow 0.1.1 on macOS 14 and later
 
 BlurFollow is intended to make a visual effect follow a saved window-relative
 position and to provide a processed preview the user can check before sharing.

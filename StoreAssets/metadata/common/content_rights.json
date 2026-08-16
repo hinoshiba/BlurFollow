@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "app_version": "0.1.0",
+  "app_version": "0.1.1",
   "questionnaire_answer_proposal": "No, the app does not contain publisher-supplied third-party content.",
   "bundled_third_party_media_or_catalog": false,
   "user_selected_window_content": {

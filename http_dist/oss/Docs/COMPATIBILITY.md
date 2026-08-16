@@ -1,6 +1,6 @@
 # Compatibility and verification matrix
 
-Last reviewed: 2026-08-16<br>
+Last reviewed: 2026-08-17<br>
 Declared minimum: macOS 14.0
 
 This file distinguishes a declared target from recorded test evidence. A
@@ -16,7 +16,7 @@ exact signed artifact and current versions of macOS and sharing products.
 | UI | Native AppKit/SwiftUI; no browser engine or third-party UI runtime. |
 | Capture | ScreenCaptureKit with Apple's single-window content picker. macOS 14–15.1 first requires broad Screen Recording permission for exact identity resolution without guessing; macOS 15.2+ uses the picker's selected-window identity without proactively requesting that broader grant. |
 | Overlay tracking | Public `CGWindowList` metadata; no Accessibility permission or private window API. |
-| Network | None in the audited 0.1.0 app target. |
+| Network | None in the audited 0.1.1 app target. |
 | Audio | Not captured by Share Preview. |
 | Storage | Local mask JSON in Application Support; sandboxed builds use their app container. |
 
