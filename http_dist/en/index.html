@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BlurFollow — Blur that follows your window.</title>
-  <meta name="description" content="Pin a mask to a display or let it follow a selected window, then inspect the composited Share Preview before sharing on macOS.">
+  <title>BlurFollow — Window-following blur for Mac</title>
+  <meta name="description" content="Pin a visual mask to a display or selected window, inspect real BlurFollow workflows, and review support, privacy, and open-source details for macOS.">
   <link rel="canonical" href="https://blurfollow.app/en/">
   <link rel="alternate" hreflang="ja" href="https://blurfollow.app/">
   <link rel="alternate" hreflang="en" href="https://blurfollow.app/en/">
@@ -15,7 +15,7 @@
   <meta name="theme-color" content="#101116">
   <meta property="og:type" content="website">
   <meta property="og:title" content="BlurFollow — Blur that follows your window.">
-  <meta property="og:description" content="A macOS visual masking and pre-share inspection utility.">
+  <meta property="og:description" content="A macOS visual masking and pre-share inspection utility, with support, privacy, and open-source details in one place.">
   <meta property="og:url" content="https://blurfollow.app/en/">
   <meta property="og:image" content="https://blurfollow.app/assets/blurfollow-icon.png">
   <meta property="og:locale" content="en_US">
@@ -24,32 +24,34 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="container nav-row">
-      <a class="brand" href="/en/" aria-label="BlurFollow home">
+      <a class="brand" href="#top" aria-label="BlurFollow page top">
         <img src="/assets/blurfollow-icon.png" alt="" width="38" height="38">
         <span>BlurFollow</span>
       </a>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="#features">Features</a>
-        <a href="/en/support/">Support</a>
-        <a href="/en/privacy/">Privacy</a>
-        <a href="/en/oss/">Open source</a>
+        <a href="#examples">Examples</a>
+        <a href="#guide">Guide</a>
+        <a href="#support">Support</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#open-source">Open source</a>
         <a class="language-link" href="/" lang="ja" hreflang="ja">日本語</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero">
+    <section class="hero" id="top">
       <div class="container hero-grid">
         <div>
           <p class="eyebrow">Window-following blur for Mac</p>
           <h1>Blur that follows your window.</h1>
           <p class="lede">Pin a mask to a display or update it as your selected window moves and resizes. Inspect the composited result before you share.</p>
           <div class="hero-actions">
-            <a class="button" href="#how-it-works">See how it works</a>
-            <a class="button secondary" href="/en/support/">Help and support</a>
+            <a class="button" href="#examples">See the screens</a>
+            <a class="button secondary" href="#guide">Read the guide</a>
           </div>
-          <p class="compat">macOS 14.0 or later</p>
+          <p class="compat">macOS 14.0 or later · Local-first · Apache-2.0</p>
         </div>
         <div class="product-visual" role="img" aria-label="A proportional mask displayed in the same relative location after a window moves">
           <div class="mock-window back" aria-hidden="true">
@@ -117,89 +119,294 @@
       </div>
     </section>
 
-    <section class="section compact" aria-labelledby="screenshots-title">
+    <section class="section section-tint" id="examples" aria-labelledby="examples-title">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Inside the app</p>
-          <h2 id="screenshots-title">A clear path to the receiving preview.</h2>
+          <h2 id="examples-title">See the complete path before you share.</h2>
+          <p class="section-intro">These are shipping BlurFollow screens, shown in the same order as the placement and verification workflow.</p>
         </div>
         <div class="screenshot-grid">
-          <figure class="screenshot-card">
-            <img src="/assets/screenshots/en-US/02-display-window-modes.png" width="1440" height="900" loading="lazy" alt="BlurFollow screen comparing Display Pin and Window Pin">
-            <figcaption><strong>Pin to a display. Follow a window.</strong>Compare both placement modes in the first-run guide.</figcaption>
+          <figure class="screenshot-card featured">
+            <img src="/assets/screenshots/en-US/01-window-following.png" width="1440" height="900" alt="BlurFollow onboarding screen illustrating a proportional mask following a window as it moves and resizes" fetchpriority="high">
+            <figcaption><strong>Blur that follows your window.</strong>A proportional mask updates as the selected window moves and resizes.</figcaption>
           </figure>
           <figure class="screenshot-card">
-            <img src="/assets/screenshots/en-US/04-share-guide.png" width="1440" height="900" loading="lazy" alt="Share Guide explaining full-display, single-window, and browser-tab workflows">
-            <figcaption><strong>Choose for your sharing method.</strong>Share Guide explains single-window and browser-tab capture boundaries.</figcaption>
+            <img src="/assets/screenshots/en-US/02-display-window-modes.png" width="1440" height="900" loading="lazy" alt="BlurFollow onboarding screen comparing Display Pin and Window Pin">
+            <figcaption><strong>Pin to a display. Follow a window.</strong>Compare both placement modes before choosing where the mask belongs.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/en-US/04-share-guide.png" width="1440" height="900" loading="lazy" alt="BlurFollow Share Guide explaining full-display, single-window, and browser-tab workflows">
+            <figcaption><strong>Choose for your sharing method.</strong>Share Guide explains when to inspect desktop masks and when to use Share Preview.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/en-US/03-share-preview-check.png" width="1440" height="900" loading="lazy" alt="BlurFollow pre-share review screen listing full-display, single-window, and browser-tab checks">
+            <figcaption><strong>Check every mask before sharing.</strong>Inspect the composite, then verify it again in the meeting application's preview.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/en-US/05-local-controls.png" width="1440" height="900" loading="lazy" alt="BlurFollow Settings screen showing mask visibility, Screen Recording access, local export and deletion, version, and license information">
+            <figcaption><strong>Local controls, on your Mac.</strong>Review visibility, permission, export, deletion, version, and licensing in one place.</figcaption>
           </figure>
         </div>
       </div>
     </section>
 
-    <section class="section dark" id="how-it-works">
+    <section class="section" id="guide" aria-labelledby="guide-title">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">Single-window workflow</p>
-          <h2>Share Share Preview—not the original window.</h2>
-          <p class="section-intro">A desktop overlay from another app is normally excluded from single-window capture in apps such as Chrome and from browser-tab sharing.</p>
+          <p class="eyebrow">Guide</p>
+          <h2 id="guide-title">Place the mask, inspect the result, then share.</h2>
+          <p class="section-intro">Choose the capture method first. A desktop overlay and a single-window or browser-tab capture do not behave the same way.</p>
         </div>
-        <div class="boundary-grid">
-          <article class="boundary-card">
-            <p><strong>Sharing a full display</strong></p>
-            <p>Inspect BlurFollow's desktop masks, then inspect the meeting application's own preview.</p>
-          </article>
-          <article class="boundary-card">
-            <p><strong>Single window or browser tab</strong></p>
-            <p>Composite the source and its Window Pins in Share Preview, then select BlurFollow Share Preview in the meeting app.</p>
+        <div class="article-wrap">
+          <nav class="article-nav" aria-label="Guide topics">
+            <a href="#start">Basic use</a>
+            <a href="#sharing">Sharing methods</a>
+          </nav>
+          <article class="prose">
+            <section id="start">
+              <h3>Basic use</h3>
+              <h4>Pin to a display</h4>
+              <ol>
+                <li>Choose Display Pin from Home.</li>
+                <li>Drag over the area on the target display.</li>
+                <li>In Masks, choose Frost, Mosaic, or Redact. Adjust Strength for Frost or Mosaic, then inspect the position and appearance on the actual display. Redact remains opaque.</li>
+              </ol>
+              <h4>Follow a window</h4>
+              <ol>
+                <li>Choose Window Pin from Home.</li>
+                <li>Select the source in Apple's system picker.</li>
+                <li>Drag over an area inside the window. Move and resize the source to inspect the resulting mask position.</li>
+                <li>If the source was recreated, its title changed, or its state becomes Select again, use Reconnect… in Masks. Inspect the layout again after reconnecting.</li>
+              </ol>
+              <h4>Adjust an existing mask</h4>
+              <ol>
+                <li>Open the mask in Masks. Strength changes the appearance of Frost and the tile size and opacity of Mosaic. Redact remains opaque regardless of Strength.</li>
+                <li>To change its position, choose Move…, then drag the mask itself on screen. Release the mouse or trackpad to save the position; press Esc before saving to cancel. Move… is available when masks are shown, that mask is on, and its position is known.</li>
+                <li>Open the BlurFollow menu-bar icon to identify each Display Pin or Window Pin by name and state, then switch that mask on or off. Show Masks is the master switch for desktop overlays; when it is off, no desktop mask is displayed even if its individual setting is on. Share Preview uses individually enabled Window Pins, so inspect it separately.</li>
+              </ol>
+              <p>A Window Pin updates its displayed position as its source moves or resizes. When a matching mask's position, style, Strength, or on/off state changes—or Share Preview's capture state changes—Share Preview updates its display and may clear or cover the previous image while updating. If “I checked every mask” is reset, wait for the current composite and inspect every mask again. A display update does not guarantee zero latency, exact alignment while moving, correct mask placement, or correct shared content.</p>
+            </section>
+
+            <section id="sharing">
+              <h3>Choose a sharing method</h3>
+              <h4>Full display</h4>
+              <p>Inspect the desktop masks first, choose the full display in the meeting app, and inspect that app's own preview. Watch for notifications, other Spaces, and full-screen changes.</p>
+              <h4>Single window</h4>
+              <p>An overlay drawn by another app is normally excluded from single-window capture. Open Share Preview in BlurFollow, select the source, and inspect every matching Window Pin. In the meeting app, select BlurFollow Share Preview instead of the original window.</p>
+              <h4>Browser tab</h4>
+              <p>Tab sharing also excludes desktop overlays. Share Preview selects the browser window, so inspect whether browser chrome or content outside the intended tab is visible. Share BlurFollow Share Preview to the meeting app and inspect its receiving preview.</p>
+              <div class="notice">
+                <h4>Before pressing Share</h4>
+                <p>Following, Placed, and Preview active describe technical state observed by BlurFollow. They do not certify the content. Recheck BlurFollow and the meeting app after scrolling, zooming, moving, reconnecting, or editing a mask.</p>
+              </div>
+            </section>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="support" aria-labelledby="support-title">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">Check before presenting</p>
-          <h2>Three steps to the share button.</h2>
+          <p class="eyebrow">Support</p>
+          <h2 id="support-title">Permissions, limitations, and troubleshooting.</h2>
+          <p class="section-intro">BlurFollow reports technical state, but you remain responsible for checking the actual image shown to the receiver.</p>
         </div>
-        <div class="steps-grid">
-          <article class="step-card">
-            <span class="step-number">STEP 01</span>
-            <h3>Place the area</h3>
-            <p>Choose Display Pin or Window Pin and drag over an area you have inspected.</p>
-          </article>
-          <article class="step-card">
-            <span class="step-number">STEP 02</span>
-            <h3>Inspect the composite</h3>
-            <p>For a single window, open Share Preview and visually inspect the source, layout, and every mask.</p>
-          </article>
-          <article class="step-card">
-            <span class="step-number">STEP 03</span>
-            <h3>Check the receiving preview</h3>
-            <p>Select the intended target in the meeting app and inspect that app's own receiving preview again.</p>
+        <div class="article-wrap">
+          <nav class="article-nav" aria-label="Support topics">
+            <a href="#permissions">Permissions</a>
+            <a href="#limitations">Limitations</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contact</a>
+          </nav>
+          <article class="prose">
+            <section id="permissions">
+              <h3>Screen Recording permission</h3>
+              <ul>
+                <li><strong>Display Pin:</strong> does not require Screen Recording permission.</li>
+                <li><strong>macOS 15.2 or later:</strong> Window Pin and Share Preview use authorization for the window selected in Apple's system picker.</li>
+                <li><strong>macOS 14 through 15.1:</strong> the compatibility path requires broader Screen Recording permission to identify the selected window without guessing. After granting access in System Settings, quit and reopen BlurFollow.</li>
+              </ul>
+              <p>If access is denied, Window Pin and Share Preview stop instead of guessing a window. Check System Settings → Privacy &amp; Security → Screen Recording. On macOS 14 through 15.1, revoke the broader permission there when it is no longer needed.</p>
+              <p>BlurFollow does not request Accessibility, Full Disk Access, camera, or microphone permission.</p>
+            </section>
+
+            <section id="limitations">
+              <h3>Limits of a visual aid</h3>
+              <p>BlurFollow assists with mask placement and pre-share inspection; it is not a security control. It does not automatically identify confidential information or guarantee mask placement, blur or mosaic unreadability, or inclusion in a shared output. Scrolling, zoom, layout changes, child windows, tracking loss, and capture method can change what appears. Remove secrets from the source where possible, choose opaque Redact when appropriate, and visually inspect both BlurFollow and the meeting application's receiving preview every time.</p>
+            </section>
+
+            <section id="faq">
+              <h3>Frequently asked questions</h3>
+              <div class="faq-list">
+                <details>
+                  <summary>The desktop mask is missing when I share a Chrome window or tab.</summary>
+                  <div class="faq-answer"><p>Single-window and tab capture normally excludes another app's overlay. Composite the browser window and matching Window Pins in Share Preview, then select BlurFollow Share Preview as the meeting app's sharing target.</p></div>
+                </details>
+                <details>
+                  <summary>A Window Pin no longer follows its window.</summary>
+                  <div class="faq-answer"><p>The window may have closed, become hidden, been recreated, or become ambiguous among similar candidates. Check Masks and use Reconnect… to choose it again with Apple's picker. Proportional coordinates remain, but visually inspect whether the content layout changed.</p></div>
+                </details>
+                <details>
+                  <summary>What is Last-position cover?</summary>
+                  <div class="faq-answer"><p>When window position becomes unavailable, it can cover the latest position BlurFollow had available. That may not be the source's current position and does not replace reconnecting or checking the shared output.</p></div>
+                </details>
+                <details>
+                  <summary>Share Preview says Preview paused or shows a covered frame.</summary>
+                  <div class="faq-answer"><p>BlurFollow does not show its normal composite if no matching Window Pin exists, the source or frame cannot be validated, restored settings need acknowledgement, or capture stopped. Follow the reason shown in the window: add or reconnect a Window Pin, review restored settings, or select the source again.</p></div>
+                </details>
+                <details>
+                  <summary>Do blur and mosaic make information unreadable?</summary>
+                  <div class="faq-answer"><p>See <a href="#limitations">Limits of a visual aid</a> for why opaque Redact and receiver-side inspection may be more appropriate.</p></div>
+                </details>
+                <details>
+                  <summary>Does BlurFollow record or upload screen content or audio?</summary>
+                  <div class="faq-answer"><p>See <a href="#privacy-summary">the privacy summary</a> and <a href="#screen">Screen frames</a> for the exact behavior of version 0.1.0 and the separate role of a meeting app.</p></div>
+                </details>
+                <details>
+                  <summary>How do I delete stored masks?</summary>
+                  <div class="faq-answer"><p>See <a href="#choices">Retention, deletion, and choices</a> for individual masks, all app settings, exported settings, and backups.</p></div>
+                </details>
+              </div>
+            </section>
+
+            <section id="contact">
+              <div class="contact-card">
+                <h3>Contact</h3>
+                <p>For product support, email <a href="mailto:support@blurfollow.app?subject=BlurFollow%20Support">support@blurfollow.app</a> in Japanese or English. For privacy questions, use the subject <a href="mailto:support@blurfollow.app?subject=BlurFollow%20Privacy">BlurFollow Privacy</a>.</p>
+                <p>For support, include the BlurFollow version, macOS version, Mac model/architecture, sharing method, source and meeting app, displayed state, reproduction steps, expected result, and actual result. Reproduce with fabricated data. Do not send real confidential frames, window titles, personal data, or credentials.</p>
+                <p>For a suspected vulnerability, include “Security” in the subject and do not post details in a public issue.</p>
+              </div>
+            </section>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section compact">
+    <section class="section section-tint" id="privacy" aria-labelledby="privacy-title">
       <div class="container">
-        <div class="notice">
-          <h2>BlurFollow is a visual aid.</h2>
-          <p>It is not a security control and does not automatically detect confidential information. It does not guarantee mask placement, blur unreadability, or inclusion in the shared output. After scrolling, zooming, opening child windows, or changing capture methods, always inspect both BlurFollow and the meeting application's preview.</p>
+        <div class="section-heading">
+          <p class="eyebrow">Privacy policy</p>
+          <h2 id="privacy-title">How BlurFollow handles screen content and settings.</h2>
+          <p class="section-intro">The policy below describes each feature of the audited macOS build.</p>
+          <p class="meta-line">Last updated: August 16, 2026 · Applies to: BlurFollow 0.1.0 for macOS</p>
+        </div>
+        <div class="article-wrap">
+          <nav class="article-nav" aria-label="Privacy topics">
+            <a href="#privacy-summary">Summary</a>
+            <a href="#screen">Screen frames</a>
+            <a href="#local">Local settings</a>
+            <a href="#permissions">Permissions</a>
+            <a href="#network">Transfers</a>
+            <a href="#choices">Deletion</a>
+            <a href="#limitations">Limitations</a>
+            <a href="#contact">Contact</a>
+          </nav>
+          <article class="prose">
+            <section id="privacy-summary">
+              <h3>Summary</h3>
+              <ul>
+                <li>No account, advertising, analytics, tracking, or third-party runtime SDK.</li>
+                <li>Window frames are processed transiently on the Mac for Share Preview. BlurFollow does not write them to a recording or send them to its developer.</li>
+                <li>No audio, camera input, keystrokes, or clipboard content is captured.</li>
+                <li>Mask settings and limited metadata used to identify a selected window again are stored locally.</li>
+              </ul>
+            </section>
+
+            <section id="screen">
+              <h3>Screen frames</h3>
+              <p>For Share Preview, ScreenCaptureKit provides one window deliberately selected in Apple's system picker. BlurFollow composites matching Window Pins in memory and displays the result in a separate regular window. Audio capture is disabled.</p>
+              <p>The current app has no code intended to encode frames as an image or video, transmit them over a network, analyze them, or use them for model training. It releases its current preview image when capture stops. This does not claim complete control over macOS swap, GPU buffers, crash diagnostics, user-created screenshots, backups, or another process with screen-capture access.</p>
+              <p>After a user shares BlurFollow Share Preview through a meeting, streaming, or recording app, that product and its recipients process the displayed video under their own terms. BlurFollow does not control meeting participants, recordings, or later redistribution.</p>
+            </section>
+
+            <section id="local">
+              <h3>Local settings</h3>
+              <p>BlurFollow stores these categories in a JSON configuration:</p>
+              <ul>
+                <li>mask name, proportional rectangle, visual style, strength, corner radius, enabled state, creation date, and display identifier;</li>
+                <li>for Window Pin, window ID, process ID, app name, bundle ID, window title, and saved window bounds; and</li>
+                <li>global visibility, Last-position cover, onboarding, and related preferences.</li>
+              </ul>
+              <p>In a sandboxed Mac App Store build, the file normally resides at <code>Library/Application Support/BlurFollow/Masks.json</code> inside the app container. BlurFollow may keep the last validated settings at <code>Masks.json.backup</code> in the same folder. Window titles and user-entered mask names may themselves be sensitive.</p>
+              <p>Export Mask Settings writes the same categories to a user-selected location. That copy is then subject to the storage, synchronization, and backup software chosen by the user.</p>
+            </section>
+
+            <section id="network">
+              <h3>Transfers and App Privacy</h3>
+              <p>The audited 0.1.0 app has no network client or remote endpoint. The developer does not collect personal data through the app, share data for advertising, or track users across apps or websites. For the current unmodified build, the expected Apple App Privacy answer is “No, this app does not collect data.”</p>
+              <p>The App Store, signing and notarization services, download host, macOS, and a meeting app may process information separately as their respective providers. That is distinct from a BlurFollow runtime transmission.</p>
+            </section>
+
+            <section id="choices">
+              <h3>Retention, deletion, and choices</h3>
+              <ul>
+                <li>Stop Share Preview to end capture and release the current preview from app state.</li>
+                <li>Disable or delete individual masks. Delete All Masks empties the mask list and removes the recovery backup.</li>
+                <li>To remove every stored setting, quit BlurFollow, then delete <code>Masks.json</code> and <code>Masks.json.backup</code> from its sandbox container.</li>
+                <li>Delete exported settings and copies held by synchronization or backup products separately.</li>
+                <li>Uninstalling the app may leave Application Support or sandbox-container data behind.</li>
+              </ul>
+              <p>There is no BlurFollow account or server profile to access or delete.</p>
+            </section>
+
+            <section id="privacy-changes">
+              <h3>Policy changes</h3>
+              <p>If a future build adds networking, accounts, analytics, payments, cloud sync, or another change to data handling, this policy and the App Privacy answers will be updated before distribution.</p>
+            </section>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="open-source" aria-labelledby="open-source-title">
       <div class="container">
-        <div class="cta-band">
-          <h2>Check permissions and compatibility.</h2>
-          <p>Display Pin works without Screen Recording permission. Window Pin and Share Preview use different authorization paths depending on the macOS version.</p>
-          <div class="button-row">
-            <a class="button" href="/en/support/#permissions">Read permission details</a>
-            <a class="button secondary" href="/en/privacy/">Read data handling</a>
-          </div>
+        <div class="section-heading">
+          <p class="eyebrow">Open source</p>
+          <h2 id="open-source-title">Open code. Explicit boundaries.</h2>
+          <p class="section-intro">BlurFollow code and ordinary documentation use the Apache License 2.0. Brand Assets and trademarks have separate terms.</p>
+        </div>
+        <div class="article-wrap">
+          <nav class="article-nav" aria-label="Open-source topics">
+            <a href="#license">License</a>
+            <a href="#dependencies">Dependencies</a>
+            <a href="#brand">Brand</a>
+            <a href="#documents">Documents</a>
+          </nav>
+          <article class="prose">
+            <section id="license">
+              <h3>Apache License 2.0</h3>
+              <p>Except for Brand Assets and verbatim third-party legal texts, BlurFollow source code and ordinary documentation are provided under the Apache License, Version 2.0. Subject to its conditions, the license permits use, modification, redistribution, and commercial use. Redistributors must retain the license and NOTICE, identify modified files, and preserve required attribution. Patent and termination provisions also apply.</p>
+              <p>Apache-2.0 commercial-use permission does not grant permission to use the BlurFollow name, logo, or icon as a product brand. It also provides no warranty of fitness or absence of defects. The full license text controls.</p>
+            </section>
+
+            <section id="dependencies">
+              <h3>Current distribution dependencies</h3>
+              <p>The audited 0.1.0 app bundles no third-party runtime library, SDK, package, executable, model, font, analytics SDK, advertising SDK, or updater. It links to frameworks supplied by macOS, including AppKit, SwiftUI, ScreenCaptureKit, and Core Image. Apple frameworks and the Swift runtime are not relicensed under BlurFollow's Apache-2.0 terms.</p>
+              <p>Each future release must re-audit packages, embedded frameworks, resources, fonts, build tools, and CI actions, then update notices for what is actually distributed.</p>
+            </section>
+
+            <section id="brand">
+              <h3>Name, logo, and icon</h3>
+              <p>The BlurFollow name, logo, app icon, and confusingly similar source identifiers are governed by the trademark and brand policy. Icon artwork and derived renditions are excluded from Apache-2.0; their respective rights holders reserve all rights. Unless separately authorized, a fork or redistribution should use its own name, bundle ID, icon, signing identity, support contact, and privacy statement.</p>
+              <p>Availability of a name or design varies by territory, goods and services, and similarity. These documents are not trademark clearance or legal advice.</p>
+            </section>
+
+            <section id="documents">
+              <h3>License and audit documents</h3>
+              <p>These downloads reproduce the texts included with the distribution.</p>
+              <div class="download-list">
+                <a class="download-link" href="/oss/LICENSE">Apache-2.0 LICENSE</a>
+                <a class="download-link" href="/oss/NOTICE">NOTICE</a>
+                <a class="download-link" href="/oss/THIRD_PARTY_NOTICES.md">Third-party notices</a>
+                <a class="download-link" href="/oss/DEPENDENCIES.md">Dependencies audit</a>
+                <a class="download-link" href="/oss/TRADEMARKS.md">Trademark policy</a>
+                <a class="download-link" href="/oss/Brand/PROVENANCE.md">Brand provenance</a>
+                <a class="download-link" href="/oss/SECURITY.md">Security reporting policy</a>
+              </div>
+            </section>
+          </article>
         </div>
       </div>
     </section>
@@ -213,10 +420,11 @@
         <p>© 2026 The BlurFollow Authors</p>
       </div>
       <nav class="footer-links" aria-label="Footer navigation">
-        <a href="/en/support/">Support</a>
-        <a href="/en/privacy/">Privacy</a>
-        <a href="/en/oss/">Open source</a>
-        <a href="/" lang="ja">日本語</a>
+        <a href="#guide">Guide</a>
+        <a href="#support">Support</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#open-source">Open source</a>
+        <a href="/" lang="ja" hreflang="ja">日本語</a>
       </nav>
     </div>
   </footer>
