@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "app_version": "0.1.0",
+  "app_version": "0.1.1",
   "info_plist_key": "ITSAppUsesNonExemptEncryption",
   "info_plist_value": false,
   "questionnaire_answer_proposal": "The app uses no non-exempt encryption.",

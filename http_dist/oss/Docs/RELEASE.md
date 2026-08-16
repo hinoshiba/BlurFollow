@@ -109,13 +109,23 @@ swift test
 ./build.sh
 ./Scripts/check-release.sh
 python3 StoreAssets/Scripts/validate_metadata.py --require-screenshots
+# Build the Release app without signing.
 xcodebuild \
   -project BlurFollow.xcodeproj \
   -scheme BlurFollow \
   -configuration Release \
   -destination 'platform=macOS' \
   CODE_SIGNING_ALLOWED=NO \
-  build test
+  build
+
+# Run tests in Debug, where testability is enabled.
+xcodebuild \
+  -project BlurFollow.xcodeproj \
+  -scheme BlurFollow \
+  -configuration Debug \
+  -destination 'platform=macOS' \
+  CODE_SIGNING_ALLOWED=NO \
+  test
 ```
 
 Complete the manual matrix in `Docs/COMPATIBILITY.md` against the candidate:
@@ -133,8 +143,8 @@ must be exactly `v<major>.<minor>.<patch>` and its version must equal
 `MARKETING_VERSION`:
 
 ```sh
-git tag -s v0.1.0 -m "BlurFollow 0.1.0"
-git push origin v0.1.0
+git tag -s v0.1.1 -m "BlurFollow 0.1.1"
+git push origin v0.1.1
 ```
 
 `ci_scripts/ci_pre_xcodebuild.sh` rejects an Archive without Xcode Cloud, a

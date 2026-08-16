@@ -1,7 +1,7 @@
 # Dependency and license policy
 
-Last audited: 2026-08-16<br>
-Baseline: BlurFollow 0.1.0, macOS deployment target 14.0
+Last audited: 2026-08-17<br>
+Baseline: BlurFollow 0.1.1, macOS deployment target 14.0
 
 This document records what the current app uses and the gate for accepting new
 dependencies. It is designed to keep an open-source build and paid official

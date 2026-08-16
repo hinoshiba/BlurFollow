@@ -1,7 +1,7 @@
 # Third-party notices
 
-Last reviewed: 2026-08-16<br>
-Applies to: BlurFollow 0.1.0 source and the current macOS application target
+Last reviewed: 2026-08-17<br>
+Applies to: BlurFollow 0.1.1 source and the current macOS application target
 
 ## Shipped third-party components
 

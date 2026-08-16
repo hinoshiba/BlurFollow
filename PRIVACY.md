@@ -1,7 +1,7 @@
 # BlurFollow privacy statement
 
-Last updated: 2026-08-16<br>
-Applies to: the open-source BlurFollow 0.1.0 macOS code and an unmodified build
+Last updated: 2026-08-17<br>
+Applies to: the open-source BlurFollow 0.1.1 macOS code and an unmodified build
 
 BlurFollow places visual effects over screen regions, can follow a saved region
 as its source window moves, and can create a locally processed Share Preview.
@@ -130,7 +130,7 @@ Apple's platform privacy practices.
 
 ## Network activity and disclosure
 
-The audited 0.1.0 application target has no network client and no remote
+The audited 0.1.1 application target has no network client and no remote
 endpoint. BlurFollow does not sell personal information, share it for advertising,
 or track users across apps or websites. The OS, App Store and code-signing
 services, or a third-party conferencing app may

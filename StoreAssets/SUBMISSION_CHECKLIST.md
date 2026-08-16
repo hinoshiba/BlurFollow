@@ -27,7 +27,7 @@ from a source-tree assumption.
 - [ ] Primary language is Japanese (`ja-JP`); English (`en-US`) localization is
   enabled.
 - [ ] Primary category is Utilities; secondary category is Productivity.
-- [ ] Version and build number match the archive. Version `0.1.0` in this folder
+- [ ] Version and build number match the archive. Version `0.1.1` in this folder
   must be updated if a different version is submitted.
 - [ ] Age-rating questionnaire is answered from the final behavior and content;
   no rating is assumed from this repository.

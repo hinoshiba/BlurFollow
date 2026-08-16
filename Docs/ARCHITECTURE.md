@@ -1,6 +1,6 @@
 # BlurFollow Architecture
 
-> Status: architecture of the 0.1.0 implementation<br>
+> Status: architecture of the 0.1.1 implementation<br>
 > Platform: macOS 14.0+, Swift tools 5.10, SwiftUI, AppKit, ScreenCaptureKit, Core Image
 
 ## 1. System goal and boundary
