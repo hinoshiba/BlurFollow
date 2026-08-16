@@ -87,6 +87,11 @@ final class GeometryModelsTests: XCTestCase {
 
         XCTAssertLessThan(weak.frostEffectOpacity, strong.frostEffectOpacity)
         XCTAssertLessThan(weak.frostTintOpacity, strong.frostTintOpacity)
+        XCTAssertLessThan(weak.frostAdditionalBlurRadius, strong.frostAdditionalBlurRadius)
+        XCTAssertGreaterThanOrEqual(
+            strong.frostAdditionalBlurRadius - weak.frostAdditionalBlurRadius,
+            16
+        )
         XCTAssertLessThan(weak.mosaicCellSize, strong.mosaicCellSize)
         XCTAssertLessThan(weak.mosaicOpacity, strong.mosaicOpacity)
         XCTAssertEqual(weak.normalizedStrength, 0.2, accuracy: 0.000_001)
@@ -116,10 +121,42 @@ final class GeometryModelsTests: XCTestCase {
         defer { panel.close() }
 
         XCTAssertTrue(panel.ignoresMouseEvents)
+        XCTAssertFalse(panel.canBecomeKey)
         panel.setEditing(true)
         XCTAssertFalse(panel.ignoresMouseEvents)
+        XCTAssertTrue(panel.canBecomeKey)
+        XCTAssertTrue(panel.contentView?.needsPanelToBecomeKey ?? false)
         panel.setEditing(false)
         XCTAssertTrue(panel.ignoresMouseEvents)
+        XCTAssertFalse(panel.canBecomeKey)
+    }
+
+    @MainActor
+    func testCancellingMoveRestoresFrameWhileCommitKeepsIt() {
+        let region = MaskRegion(
+            name: "Test",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
+        )
+        let panel = MaskOverlayPanel(region: region)
+        let original = CGRect(x: 120, y: 180, width: 320, height: 140)
+        let moved = CGRect(x: 400, y: 360, width: 320, height: 140)
+        defer { panel.close() }
+
+        panel.update(
+            region: region,
+            frame: original,
+            isEditing: true,
+            movementBounds: CGRect(x: 0, y: 0, width: 1200, height: 900)
+        )
+        panel.setFrame(moved, display: false)
+        panel.setEditing(false)
+        XCTAssertEqual(panel.frame, original.integral)
+
+        panel.setEditing(true)
+        panel.setFrame(moved, display: false)
+        panel.setEditing(false, restoreInitialFrame: false)
+        XCTAssertEqual(panel.frame, moved)
     }
 
     @MainActor
@@ -142,5 +179,52 @@ final class GeometryModelsTests: XCTestCase {
 
         region.strength = 0.35
         XCTAssertTrue(panel.update(region: region, frame: frame))
+        let weakRadius = panel.renderedFrostBlurRadius
+
+        region.strength = 1
+        XCTAssertTrue(panel.update(region: region, frame: frame))
+        XCTAssertGreaterThan(panel.renderedFrostBlurRadius, weakRadius)
+    }
+}
+
+final class WindowDescriptionBatchTests: XCTestCase {
+    func testIndexesOnlyRequestedWindowDescriptionsByID() throws {
+        let first: [String: Any] = [
+            kCGWindowNumber as String: NSNumber(value: 41),
+            "marker": "first"
+        ]
+        let second: [String: Any] = [
+            kCGWindowNumber as String: NSNumber(value: 73),
+            "marker": "second"
+        ]
+        let unrelated: [String: Any] = [
+            kCGWindowNumber as String: NSNumber(value: 99),
+            "marker": "unrelated"
+        ]
+        let malformed: [String: Any] = ["marker": "malformed"]
+
+        let result = WindowDescriptionBatch.informationByID(
+            from: [second, unrelated, malformed, first],
+            requestedWindowIDs: [41, 73, 88]
+        )
+
+        XCTAssertEqual(Set(result.keys), [41, 73])
+        XCTAssertEqual(try XCTUnwrap(result[41]?["marker"] as? String), "first")
+        XCTAssertEqual(try XCTUnwrap(result[73]?["marker"] as? String), "second")
+        XCTAssertNil(result[88])
+        XCTAssertNil(result[99])
+    }
+
+    func testRejectsDuplicateDescriptionForRequestedWindowID() {
+        let duplicateID = CGWindowID(52)
+        let result = WindowDescriptionBatch.informationByID(
+            from: [
+                [kCGWindowNumber as String: NSNumber(value: duplicateID), "marker": "a"],
+                [kCGWindowNumber as String: NSNumber(value: duplicateID), "marker": "b"]
+            ],
+            requestedWindowIDs: [duplicateID]
+        )
+
+        XCTAssertTrue(result.isEmpty)
     }
 }

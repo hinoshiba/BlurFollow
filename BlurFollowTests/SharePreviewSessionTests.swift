@@ -1,8 +1,32 @@
+import CoreImage
 import XCTest
 @testable import BlurFollow
 
 @MainActor
 final class SharePreviewSessionTests: XCTestCase {
+    func testFramePresenterUpdatesAttachedLayerAndClearsIt() throws {
+        let presenter = SharePreviewFramePresenter()
+        let surface = SharePreviewPixelView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        presenter.attach(surface)
+        let extent = CGRect(x: 0, y: 0, width: 2, height: 2)
+        let image = try XCTUnwrap(
+            CIContext(options: [.useSoftwareRenderer: true]).createCGImage(
+                CIImage(color: .red).cropped(to: extent),
+                from: extent
+            )
+        )
+
+        presenter.present(image)
+
+        XCTAssertNotNil(presenter.image)
+        XCTAssertNotNil(surface.layer?.contents)
+
+        presenter.present(nil)
+
+        XCTAssertNil(presenter.image)
+        XCTAssertNil(surface.layer?.contents)
+    }
+
     func testLatestFrameSlotKeepsOnlyNewestPendingFrame() {
         var slot = LatestFrameSlot<String>()
 

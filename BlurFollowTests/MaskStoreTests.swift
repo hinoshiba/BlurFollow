@@ -143,6 +143,28 @@ final class MaskStoreTests: XCTestCase {
         XCTAssertTrue(restored.masksEnabled)
     }
 
+    func testSetEnabledFlushesPendingLiveEditInSameSnapshot() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = MaskStore(storageURL: url)
+        var region = store.add(MaskRegion(
+            name: "Toolbar mask",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
+        ))
+        region.strength = 0.37
+        store.updateLive(region)
+
+        store.setEnabled(false, for: region.id)
+
+        let restored = MaskStore(storageURL: url)
+        XCTAssertEqual(restored.regions.first?.strength, 0.37)
+        XCTAssertFalse(restored.regions.first?.isEnabled ?? true)
+    }
+
     func testCorruptPrimaryRestoresValidatedBackupAndBlocksReadiness() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)

@@ -5,6 +5,10 @@ final class MaskOverlayPanel: NSPanel {
     var onMoveEnded: ((CGRect) -> Void)?
 
     var isDragging: Bool { effectView.isDragging }
+    var renderedFrostBlurRadius: CGFloat { effectView.renderedFrostBlurRadius }
+
+    override var canBecomeKey: Bool { effectView.isEditing }
+    override var canBecomeMain: Bool { false }
 
     init(region: MaskRegion) {
         effectView = MaskEffectView(region: region)
@@ -22,6 +26,7 @@ final class MaskOverlayPanel: NSPanel {
         hasShadow = false
         hidesOnDeactivate = false
         ignoresMouseEvents = true
+        becomesKeyOnlyIfNeeded = true
         animationBehavior = .none
         isReleasedWhenClosed = false
         effectView.onDragEnded = { [weak self] frame in
@@ -34,7 +39,8 @@ final class MaskOverlayPanel: NSPanel {
         region: MaskRegion,
         frame: CGRect,
         forceRedact: Bool = false,
-        isEditing: Bool = false
+        isEditing: Bool = false,
+        movementBounds: CGRect? = nil
     ) -> Bool {
         let targetFrame = frame.integral
         var geometryChanged = false
@@ -47,13 +53,24 @@ final class MaskOverlayPanel: NSPanel {
             }
         }
         let appearanceChanged = effectView.update(region: region, forceRedact: forceRedact)
-        let editingChanged = setEditing(isEditing && !forceRedact)
+        let editingChanged = setEditing(
+            isEditing && !forceRedact,
+            movementBounds: movementBounds
+        )
         return geometryChanged || appearanceChanged || editingChanged
     }
 
     @discardableResult
-    func setEditing(_ editing: Bool) -> Bool {
-        let effectChanged = effectView.setEditing(editing)
+    func setEditing(
+        _ editing: Bool,
+        movementBounds: CGRect? = nil,
+        restoreInitialFrame: Bool = true
+    ) -> Bool {
+        let effectChanged = effectView.setEditing(
+            editing,
+            movementBounds: movementBounds,
+            restoreInitialFrame: restoreInitialFrame
+        )
         let shouldIgnoreMouseEvents = !editing
         let hitTestingChanged = ignoresMouseEvents != shouldIgnoreMouseEvents
         if hitTestingChanged { ignoresMouseEvents = shouldIgnoreMouseEvents }

@@ -4,7 +4,6 @@ options:
   knownRegions:
     - ja
     - en
-  bundleIdPrefix: com.blurfollow
   deploymentTarget:
     macOS: "14.0"
   createIntermediateGroups: true
@@ -81,7 +80,7 @@ targets:
           - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Docs/COMPATIBILITY.md
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.blurfollow.app
+        PRODUCT_BUNDLE_IDENTIFIER: blurfollow.hinoshiba.com
         PRODUCT_NAME: BlurFollow
         INFOPLIST_FILE: BlurFollow/Resources/Info.plist
         CODE_SIGN_ENTITLEMENTS: BlurFollow/Resources/BlurFollow.entitlements
@@ -99,5 +98,5 @@ targets:
       - target: BlurFollow
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.blurfollow.tests
+        PRODUCT_BUNDLE_IDENTIFIER: blurfollowtests.hinoshiba.com
         GENERATE_INFOPLIST_FILE: YES

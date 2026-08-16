@@ -69,6 +69,10 @@ private struct MaskEditorCard: View {
         )
     }
 
+    private var liveRegion: MaskRegion {
+        store.regions.first(where: { $0.id == region.id }) ?? region
+    }
+
     var body: some View {
         GlassCard {
             VStack(spacing: 16) {
@@ -114,9 +118,9 @@ private struct MaskEditorCard: View {
                         }
                         .labelsHidden()
                         .pickerStyle(.segmented)
-                        Text(region.style.detail)
+                        Text(liveRegion.style.detail)
                             .font(.caption)
-                            .foregroundStyle(region.style == .frost ? BlurFollowTheme.amber : .secondary)
+                            .foregroundStyle(liveRegion.style == .frost ? BlurFollowTheme.amber : .secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -134,7 +138,7 @@ private struct MaskEditorCard: View {
                             .tint(BlurFollowTheme.iris)
                         Text(String.localizedStringWithFormat(
                             String(localized: "%lld%%"),
-                            Int64(region.strength * 100)
+                            Int64(liveRegion.strength * 100)
                         ))
                             .font(.caption.monospacedDigit())
                             .foregroundStyle(.secondary)

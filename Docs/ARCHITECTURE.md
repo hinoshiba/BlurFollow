@@ -142,13 +142,13 @@ The former content-certifying label must not be used. positionKnown means only t
 
 ### Window Pin path
 
-1. Poll on-screen layer-0 windows at approximately 30 Hz.
+1. Poll on-screen layer-0 windows at approximately 60 Hz, batching the required window IDs.
 2. Resolve the current source identity.
 3. Convert the CGWindow frame to AppKit coordinates.
 4. Convert UnitRect into the current window frame.
 5. Update the mask panel and tracking state.
 
-Panels are click-through, have no shadow, and join all Spaces and full-screen auxiliary windows. Editing occurs in the main app, not by manipulating the overlay.
+Panels are normally click-through, have no shadow, and join all Spaces and full-screen auxiliary windows. Move mode is initiated in the main app and temporarily makes only the selected mask panel draggable.
 
 ### Identity continuity and reconnect
 
@@ -185,8 +185,8 @@ The UI therefore says “Last-position cover” and “Reconnect and check posit
 
 Normal overlay panels use:
 
-- Frost: NSVisualEffectView material
-- Mosaic: a Core Image pixellate filter over a window-list image
+- Frost: NSVisualEffectView material plus a strength-controlled public Core Image content filter and foreground tint
+- Mosaic: a strength-controlled cell grid
 - Redact: an opaque rounded rectangle
 
 Frost and Mosaic reduce visual readability but do not erase or transform the underlying source application data. Redact draws an opaque rectangle in BlurFollow's own output path. None of these styles detects incorrect placement.
@@ -311,16 +311,17 @@ If primary decoding or validation fails, a validated backup may be restored. A r
 
 No screen pixels are included in persistence or export. Mask names, application names, bundle IDs, and window titles can themselves contain personal or internal information. Debug reports must remove or review those values before publication.
 
-Share Preview keeps only the latest NSImage needed by the UI. It does not encode frames to a file, capture audio, or send frames over the network. Once another application captures the BlurFollow window, that application's processing is outside the BlurFollow boundary.
+Share Preview keeps only the latest CGImage needed by its layer-backed pixel surface. It does not encode frames to a file, capture audio, or send frames over the network. Once another application captures the BlurFollow window, that application's processing is outside the BlurFollow boundary.
 
 See [PRIVACY.md](../PRIVACY.md) for the user-facing data statement.
 
 ## 8. Concurrency and performance
 
 - UI, store, overlay coordinator, window tracker, and Share Preview session are main-actor isolated.
-- Window metadata polling runs at about 30 Hz.
+- Window metadata polling follows the overlay refresh at about 60 Hz. In steady state, the required window IDs are batched into one WindowServer description request per refresh; uncertain identity can additionally trigger the existing all-window reconnect lookup.
 - ScreenCaptureKit sample handling uses a dedicated serial user-interactive queue.
 - Core Image context is reused by the frame processor.
+- Preview pixels are assigned directly to a CALayer; frame delivery does not publish an observable SwiftUI image.
 - Delivery is gated by source generation, session object identity, mask revision, and current issue state.
 - Current Share Preview target is 30 fps and at most 2560 × 1440 pixels.
 

@@ -79,6 +79,7 @@
 "Manage Masks…" = "Manage Masks…";
 "Mask Name" = "Mask Name";
 "Mask Style" = "Mask Style";
+"Mask Controls" = "Mask Controls";
 "Mask behavior and local data controls." = "Mask behavior and local data controls.";
 "Mask geometry and window identity are stored in Application Support. Screen pixels are never persisted." = "Mask geometry and window identity are stored in Application Support. Screen pixels are never persisted.";
 "Mask positions checked" = "Mask positions checked";
@@ -150,6 +151,7 @@
 "The system window picker could not complete the request." = "The system window picker could not complete the request.";
 "Total: %lld" = "Total: %lld";
 "Turns only this mask on or off." = "Turns only this mask on or off.";
+"Turn masks on or off individually." = "Turn masks on or off individually.";
 "UPDATING PREVIEW" = "UPDATING PREVIEW";
 "Unknown App" = "Unknown App";
 "Untitled Window" = "Untitled Window";

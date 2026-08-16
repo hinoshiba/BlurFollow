@@ -3,18 +3,46 @@ import Combine
 import CoreImage
 import CoreMedia
 import CoreVideo
+import QuartzCore
 import ScreenCaptureKit
 
-/// Publishes pixels independently from the session's semantic state. Keeping the 30 fps image
-/// stream in this small object prevents every frame from rebuilding Share Preview's header,
-/// instructions, and controls.
+/// A layer-backed pixel surface for Share Preview. Replacing `CALayer.contents` avoids routing the
+/// 30 fps stream through SwiftUI observation and view diffing.
 @MainActor
-final class SharePreviewFramePresenter: ObservableObject {
-    @Published private(set) var image: NSImage?
+final class SharePreviewPixelView: NSView {
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        wantsLayer = true
+        layer?.backgroundColor = NSColor.black.cgColor
+        layer?.contentsGravity = .resizeAspect
+        layer?.masksToBounds = true
+        layer?.actions = ["contents": NSNull()]
+    }
 
-    func present(_ image: NSImage?) {
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    func present(_ image: CGImage?) {
+        layer?.contents = image
+    }
+}
+
+/// Owns pixels independently from the session's semantic state. The presenter updates only its
+/// attached AppKit surface, so every frame does not rebuild Share Preview's SwiftUI controls.
+@MainActor
+final class SharePreviewFramePresenter {
+    private(set) var image: CGImage?
+    private weak var surface: SharePreviewPixelView?
+
+    func present(_ image: CGImage?) {
         if image == nil, self.image == nil { return }
         self.image = image
+        surface?.present(image)
+    }
+
+    func attach(_ surface: SharePreviewPixelView) {
+        self.surface = surface
+        surface.present(image)
     }
 }
 
@@ -22,9 +50,15 @@ final class SharePreviewFramePresenter: ObservableObject {
 final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
     let framePresenter = SharePreviewFramePresenter()
 
-    /// Kept as a read-only convenience for diagnostics and tests. Views should observe
-    /// `framePresenter` so pixel delivery does not invalidate the whole session UI.
-    var frameImage: NSImage? { framePresenter.image }
+    /// Kept as a read-only convenience for diagnostics and tests. The live view attaches directly
+    /// to `framePresenter` so pixel delivery does not invalidate the session's SwiftUI hierarchy.
+    var frameImage: NSImage? {
+        guard let image = framePresenter.image else { return nil }
+        return NSImage(
+            cgImage: image,
+            size: NSSize(width: image.width, height: image.height)
+        )
+    }
 
     @Published private(set) var hasFrame = false
     @Published private(set) var frameIsCovered = true
@@ -97,10 +131,7 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
                 guard self.captureGeneration == generation,
                       self.activeMaskRevision == maskRevision,
                       self.sourceWindowID != nil else { return }
-                self.setFrameImage(NSImage(
-                    cgImage: image,
-                    size: NSSize(width: image.width, height: image.height)
-                ))
+                self.setFrameImage(image)
                 if self.frameIsCovered != isBlocked {
                     self.invalidateReview()
                     self.frameIsCovered = isBlocked
@@ -258,7 +289,7 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
 
     private func matchingRegions(in regions: [MaskRegion]) -> [MaskRegion] {
         guard let sourceWindowID, sourceProcessID != 0 else { return [] }
-        return regions.filter { region in
+        let candidates = regions.filter { region in
             guard region.isEnabled,
                   region.mode == .window,
                   let anchor = region.windowAnchor else { return false }
@@ -266,8 +297,13 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
             let sameApplication = !sourceBundleIdentifier.isEmpty
                 ? anchor.bundleIdentifier == sourceBundleIdentifier
                 : anchor.applicationName == sourceApplicationName
-            guard sameApplication,
-                  let tracked = tracker.frame(for: region),
+            return sameApplication
+        }
+        // Resolve all matching masks against one WindowServer lookup cache. Several masks often
+        // follow the same browser window; querying it once per mask makes live edits visibly stall.
+        let trackedFrames = tracker.frames(for: candidates)
+        return candidates.filter { region in
+            guard let tracked = trackedFrames[region.id],
                   tracked.windowID == sourceWindowID,
                   tracked.processID == sourceProcessID else { return false }
             return true
@@ -317,7 +353,7 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
         }
     }
 
-    private func setFrameImage(_ image: NSImage?) {
+    private func setFrameImage(_ image: CGImage?) {
         framePresenter.present(image)
         let hasNewFrame = image != nil
         if hasFrame != hasNewFrame { hasFrame = hasNewFrame }
@@ -421,9 +457,9 @@ struct LatestFrameSlot<Value> {
 }
 
 final class SharePreviewFrameProcessor: NSObject, SCStreamOutput, @unchecked Sendable {
-    static let queue = DispatchQueue(label: "com.blurfollow.share-preview.frames", qos: .userInteractive)
+    static let queue = DispatchQueue(label: "blurfollow.hinoshiba.com.share-preview.frames", qos: .userInteractive)
     private static let renderQueue = DispatchQueue(
-        label: "com.blurfollow.share-preview.render",
+        label: "blurfollow.hinoshiba.com.share-preview.render",
         qos: .userInitiated
     )
 

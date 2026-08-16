@@ -54,7 +54,8 @@ source window ──> macOS compositor <── transparent NSPanel overlay
 
 Display Pins use normalized coordinates inside a selected display. Window Pins
 use normalized coordinates inside a tracked window frame. `WindowTracker`
-queries public `CGWindowList` metadata about 30 times per second. It first
+queries public `CGWindowList` metadata about 60 times per second and batches
+the required window IDs for each refresh. It first
 requires continuity of the selected `CGWindowID`, process, layer, and app
 identity. After loss, it will rebind only when app/title candidates are treated
 as unambiguous: exactly one matching visible candidate must remain.
@@ -83,7 +84,7 @@ source window ──> ScreenCaptureKit frames ──> Core Image mask processor
 ```
 
 Share Preview requests one window, enables the cursor, disables audio, processes
-frames locally, and displays an `NSImage` preview. It applies enabled **Window
+frames locally, and assigns the latest `CGImage` directly to a layer-backed preview. It applies enabled **Window
 Pins** only when the tracker resolves that mask to the exact selected window ID,
 process, and application identity. If none matches, it replaces the complete
 preview with an opaque fallback frame instead of intentionally displaying an
@@ -137,7 +138,7 @@ identity defeats important assumptions.
 | Threat | Current control | Residual risk / required user action |
 | --- | --- | --- |
 | User shares the original browser tab or window | Share Guide says separate-app overlays are excluded and offers Share Preview. | BlurFollow cannot change another app's selection. Share the BlurFollow Share Preview window and verify the meeting preview. |
-| Window moves or resizes | Window-relative normalized geometry and 30 Hz frame tracking. | Mask position can lag or diverge during latency, animation, Mission Control, display reconfiguration, or OS/API failure. Check the receiver-side preview. |
+| Window moves or resizes | Window-relative normalized geometry and approximately 60 Hz batched frame tracking. | Mask position can lag or diverge during latency, animation, Mission Control, display reconfiguration, or OS/API failure. Check the receiver-side preview. |
 | Source window disappears | Last-position cover can cover the entire last-known window in opaque Redact mode and marks tracking lost/reconnecting. | It covers only recorded last-known geometry. The source can reappear elsewhere, so the cover is not proof of current placement. Stop sharing on any warning. |
 | Rebind chooses the wrong window | ID/process/layer/app continuity first; later rebind requires exactly one visible owner/title match. | A unique metadata match cannot prove semantic identity. Confirm after reopen or document/title change. |
 | Overlay is absent from captured output | Product explicitly separates entire-display overlay and Share Preview paths. | Capture products can exclude overlay windows or use unusual APIs. Compatibility must be tested for each product/version. |

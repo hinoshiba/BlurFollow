@@ -72,6 +72,11 @@ struct RootView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                maskToolbarMenu
+            }
+        }
         .sheet(isPresented: Binding(
             get: { !store.hasCompletedOnboarding },
             set: { _ in }
@@ -117,6 +122,67 @@ struct RootView: View {
             .disabled(store.recoveryIssue != nil)
         }
         .padding(16)
+    }
+
+    private var maskToolbarMenu: some View {
+        Menu {
+            Toggle(isOn: $store.masksEnabled) {
+                Label("Show Masks", systemImage: store.masksEnabled ? "eye" : "eye.slash")
+            }
+            .disabled(store.recoveryIssue != nil)
+
+            Text(activeMaskCountText)
+
+            Divider()
+
+            Section("Masks") {
+                if store.regions.isEmpty {
+                    Text("No masks yet")
+                } else {
+                    ForEach(store.regions) { region in
+                        Toggle(isOn: enabledBinding(for: region.id)) {
+                            Label(maskToolbarTitle(for: region), systemImage: region.mode.systemImage)
+                        }
+                        .accessibilityLabel(Text(region.name))
+                        .accessibilityHint("Turns only this mask on or off.")
+                    }
+                }
+            }
+
+            Divider()
+
+            Button {
+                selection = .masks
+            } label: {
+                Label("Manage Masks…", systemImage: "slider.horizontal.3")
+            }
+            .accessibilityHint("Opens the mask management screen.")
+        } label: {
+            Label("Mask Controls", systemImage: maskToolbarSystemImage)
+        }
+        .help("Turn masks on or off individually.")
+        .accessibilityLabel("Mask Controls")
+        .accessibilityHint("Turn masks on or off individually.")
+    }
+
+    private var maskToolbarSystemImage: String {
+        guard store.masksEnabled else { return "eye.slash" }
+        return store.regions.contains(where: \.isEnabled) ? "eye.fill" : "eye"
+    }
+
+    private func enabledBinding(for id: UUID) -> Binding<Bool> {
+        Binding(
+            get: { store.regions.first(where: { $0.id == id })?.isEnabled ?? false },
+            set: { store.setEnabled($0, for: id) }
+        )
+    }
+
+    private func maskToolbarTitle(for region: MaskRegion) -> String {
+        String.localizedStringWithFormat(
+            String(localized: "%@ · %@"),
+            region.name,
+            region.mode.title
+        )
     }
 
     private var maskFooterTitle: String {

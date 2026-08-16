@@ -206,20 +206,24 @@ struct DashboardView: View {
             // Apple's picker allows one unassociated selection at a time. Stop the current output
             // first so source switching cannot exceed that limit; cancellation leaves the preview covered.
             if sharePreview.isRunning { await sharePreview.stop() }
-            picker.pickWindow { result in
+            let acceptedRequest = picker.pickWindow { result in
                 switch result {
                 case .success(let selection):
+                    // Show the transition immediately. Capture startup can take noticeable time,
+                    // and waiting for it before opening the window made the button feel stuck.
+                    openWindow(id: "share-preview")
+                    NSApp.activate(ignoringOtherApps: true)
                     Task {
                         await sharePreview.start(selection)
-                        openWindow(id: "share-preview")
-                        NSApp.activate(ignoringOtherApps: true)
+                        isPreparingSharePicker = false
                     }
                 case .failure(let error):
+                    isPreparingSharePicker = false
                     if case .cancelled = error { return }
                     transientMessage = error.localizedDescription
                 }
             }
-            isPreparingSharePicker = false
+            if acceptedRequest == nil { isPreparingSharePicker = false }
         }
     }
 }

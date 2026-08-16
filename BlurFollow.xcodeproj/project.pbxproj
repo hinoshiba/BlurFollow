@@ -428,7 +428,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blurfollow.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = blurfollowtests.hinoshiba.com;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlurFollow.app/Contents/MacOS/BlurFollow";
 			};
@@ -580,7 +580,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blurfollow.app;
+				PRODUCT_BUNDLE_IDENTIFIER = blurfollow.hinoshiba.com;
 				PRODUCT_NAME = BlurFollow;
 				SDKROOT = macosx;
 			};
@@ -597,7 +597,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blurfollow.app;
+				PRODUCT_BUNDLE_IDENTIFIER = blurfollow.hinoshiba.com;
 				PRODUCT_NAME = BlurFollow;
 				SDKROOT = macosx;
 			};
@@ -614,7 +614,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blurfollow.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = blurfollowtests.hinoshiba.com;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlurFollow.app/Contents/MacOS/BlurFollow";
 			};

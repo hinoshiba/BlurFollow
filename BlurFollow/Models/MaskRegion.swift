@@ -48,13 +48,15 @@ enum MaskStyle: String, Codable, CaseIterable, Identifiable, Sendable {
 
 /// Public-API-only rendering values shared by the desktop overlay.
 ///
-/// `NSVisualEffectView` does not expose a blur-radius control. Frost therefore maps strength to
-/// the opacity of the system material plus its tint, while Mosaic maps it to tile size and
-/// opacity. Keeping the mapping here makes the slider's effect deterministic and testable.
+/// `NSVisualEffectView` does not expose a blur-radius control. Frost therefore maps strength to a
+/// public Core Image content-filter radius, system-material opacity, and foreground tint, while
+/// Mosaic maps it to tile size and opacity. Keeping the mapping here makes the slider's effect
+/// deterministic and testable.
 struct MaskVisualParameters: Equatable, Sendable {
     var normalizedStrength: Double
     var frostEffectOpacity: Double
     var frostTintOpacity: Double
+    var frostAdditionalBlurRadius: Double
     var mosaicCellSize: Double
     var mosaicOpacity: Double
 
@@ -70,6 +72,9 @@ struct MaskVisualParameters: Equatable, Sendable {
             normalizedStrength: value,
             frostEffectOpacity: 0.25 + (0.75 * value),
             frostTintOpacity: 0.08 + (0.42 * value),
+            // NSVisualEffectView's material has a fixed system blur. Applying a public Core
+            // Image content filter on top gives Strength a real, continuous radius control.
+            frostAdditionalBlurRadius: 24 * value,
             mosaicCellSize: weakCellSize + ((strongCellSize - weakCellSize) * value),
             mosaicOpacity: 0.55 + (0.43 * value)
         )

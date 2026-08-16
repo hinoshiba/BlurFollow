@@ -8,6 +8,36 @@ struct TrackedWindowFrame: Sendable {
     let isOnScreen: Bool
 }
 
+/// Pure indexing for a batched WindowServer response. Only requested IDs are retained, and an
+/// unexpected duplicate is rejected instead of choosing an arbitrary identity dictionary.
+enum WindowDescriptionBatch {
+    static func informationByID(
+        from descriptions: [[String: Any]],
+        requestedWindowIDs: Set<CGWindowID>
+    ) -> [CGWindowID: [String: Any]] {
+        var result: [CGWindowID: [String: Any]] = [:]
+        var duplicateIDs: Set<CGWindowID> = []
+        result.reserveCapacity(requestedWindowIDs.count)
+
+        for description in descriptions {
+            guard
+                let idNumber = description[kCGWindowNumber as String] as? NSNumber
+            else { continue }
+            let windowID = CGWindowID(idNumber.uint32Value)
+            guard requestedWindowIDs.contains(windowID) else { continue }
+
+            if result.updateValue(description, forKey: windowID) != nil {
+                duplicateIDs.insert(windowID)
+            }
+        }
+
+        for windowID in duplicateIDs {
+            result[windowID] = nil
+        }
+        return result
+    }
+}
+
 /// Tracks a user-selected window using public WindowServer metadata. A binding is trusted only
 /// while its window ID, process, layer, and application identity remain continuous. If continuity
 /// breaks, rebinding requires one unambiguous identity match; uncertainty returns `nil` so callers
@@ -44,17 +74,30 @@ final class WindowTracker: ObservableObject {
         private var allWindowsCache: [[String: Any]]?
         private var loadedAllWindows = false
 
-        func information(for windowID: CGWindowID) -> [String: Any]? {
-            if let cached = informationByID[windowID] {
-                switch cached {
-                case .found(let information): return information
-                case .missing: return nil
-                }
+        init(windowIDs: Set<CGWindowID>) {
+            guard !windowIDs.isEmpty else { return }
+            let descriptions = WindowTracker.descriptions(for: windowIDs) ?? []
+            let prefetched = WindowDescriptionBatch.informationByID(
+                from: descriptions,
+                requestedWindowIDs: windowIDs
+            )
+            informationByID.reserveCapacity(windowIDs.count)
+            for windowID in windowIDs {
+                informationByID[windowID] = prefetched[windowID]
+                    .map(CachedInformation.found) ?? .missing
             }
+        }
 
-            let information = WindowTracker.information(for: windowID)
-            informationByID[windowID] = information.map(CachedInformation.found) ?? .missing
-            return information
+        func information(for windowID: CGWindowID) -> [String: Any]? {
+            guard let cached = informationByID[windowID] else {
+                // A missing prefetch entry is uncertainty. Never hide an extra synchronous IPC in
+                // this accessor, because every visual refresh must have a bounded query count.
+                return nil
+            }
+            switch cached {
+            case .found(let information): return information
+            case .missing: return nil
+            }
         }
 
         func allWindows() -> [[String: Any]]? {
@@ -85,13 +128,14 @@ final class WindowTracker: ObservableObject {
     }
 
     func frame(for region: MaskRegion) -> TrackedWindowFrame? {
-        frame(for: region, lookup: RefreshLookup())
+        let lookup = RefreshLookup(windowIDs: requiredWindowIDs(for: [region]))
+        return frame(for: region, lookup: lookup)
     }
 
     /// Resolves every region against one metadata snapshot/cache. Identity continuity and
     /// unambiguous-rebind rules remain identical to `frame(for:)`.
     func frames(for regions: [MaskRegion]) -> [UUID: TrackedWindowFrame] {
-        let lookup = RefreshLookup()
+        let lookup = RefreshLookup(windowIDs: requiredWindowIDs(for: regions))
         var result: [UUID: TrackedWindowFrame] = [:]
         result.reserveCapacity(regions.count)
         for region in regions {
@@ -100,6 +144,23 @@ final class WindowTracker: ObservableObject {
             }
         }
         return result
+    }
+
+    private func requiredWindowIDs(for regions: [MaskRegion]) -> Set<CGWindowID> {
+        var windowIDs: Set<CGWindowID> = []
+        windowIDs.reserveCapacity(regions.count * 2)
+        for region in regions {
+            guard let anchor = region.windowAnchor else { continue }
+            if anchor.windowID != kCGNullWindowID {
+                windowIDs.insert(anchor.windowID)
+            }
+            if let binding = bindings[region.id],
+               binding.isContinuous,
+               binding.windowID != kCGNullWindowID {
+                windowIDs.insert(binding.windowID)
+            }
+        }
+        return windowIDs
     }
 
     private func frame(for region: MaskRegion, lookup: RefreshLookup) -> TrackedWindowFrame? {
@@ -238,8 +299,21 @@ final class WindowTracker: ObservableObject {
         return matches[0]
     }
 
-    private static func information(for windowID: CGWindowID) -> [String: Any]? {
-        (CGWindowListCopyWindowInfo([.optionIncludingWindow], windowID) as? [[String: Any]])?.first
+    private static func descriptions(
+        for windowIDs: Set<CGWindowID>
+    ) -> [[String: Any]]? {
+        let sortedIDs = windowIDs.filter { $0 != kCGNullWindowID }.sorted()
+        guard !sortedIDs.isEmpty else { return [] }
+
+        // Quartz represents a CFArray of CGWindowID values as unretained pointer-sized integers.
+        // Bridging `[NSNumber]` to CFArray looks natural in Swift but is not the API's input shape.
+        var rawWindowIDs: [UnsafeRawPointer?] = sortedIDs.map {
+            UnsafeRawPointer(bitPattern: UInt($0))
+        }
+        let windowArray: CFArray = rawWindowIDs.withUnsafeMutableBufferPointer { values in
+            CFArrayCreate(kCFAllocatorDefault, values.baseAddress, values.count, nil)
+        }
+        return CGWindowListCreateDescriptionFromArray(windowArray) as? [[String: Any]]
     }
 
     private static func bounds(from info: [String: Any]) -> CGRect? {

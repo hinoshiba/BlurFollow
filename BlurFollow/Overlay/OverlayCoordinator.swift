@@ -11,6 +11,7 @@ final class OverlayCoordinator: ObservableObject {
     private var lastKnownWindowFrames: [UUID: CGRect] = [:]
     private var timer: Timer?
     private var escapeMonitor: Any?
+    private weak var keyWindowBeforeEditing: NSWindow?
     private var cancellables: Set<AnyCancellable> = []
 
     init(store: MaskStore, tracker: WindowTracker) {
@@ -63,6 +64,7 @@ final class OverlayCoordinator: ObservableObject {
               region.isEnabled else { return }
 
         endEditing()
+        keyWindowBeforeEditing = NSApp.keyWindow
         editingRegionID = regionID
         escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard event.keyCode == 53 else { return event }
@@ -73,13 +75,23 @@ final class OverlayCoordinator: ObservableObject {
     }
 
     func endEditing() {
+        finishEditing(restoreInitialFrame: true)
+    }
+
+    private func finishEditing(restoreInitialFrame: Bool) {
         guard editingRegionID != nil || escapeMonitor != nil else { return }
         editingRegionID = nil
         if let escapeMonitor {
             NSEvent.removeMonitor(escapeMonitor)
             self.escapeMonitor = nil
         }
-        panels.values.forEach { $0.setEditing(false) }
+        panels.values.forEach {
+            $0.setEditing(false, restoreInitialFrame: restoreInitialFrame)
+        }
+        if let keyWindowBeforeEditing, keyWindowBeforeEditing.canBecomeKey {
+            keyWindowBeforeEditing.makeKey()
+        }
+        keyWindowBeforeEditing = nil
     }
 
     func refresh() {
@@ -148,7 +160,8 @@ final class OverlayCoordinator: ObservableObject {
                 panel.update(
                     region: region,
                     frame: region.normalizedRect.rect(in: screen.frame),
-                    isEditing: editingRegionID == region.id
+                    isEditing: editingRegionID == region.id,
+                    movementBounds: screen.frame
                 )
                 panel.showIfNeeded()
                 store.setTrackingState(.positionKnown, for: region.id)
@@ -161,7 +174,8 @@ final class OverlayCoordinator: ObservableObject {
                         panel.update(
                             region: region,
                             frame: frame,
-                            isEditing: editingRegionID == region.id
+                            isEditing: editingRegionID == region.id,
+                            movementBounds: tracked.appKitFrame
                         )
                         panel.showIfNeeded()
                         store.setTrackingState(.positionKnown, for: region.id)
@@ -207,7 +221,7 @@ final class OverlayCoordinator: ObservableObject {
 
         // End input capture before publishing the persisted geometry. The synchronous store
         // refresh must never leave the overlay interactive after the drag completes.
-        endEditing()
+        finishEditing(restoreInitialFrame: false)
         region.normalizedRect = normalizedRect
         store.update(region)
     }

@@ -18,7 +18,7 @@ BlurFollowは位置合わせと確認を助ける視覚的補助であり、secu
 - **Window Pin** — Appleのシステムピッカーで選んだウインドウ内の割合座標へマスクを置き、移動・リサイズに合わせて表示位置を更新します。
 - **3つのマスク表現** — Frost（ぼかし）、Mosaic（モザイク）、Redact（不透明カバー）。StrengthはFrostの見え方とMosaicの粒の大きさ・濃さへ反映され、Redactは不透明のままです。
 - **Move** — Masksの「Move…」から画面上のマスク本体をドラッグし、既存マスクの位置を調整できます。
-- **メニューバー操作** — Display PinとWindow Pinを名前・状態付きで一覧し、マスクごとにOn/Offを切り替えられます。「Show Masks」はデスクトップ上の通常マスクの全体スイッチで、Offの場合は個別設定がOnでも通常マスクを表示しません。
+- **ツールバー／メニューバー操作** — Display PinとWindow Pinを一覧し、メインウインドウのツールバーまたはメニューバーから、マスクごとにOn/Offを切り替えられます。「Show Masks」はデスクトップ上の通常マスクの全体スイッチで、Offの場合は個別設定がOnでも通常マスクを表示しません。
 - **Last-position cover** — 対象窓の位置情報が取れなくなった場合、appが保持している最後の利用可能位置を不透明に覆います。再起動後はWindow Pin作成時の保存位置を使う場合があります。
 - **Share Preview** — 選んだ1ウインドウをScreenCaptureKitで端末内処理し、対応するWindow Pinをフレームへ合成した確認用ウインドウを作ります。マスク編集やキャプチャ状態の変化に応じて表示と確認状態を更新します。
 - **Share Guide** — ディスプレイ共有、単一窓共有、タブ共有の違いと、選ぶべきBlurFollow側の表示方法を案内します。
@@ -78,7 +78,7 @@ Window Pinはウインドウ内の**割合座標**を追います。DOM要素、
 
 1. Masksで対象マスクを開き、Frost / Mosaic / RedactとStrengthを調整します。StrengthはFrostとMosaicの見え方へ反映されます。RedactはStrengthにかかわらず不透明です。
 2. 位置を変える場合は「Move…」を押し、画面上のマスク本体をドラッグします。マウスまたはトラックパッドを離すと新しい割合座標が保存されます。保存前にEscまたは「Cancel Move」を使うと取り消せます。「Move…」は全体と対象マスクがOnで、位置を取得できている場合に使えます。
-3. メニューバーのBlurFollowアイコンを開くと、名前、Display Pin / Window Pin、現在の状態を確認しながら、各マスクを個別にOn/Offできます。「Show Masks」はデスクトップ上の通常マスクをまとめて切り替えます。Share Previewは個別にOnのWindow Pinを使うため、別に表示を確認してください。
+3. メインウインドウのツールバー、またはメニューバーのBlurFollowアイコンを開くと、各マスクを個別にOn/Offできます。「Show Masks」はデスクトップ上の通常マスクをまとめて切り替えます。Share Previewは個別にOnのWindow Pinを使うため、別に表示を確認してください。
 4. Strength、位置、On/Offを変えた後は、通常表示と利用中のShare Preview、会議アプリ側のプレビューをもう一度確認します。
 
 ### Share Preview — 単一窓／タブ共有の代替

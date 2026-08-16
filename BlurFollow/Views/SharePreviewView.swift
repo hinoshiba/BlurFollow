@@ -16,6 +16,7 @@ struct SharePreviewView: View {
                 BlurFollowTheme.carbon
                 if sharePreview.hasFrame, sharePreview.isRunning {
                     SharePreviewFrameSurface(presenter: sharePreview.framePresenter)
+                        .accessibilityLabel("Window mask preview")
                     if sharePreview.frameIsCovered {
                         coveredOverlay
                     }
@@ -151,16 +152,18 @@ struct SharePreviewView: View {
                                 // this task runs. Re-check the view lifetime before capture starts.
                                 guard pickerRequestID == requestID else { return }
                                 await sharePreview.start(selection)
+                                if pickerRequestID == requestID { isPreparingPicker = false }
                             }
                         case .failure(let error):
+                            isPreparingPicker = false
                             if case .cancelled = error { return }
                             pickerMessage = userFacingPickerMessage(for: error)
                         }
                     }
                     if acceptedRequest == nil, activePickerRequest == pickerRequest {
                         activePickerRequest = nil
+                        isPreparingPicker = false
                     }
-                    if pickerRequestID == requestID { isPreparingPicker = false }
                 }
             }
             .disabled(picker.isPicking || isPreparingPicker)
@@ -214,7 +217,9 @@ struct SharePreviewView: View {
     }
 
     private var previewIsUpdating: Bool {
-        sharePreview.isPreparing || (sharePreview.isRunning && !sharePreview.hasFrame)
+        isPreparingPicker
+            || sharePreview.isPreparing
+            || (sharePreview.isRunning && !sharePreview.hasFrame)
     }
 
     private var previewChromeState: PreviewChromeState {
@@ -249,24 +254,20 @@ private enum PreviewChromeState: Equatable {
     case checked
 }
 
-/// The high-frequency pixel stream lives in a dedicated observation boundary. Semantic status and
-/// controls in `SharePreviewView` therefore update only when their state actually changes.
-private struct SharePreviewFrameSurface: View {
-    @ObservedObject var presenter: SharePreviewFramePresenter
+/// The high-frequency pixel stream is pushed directly into this layer-backed AppKit view. SwiftUI
+/// only creates and lays out the surface; individual capture frames do not trigger view diffing.
+private struct SharePreviewFrameSurface: NSViewRepresentable {
+    let presenter: SharePreviewFramePresenter
 
-    var body: some View {
-        Group {
-            if let image = presenter.image {
-                Image(nsImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .accessibilityLabel("Window mask preview")
-            } else {
-                Color.clear
-            }
-        }
-        // Pixel replacement must be immediate. In particular, a revision clear must never leave an
-        // old frame fading out while a new mask configuration is being rendered.
-        .transaction { transaction in transaction.animation = nil }
+    func makeNSView(context: Context) -> SharePreviewPixelView {
+        let view = SharePreviewPixelView(frame: .zero)
+        presenter.attach(view)
+        return view
+    }
+
+    func updateNSView(_ nsView: SharePreviewPixelView, context: Context) {
+        // SwiftUI can recreate this representable when semantic preview state changes. Reattaching
+        // synchronizes the replacement surface with the most recently delivered pixel immediately.
+        presenter.attach(nsView)
     }
 }

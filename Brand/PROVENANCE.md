@@ -7,30 +7,53 @@ from it under `BlurFollow/Resources/Assets.xcassets/AppIcon.appiconset/`.
 
 ## Generation record
 
-- Creation mode: new raster image, followed by one targeted edit of that
-  generated image. No external reference image was supplied.
+- Creation mode: reference-guided raster redesign, followed by one targeted
+  edit of the generated image. The previous in-repository icon was supplied
+  only as a concept and palette reference; no external artwork was supplied.
 - Generator: OpenAI image generation available in the Codex workspace.
-- Source SHA-256:
+- Previous/reference source SHA-256:
   `4b6b0c37784e6cc5509733259077c64b4c492e4d58a4eb65443420fc01051a89`
-- Initial prompt:
+- Source SHA-256:
+  `a981582cf26a04bcc70684f5b9b865a5b3e732ad33ff61e360130b37de5cee86`
+- Redesign prompt:
 
-  > Use case: logo-brand. Asset type: 1024x1024 macOS app icon for
-  > BlurFollow. Create a refined, instantly understandable icon for a Mac
-  > utility whose rectangular blur area follows a moving app window. Show two
-  > offset rounded window outlines, a frosted rectangle aligned inside the
-  > foreground window, and a subtle cyan-to-iris motion cue on a dark rounded
-  > tile. No text, shield, lock, eye, checkmark, pin, veil, badge, warning
-  > symbol, red/coral accent, watermark, or photorealism.
+  > Use case: logo-brand. Asset type: production master artwork for a macOS app
+  > icon, square 1024-style composition intended for system-applied
+  > rounded-corner masking. Image 1 is the existing BlurFollow icon; use it only
+  > as a reference for the product concept and ink/cyan/iris palette. Replace
+  > the entire over-rendered artwork with a cleaner redesign. Create a simple,
+  > memorable "following mask" symbol for BlurFollow, a Mac utility that keeps
+  > a rectangular blur region aligned to a moving app window. Use a full-bleed
+  > deep ink/navy square background with a subtle cyan-to-iris tonal gradient;
+  > no pre-masked squircle or black outer corners. Show one dominant front-facing
+  > rounded-rectangle app-window frame, one short offset echo of that frame
+  > behind it, and one bold frosted rounded blur band anchored horizontally
+  > inside the foreground window. Use minimal vector-friendly flat 2.5D
+  > geometry, crisp defined edges, restrained translucency, orthographic
+  > composition, generous safe-area padding, at most three foreground shapes,
+  > and strong 16 px readability. Use carbon/ink, cyan `#42D9C8`, iris
+  > `#7C6CFF`, and soft ice-white only. No text, letters, watermark, mockup,
+  > device frame, traffic-light controls, arrow, perspective tilt, extra
+  > windows, floating badge, shield, lock, eye, checkmark, pin, warning, camera,
+  > crop corners, glossy AI rendering, neon bloom, fuzzy edges, texture noise,
+  > or pre-rounded outer tile.
 
 - Targeted edit prompt:
 
-  > Remove every red, yellow, and green traffic-light window-control dot from
-  > both window frames. Replace those controls with clean uninterrupted
-  > frosted window outlines. Preserve the two-window motion composition,
-  > motion arrow, aligned frosted blur rectangle, dark tile, lighting, depth,
-  > framing, and all other geometry. Add no text or security symbols.
+  > Change only the frosted rounded blur band inside the foreground window.
+  > Reduce its height to about 22% of the foreground window's interior height
+  > while keeping its width and horizontal centering. Make it translucent ice
+  > glass instead of opaque white, with a restrained soft cyan-to-iris blur
+  > inside. Let the dark window interior faintly show through so the band feels
+  > anchored inside the window. Keep the full-bleed square navy background,
+  > exact front and rear frame geometry, positions, orthographic composition,
+  > palette, padding, crisp edges, and all other elements unchanged. Preserve
+  > 16 px readability. Add no text, arrow, controls, symbols, watermark, new
+  > objects, outer rounded tile, black corners, excessive glow, or fuzzy edges.
 
-The asset-catalog files are resized renditions of that source. Duplicate
+The final generator output was resized from 1254 x 1254 to the canonical opaque
+1024 x 1024 RGB source with ImageMagick 7.1.2-27 using Lanczos resampling. The
+asset-catalog and website files are resized renditions of that source. Duplicate
 hashes at equivalent pixel dimensions are expected. Recreate and record hashes
 if the master artwork changes.
 

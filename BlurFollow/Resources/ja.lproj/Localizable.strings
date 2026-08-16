@@ -52,6 +52,7 @@
 "Create one from Home by dragging over an area to blur." = "ホームで、ぼかしたい範囲をドラッグして作成してください。";
 "Mask Style" = "マスク表現";
 "Mask Name" = "マスク名";
+"Mask Controls" = "マスク操作";
 "Strength" = "強さ";
 "%lld%%" = "%lld%%";
 "Pinned to this display" = "このディスプレイに固定";
@@ -127,6 +128,7 @@
 "Cover Last Position" = "最終取得位置をカバー";
 "If tracking pauses, cover only the last known window position. This cover does not follow a missing window." = "追従が止まったとき、最後に取得できたウインドウ位置だけを覆います。見失ったウインドウには追従しません。";
 "Show Masks" = "マスクを表示";
+"Turn masks on or off individually." = "マスクを個別にオン／オフします。";
 "Display all enabled Display Pins and Window Pins." = "有効な画面固定・ウインドウ追従マスクをすべて表示します。";
 "Share Preview uses Apple's per-selection system picker. Frames stay in memory and are never uploaded." = "共有プレビューはAppleの選択式システムピッカーを使います。フレームはメモリ内に留まり、送信されません。";
 "macOS 14 through 15.1 requires Screen Recording access for window identity. Frames stay local." = "macOS 14〜15.1では窓の識別に画面収録の許可が必要です。フレームはMac内だけで処理します。";

@@ -22,7 +22,7 @@ from a source-tree assumption.
 
 ## App record
 
-- [ ] Bundle ID is `com.blurfollow.app` and matches the signed archive, App ID,
+- [ ] Bundle ID is `blurfollow.hinoshiba.com` and matches the signed archive, App ID,
   provisioning profile, privacy manifest, and App Store Connect record.
 - [ ] Primary language is Japanese (`ja-JP`); English (`en-US`) localization is
   enabled.
