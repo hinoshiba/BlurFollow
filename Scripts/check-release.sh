@@ -4,6 +4,29 @@ set -euo pipefail
 ROOT_DIR=${0:A:h:h}
 APP="$ROOT_DIR/dist/BlurFollow.app"
 
+if [[ $# -ne 0 ]]; then
+    print -u2 "Usage: $0"
+    exit 64
+fi
+
+/bin/zsh -n "$ROOT_DIR/build.sh" "$ROOT_DIR"/Scripts/*.sh
+/bin/sh -n "$ROOT_DIR"/ci_scripts/*.sh
+for cloud_script in "$ROOT_DIR"/ci_scripts/*.sh; do
+    if [[ ! -x "$cloud_script" ]]; then
+        print -u2 "Xcode Cloud script is not executable: $cloud_script"
+        exit 1
+    fi
+done
+plutil -lint "$ROOT_DIR/BlurFollow/Resources/Info.plist" \
+    "$ROOT_DIR/BlurFollow/Resources/BlurFollow.entitlements" \
+    "$ROOT_DIR/BlurFollow/Resources/PrivacyInfo.xcprivacy"
+
+if [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$ROOT_DIR/BlurFollow/Resources/Info.plist")" != '$(MARKETING_VERSION)' || \
+      "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$ROOT_DIR/BlurFollow/Resources/Info.plist")" != '$(CURRENT_PROJECT_VERSION)' ]]; then
+    print -u2 'BlurFollow Info.plist must inherit version/build from Xcode settings.'
+    exit 1
+fi
+
 "$ROOT_DIR/Scripts/check-localizations.sh"
 
 if [[ ! -d "$APP" ]]; then
@@ -19,6 +42,18 @@ if [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/I
 fi
 if [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$APP/Contents/Info.plist")" != "BlurFollow" ]]; then
     print -u2 "Unexpected display name."
+    exit 1
+fi
+PROJECT_VERSION=$(awk '$1 == "MARKETING_VERSION:" { gsub(/"/, "", $2); print $2; exit }' "$ROOT_DIR/project.yml")
+APP_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")
+if [[ "$APP_VERSION" != "$PROJECT_VERSION" ]] || \
+   ! grep -F -q "MARKETING_VERSION = $PROJECT_VERSION;" "$ROOT_DIR/BlurFollow.xcodeproj/project.pbxproj"; then
+    print -u2 "Development app, project.yml, and checked-in Xcode project versions differ."
+    exit 1
+fi
+if ! grep -F -q 'DEVELOPMENT_TEAM = 94HVVWXLK3;' "$ROOT_DIR/BlurFollow.xcodeproj/project.pbxproj" || \
+   ! grep -F -q 'PRODUCT_BUNDLE_IDENTIFIER = com.hinoshiba.blurfollow;' "$ROOT_DIR/BlurFollow.xcodeproj/project.pbxproj"; then
+    print -u2 "Checked-in Xcode project has an unexpected Team or bundle identifier."
     exit 1
 fi
 test -f "$APP/Contents/Resources/LICENSE"
@@ -74,10 +109,6 @@ if otool -L "$APP/Contents/MacOS/BlurFollow" | tail -n +2 | rg -v '^\s+(/System/
     print -u2 "Unexpected non-system dynamic library detected:"
     otool -L "$APP/Contents/MacOS/BlurFollow"
     exit 1
-fi
-
-if [[ "${1:-}" == "--distribution" ]]; then
-    spctl --assess --type execute --verbose=4 "$APP"
 fi
 
 print "Release checks passed."

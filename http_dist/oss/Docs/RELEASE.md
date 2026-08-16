@@ -1,348 +1,198 @@
-# Release and commercial-distribution runbook
+# App Store release and commercial-distribution runbook
 
-This runbook covers two separate macOS channels:
+BlurFollow is distributed through the Mac App Store. Official binaries are
+built and uploaded by Xcode Cloud from immutable semantic-version tags. There
+is no local signing, notarization, DMG, archive, or upload procedure.
 
-1. a Developer ID-signed, notarized DMG distributed directly; and
-2. a sandboxed build submitted to the Mac App Store.
+`./build.sh` remains available only for local development. Its ad-hoc-signed
+`dist/BlurFollow.app` must never be published.
 
-Do not reuse one channel's signed artifact for the other. Apple requirements,
-contracts, and review rules change; verify the current official requirements at
-release time. This document is an engineering control, not legal advice.
+## 1. Ownership and legal gate
 
-## 0. Mandatory ownership and legal gate
+Before submitting or selling an official branded build, the release owner must
+record approval for all of the following:
 
-The release manager must mark every item complete **before publishing an
-official branded artifact, accepting payment or preorders, or submitting a
-branded build to a store**:
+- the publishing legal person/entity, Apple Developer team, merchant of record,
+  tax/banking owner, support owner, and security contact;
+- Apache-2.0 compliance, Apple agreements and current store rules, consumer and
+  refund terms, privacy/recording law, export compliance, sanctions, and target
+  territories;
+- name/logo clearance and ownership or written commercial-use permission for
+  every brand asset, reconciled with `Brand/PROVENANCE.md`;
+- DCO sign-offs and provenance for code, translations, screenshots, fonts,
+  marketing claims, and generated artwork;
+- the exact dependency, license, NOTICE, privacy, security, and threat-model
+  inventory for the tagged source and binary;
+- public privacy/support URLs and accurate App Store metadata, privacy answers,
+  export compliance, pricing, and review notes; and
+- claims that describe observable app behavior without promising
+  confidentiality, certified protection, or guaranteed redaction.
 
-- [ ] Identify the publishing legal person/entity, Apple Developer team,
-      merchant of record, tax owner, support owner, and security contact.
-- [ ] Obtain qualified legal review for Apache-2.0 compliance, Apple agreements
-      and current store rules, consumer/refund and warranty terms, privacy and
-      recording law, export compliance, sanctions, and target countries.
-- [ ] Complete name/logo clearance and record ownership or written permission
-      for all Brand Assets as required by `TRADEMARKS.md`; reconcile the
-      generation record and source digest in
-      [Brand/PROVENANCE.md](../Brand/PROVENANCE.md) with the final artwork.
-- [ ] Record a professional exact, phonetic, and confusing-similarity clearance
-      search for **BlurFollow** in every target territory and relevant class.
-      Repository, App Store, web, and domain searches are preliminary collision
-      checks only and do not establish trademark availability.
-- [ ] Confirm DCO sign-offs and provenance for code, translations, screenshots,
-      fonts, marketing claims, and generated artwork.
-- [ ] Confirm root-license scope and any file-level SPDX/license headers agree
-      with the Apache code/documentation grant and the explicit Brand Asset and
-      verbatim-legal-text exclusions; ambiguous or missing file provenance
-      blocks publication.
-- [ ] Audit the exact source revision and artifact against `DEPENDENCIES.md`;
-      resolve every license and notice. Unknown provenance blocks release.
-- [ ] Replace all placeholder contacts with the publisher's real legal identity,
-      public privacy-policy URL, support URL, and rights-request contact.
-- [ ] Verify that store copy and pricing explain what is sold: an official
-      signed build/support experience, not exclusive rights to Apache code.
-- [ ] Remove claims or visuals that imply confidentiality, certified protection,
-      or guaranteed redaction. `Following`, `Position known`, `Preview active`,
-      and `Last-position cover` must describe only observed app state, and every
-      sharing workflow must tell the user to inspect receiver-side output.
-- [ ] Approve a channel-specific App Store privacy disclosure and review notes
-      based on the exact binary, not this repository in the abstract.
+Record reviewer, date, scope, evidence, and every approved exception in a
+private release record. An unresolved ownership, privacy, signing, or legal item
+blocks submission.
 
-Record the reviewer, date, scope, and decision in a private release record.
-“No external dependency” is not a legal opinion and does not waive this gate.
+Protect `main` and release tags, require passing CI and review, enable
+multifactor authentication, keep release access away from fork workflows, and
+restrict who may administer Xcode Cloud or submit an App Store version.
 
-### Repository controls before the first release
+Create an **Active** tag ruleset in GitHub **Settings > Rules > Rulesets** for
+the `v*` target pattern. Enable **Restrict creations**, **Restrict updates**,
+and **Restrict deletions**, and allow bypass only for the designated release
+manager. Create a release tag only on a reviewed `main` commit. Never move,
+replace, or reuse it; a permitted tag creation authorizes Xcode Cloud to build
+and upload a signed candidate.
 
-The repository owner explicitly authorized the initial source import to
-`git@github.com:hinoshiba/BlurFollow.git` on 2026-08-16. The canonical history
-begins with the complete reviewed source snapshot, excluding ignored local
-build products, and the import commit carries the importer identity and DCO
-`Signed-off-by` trailer. That commit establishes a reviewable source baseline;
-it does not close the separate brand, trademark, seller, signing, notarization,
-storefront, or commercial-release gates in this document.
+## 2. Xcode Cloud workflow
 
-- Preserve the initial import and its DCO sign-off as the source provenance
-  baseline. A DCO trailer records the importer's certification but does not
-  cure missing rights, unidentified AI/media inputs, or an absent assignment.
-- Protect the default branch and release environment; block force-push and tag
-  deletion, require passing CI and independent review, and restrict who can
-  approve or publish a release.
-- Require multifactor authentication for maintainers and protect recovery codes,
-  signing keys, Apple roles, domains, and merchant accounts separately.
-- Enable GitHub private vulnerability reporting and monitor the contact route in
-  `SECURITY.md` before directing reporters to it.
-- Keep release credentials unavailable to fork/pull-request workflows. Use
-  least-privilege, short-lived tokens and pin third-party actions to reviewed
-  commit SHAs.
-- Review dependency/runner updates; do not auto-merge a toolchain or action into
-  a release solely because automation opened the pull request.
+Complete the app's initial Xcode Cloud setup from Xcode. Edit the suggested
+workflow to use a non-Archive **Build** action and run it once from `main`;
+the release guard intentionally rejects an Archive without a release tag.
+After that setup build, edit the workflow in Xcode or App Store Connect:
 
-## 1. Freeze a release candidate
+- **Name:** `App Store Release`
+- **General:** enable **Restrict Editing** and limit workflow administrators to
+  the designated release managers
+- **Product:** BlurFollow (`com.hinoshiba.blurfollow`), Team `94HVVWXLK3`
+- **Repository:** `hinoshiba/BlurFollow`
+- **Start condition:** Tag Changes; include `v*`
+  and add no branch, pull-request, or schedule start condition; in this tag
+  condition's **Options**, set **Auto-cancel Builds** to **Off** so a later tag
+  cannot cancel an in-progress release archive
+- **Environment:** the latest released macOS and Xcode; enable **Clean**
+- **Action 1:** Test, macOS, scheme `BlurFollow`, **Required to Pass**
+- **Action 2:** Archive, macOS, scheme `BlurFollow`
+- **Deployment Preparation:** `TestFlight and App Store`
+- **Post-actions:** none by default. Add TestFlight distribution only after an
+  intended tester group exists and the release owner approves automatic
+  distribution to that exact group.
 
-1. Start from a clean, protected branch and record the full commit SHA.
-2. Choose an immutable semantic version and monotonically increasing build
-   number. The tag, app metadata, DMG, SBOM, release notes, and store record must
-   agree.
-3. Record macOS, Xcode, Swift, and SDK versions plus the build runner image.
-4. Run CI and the manual matrix in `COMPATIBILITY.md` on both Apple silicon and
-   Intel hardware (or record an explicitly approved exception).
-5. Re-read `PRIVACY.md`, `SECURITY.md`, `THREAT_MODEL.md`, `DEPENDENCIES.md`,
-   `THIRD_PARTY_NOTICES.md`, `NOTICE`, and `TRADEMARKS.md` against the candidate.
-6. Scan the repository and build logs for secrets and real captured content.
-7. Scan the final executable, symbols, archive, and package for local absolute
-   workspace paths and usernames. Build from a clean, reproducible path and use
-   Swift file/debug prefix mapping (or an equivalent toolchain control) before
-   signing if any local path remains.
+Keep automatic signing enabled. Xcode Cloud manages distribution signing for
+Team `94HVVWXLK3`; do not store certificates, profiles, App Store Connect keys,
+or Apple Account credentials in this repository or in non-secret variables.
 
-Suggested source checks:
+After the non-Archive setup build succeeds, remove the generated branch/PR
+start conditions from this release workflow and retain only the tag condition
+above.
+
+Xcode Cloud assigns the build number used by App Store Connect. Because this is
+a macOS app, the build number must increase across all marketing versions. For
+an existing app, open **App Store Connect > BlurFollow > Xcode Cloud > Settings
+> Build Number** and set **Next Build Number** to an integer greater than the
+largest build already uploaded for BlurFollow before the first tagged build.
+
+## 3. Prepare a release pull request
+
+Choose a semantic marketing version and update it consistently in:
+
+- `project.yml` and the checked-in `BlurFollow.xcodeproj`;
+- `StoreAssets/metadata/common/version.txt` and any version-specific listing
+  copy;
+- privacy, security, compatibility, architecture, dependency, notice, and
+  threat-model documents when behavior or inventory changed; and
+- the private release record, metadata, screenshots, and review notes for the
+  exact candidate.
+
+If `project.yml` changes, regenerate the checked-in project with the reviewed
+XcodeGen version and inspect the complete diff:
 
 ```sh
-test -z "$(git status --porcelain)"
-git rev-parse HEAD
-git log --show-signature -1
+xcodegen generate
+git diff --check
+git diff -- project.yml BlurFollow.xcodeproj
+```
+
+Run the automated gates:
+
+```sh
 swift test
-swift package show-dependencies --format json
-```
-
-Review all commits for `Signed-off-by` trailers. A script can assist, but a
-human must resolve merge commits, bots, and contributor identity exceptions.
-
-## 2. Produce the SBOM and provenance record
-
-Every binary release requires an SBOM even when the dependency list is empty.
-Use SPDX 2.3 JSON (preferred) or CycloneDX JSON and a version-pinned, reviewed
-generator. Record the generator name, version, source, and digest. The SBOM must
-identify:
-
-- BlurFollow, its version, source commit, Apache-2.0 license, and artifact digest;
-- every source or binary component actually packaged in the app/DMG;
-- direct and transitive relationships and concluded licenses;
-- reserved Brand Assets as not Apache-licensed; and
-- the fact that Apple system frameworks are external operating-system
-  requirements rather than bundled packages.
-
-Reconcile the SBOM with a manual bundle inspection and
-`THIRD_PARTY_NOTICES.md`. A repository dependency-graph export alone is not
-enough because it may omit copied code, resources, generated artifacts, and
-embedded binaries.
-
-Name release files unambiguously, for example:
-
-```text
-BlurFollow-1.2.3.dmg
-BlurFollow-1.2.3.dmg.sha256
-BlurFollow-1.2.3.spdx.json
-BlurFollow-1.2.3-provenance.json
-```
-
-Where supported, generate signed artifact provenance and an SBOM attestation
-from the protected release workflow. Pin CI actions to reviewed full commit
-SHAs. Preserve an offline copy of the workflow, logs, attestations, notarization
-submission ID/log, signing-certificate identity, source SHA, SBOM, and hashes.
-An attestation links an artifact to an identity and build record; it does not
-prove that the source or artifact is secure, and it provides value only when
-consumers verify it against an explicit policy.
-
-## 3. Developer ID direct distribution
-
-### Prerequisites
-
-- an Apple Developer Program team and a valid **Developer ID Application**
-  identity;
-- hardened runtime enabled with the minimum entitlements;
-- a `notarytool` keychain profile created interactively on the trusted release
-  Mac; and
-- no secret placed in the repository, shell history, CI output, or artifact.
-
-The current entitlements file contains App Sandbox plus user-selected
-read/write access for settings export; the direct build intentionally keeps
-that sandbox baseline too. Do not add network, automation, Accessibility,
-microphone, camera, or broader file-system exceptions merely to make a failing
-test pass. Document and review any entitlement change.
-
-### Build, sign, and inspect
-
-```sh
-export BLURFOLLOW_VERSION=1.2.3
-export BLURFOLLOW_BUILD_NUMBER=123
-export BLURFOLLOW_SIGN_IDENTITY='Developer ID Application: Legal Name (TEAMID)'
-
-./build.sh --dist
+./build.sh
 ./Scripts/check-release.sh
-
-codesign --verify --strict --verbose=2 dist/BlurFollow.app
-codesign -dvvv --entitlements :- dist/BlurFollow.app
-lipo -archs dist/BlurFollow.app/Contents/MacOS/BlurFollow
-otool -L dist/BlurFollow.app/Contents/MacOS/BlurFollow
+python3 StoreAssets/Scripts/validate_metadata.py --require-screenshots
+xcodebuild \
+  -project BlurFollow.xcodeproj \
+  -scheme BlurFollow \
+  -configuration Release \
+  -destination 'platform=macOS' \
+  CODE_SIGNING_ALLOWED=NO \
+  build test
 ```
 
-Expected architecture output is `arm64 x86_64`. Confirm that `LICENSE`,
-`NOTICE`, `THIRD_PARTY_NOTICES.md`, `DEPENDENCIES.md`, `PRIVACY.md`,
-`TRADEMARKS.md`, `SECURITY.md`, `Brand/PROVENANCE.md`, and
-`Docs/{RELEASE,THREAT_MODEL,COMPATIBILITY}.md` are readable inside
-`Contents/Resources` with their relative links intact. Confirm that
-`PrivacyInfo.xcprivacy` is present and matches the binary, the purpose string
-accurately describes ScreenCaptureKit, the version is correct,
-`com.apple.security.get-task-allow` is absent/false, and no unexpected helper or
-framework is embedded. Confirm the expected App Sandbox and user-selected-file
-entitlements are present and that no network entitlement was introduced.
+Complete the manual matrix in `Docs/COMPATIBILITY.md` against the candidate:
+permission allow/deny/revoke/reopen flows, Display Pin and Window Pin,
+Reconnect, Share Guide, Share Preview and stop/error paths, multiple
+displays/Spaces/full-screen/mixed DPI, supported sharing products,
+accessibility, localization, and a sustained performance run. Use synthetic
+content and record the exact commit, app hash, hardware, OS/app versions,
+results, and exceptions.
 
-`codesign --deep` must not be used as a substitute for signing each nested code
-object correctly. If nested code is added later, sign inside-out and audit each
-designated requirement.
+## 4. Start the cloud build
 
-### Package, notarize, staple, and verify
-
-Create the keychain profile once using Apple's `notarytool store-credentials`
-workflow, then run:
+Only tag the reviewed commit after GitHub CI and manual acceptance pass. The tag
+must be exactly `v<major>.<minor>.<patch>` and its version must equal
+`MARKETING_VERSION`:
 
 ```sh
-export BLURFOLLOW_NOTARY_PROFILE='blurfollow-notary'
-./Scripts/make-dmg.sh
-
-xcrun stapler validate "dist/BlurFollow-$BLURFOLLOW_VERSION.dmg"
-shasum -a 256 -c "dist/BlurFollow-$BLURFOLLOW_VERSION.dmg.sha256"
-./Scripts/check-release.sh --distribution
+git tag -s v0.1.0 -m "BlurFollow 0.1.0"
+git push origin v0.1.0
 ```
 
-Archive the notarization submission ID and retrieve its full log. A successful
-notarization is necessary release evidence; it is not an Apple endorsement,
-privacy audit, or proof that the app is vulnerability-free.
+`ci_scripts/ci_pre_xcodebuild.sh` rejects an Archive without Xcode Cloud, a
+release tag, or a positive Cloud build number, as well as malformed tags,
+tag/version mismatches,
+or a cloud action configured with the wrong platform, scheme, bundle ID, or
+team. It applies the Cloud build number to the temporary Xcode project. A
+passing workflow tests and archives the Release configuration and makes the
+build available in App Store Connect for TestFlight/App Store use.
 
-Mount the final DMG read-only and test the exact copied app from a clean standard
-user account with Gatekeeper enabled. Test first launch, picker cancel/deny/end,
-any OS-specific Screen Recording setting and relaunch behavior, masks, Share
-Preview start/stop, and uninstall documentation. Do not tell users to bypass
-Gatekeeper.
+Never move or reuse a release tag. Correct a failed candidate with a new build
+and, when source or marketing version changes, a new tag.
 
-## 4. Mac App Store distribution
+## 5. Verify the cloud artifact
 
-The direct-distribution script does not create an App Store artifact. Use an
-Xcode Archive and the Organizer/App Store Connect workflow with signing managed
-for the publisher's team.
+In the completed Xcode Cloud build and App Store Connect, verify:
 
-### Required App Store variant
+- source tag and commit, Xcode/macOS versions, version/build, and action logs;
+- bundle ID `com.hinoshiba.blurfollow`, Team `94HVVWXLK3`, App Sandbox,
+  Hardened Runtime, user-selected-file entitlement, and absence of unrelated
+  entitlements;
+- both advertised architectures, privacy manifest, localized resources, icon,
+  license/NOTICE/provenance files, and no unexpected embedded executable,
+  framework, non-system library, updater, analytics, audio, recording, or
+  network path;
+- metadata, screenshots, privacy answers, export compliance, category, age
+  rating, pricing, territories, support URLs, review notes, and release mode
+  against the exact build; and
+- first-launch and permission behavior from a clean account using the
+  TestFlight/App Store-signed candidate, including receiver-side preview.
 
-- Enable App Sandbox (`com.apple.security.app-sandbox = true`). Apple requires
-  it for Mac App Store distribution.
-- Add only entitlements demonstrated to be necessary. The current export
-  feature needs user-selected read/write access
-  (`com.apple.security.files.user-selected.read-write = true`) in a sandboxed
-  build. No network entitlement is needed by the current app.
-- Retain a clear `NSScreenCaptureUsageDescription`; test system-picker session
-  authorization and any OS-specific Screen Recording/TCC behavior in the
-  archived sandboxed build.
-- Verify Application Support storage moves to the sandbox container and define
-  migration/channel-switch behavior. Never silently read another channel's
-  data or weaken sandboxing to share it.
-- Confirm hardened runtime, bundle identifier, App ID, provisioning profile,
-  version/build, category, copyright, icon, localized metadata, and export
-  compliance on the archive.
-- Validate the archive's privacy manifest and scan required-reason API use;
-  an empty declaration is valid only while the exact code and embedded SDKs
-  support it.
-- Validate the archive and upload through the current Xcode/App Store Connect
-  path. Apple performs the store signing/distribution flow; do not notarize or
-  Developer ID-sign the uploaded archive as though it were the direct build.
+Xcode Cloud artifacts are retained for a limited period. Preserve the archive,
+logs, test results, App Store Connect build record, source commit, SBOM, and
+approval evidence in the private release record.
 
-The checked-in minimal sandbox entitlement set is **not itself proof of App
-Store readiness**. Release cannot proceed until the separate sandboxed archive
-passes runtime tests and Xcode/App Store validation.
+## 6. App Store Connect handoff
 
-### Privacy and review preparation
+Wait for build processing to finish before selecting it. Choose the exact
+version/build, save, and confirm it remains selected. Resolve every required
+metadata or compliance item named by App Store Connect.
 
-For the current local-only implementation, screen pixels processed only on the
-device are not “collected” under Apple's App Privacy definition. Re-audit the
-submitted binary and all SDKs at submission time. Update App Store Connect
-answers before adding any telemetry, crash reporter, licensing server, payment
-SDK, updater, support upload, or other transmission.
+Tagging authorizes the Xcode Cloud build and upload only. Distributing to
+testers, selecting the build for an App Store version, adding it for review,
+submitting for review, and releasing it are separate App Store Connect actions.
+Do not perform any of them without the release owner's explicit approval.
 
-Review Notes should give App Review a short, reproducible path:
-
-1. explain Display Pin versus Window Pin and why a separate overlay may be
-   omitted from an app/window or browser-tab share;
-2. open Share Guide, choose a synthetic source using Apple's picker, and open
-   Share Preview;
-3. point out the factual `Preview active`/stopped indicator, no-audio behavior,
-   local processing, and how to end system-authorized sharing;
-4. instruct the reviewer to inspect the BlurFollow preview, share the
-   **BlurFollow Share Preview window** rather than the original source, and
-   inspect receiver-side output; and
-5. provide a support contact and any needed demo configuration without real
-   personal data.
-
-Confirm compliance with the current recording-consent/indication rule, current
-privacy-policy rule, and accurate-metadata rule. Paid functionality must use the
-payment mechanism allowed for the chosen storefront model under current rules.
-
-## 5. Publish an immutable release
-
-Create and sign the annotated tag only after the release commit is approved:
-
-```sh
-git tag -s "v$BLURFOLLOW_VERSION" -m "BlurFollow $BLURFOLLOW_VERSION"
-git tag -v "v$BLURFOLLOW_VERSION"
-git push origin "v$BLURFOLLOW_VERSION"
-```
-
-Enable the hosting platform's immutable-release protection before the first
-public release. On GitHub, prepare a **draft**, attach the DMG, checksum, SBOM,
-provenance/attestation information, license notices, and final release notes,
-then publish once. GitHub immutable releases lock the tag and assets after
-publication and generate a release attestation.
-
-After publication:
-
-- never replace, delete, or silently rebuild an asset under the same version;
-- do not move or reuse the tag;
-- correct a defect with a new version and document the superseded release;
-- publish a security advisory/revocation notice when appropriate; and
-- verify the public asset against the locally archived digest and attestation.
-
-When using GitHub's immutable-release verification:
-
-```sh
-gh release verify "v$BLURFOLLOW_VERSION"
-gh release verify-asset "v$BLURFOLLOW_VERSION" \
-  "dist/BlurFollow-$BLURFOLLOW_VERSION.dmg"
-```
-
-Source archives generated on demand by the hosting platform are distinct from
-uploaded, attested release assets; document which artifact users should verify.
-
-## 6. Final two-person release checklist
-
-One release manager performs the build; a second authorized reviewer verifies
-the evidence and public draft.
-
-- [ ] Legal/ownership gate in section 0 is signed off.
-- [ ] Clean source SHA, signed tag, toolchain, tests, manual matrix, and DCO
-      evidence are archived.
-- [ ] Exact binary behavior matches product, privacy, compatibility, and store
-      claims; no placeholder remains.
-- [ ] Permissions and entitlements are minimal and correct for this channel.
-- [ ] Apache license, NOTICE, third-party notices, trademark separation, and
-      source link are present and readable.
-- [ ] SBOM matches the bundle; checksum and provenance bind to exact assets.
-- [ ] Developer ID artifact passes signature, hardened-runtime, notarization,
-      staple, Gatekeeper, and clean-machine tests; **or** the App Store archive
-      passes sandbox, validation, upload, and TestFlight/reviewer tests.
-- [ ] Privacy/support URLs and seller identity are public and monitored.
-- [ ] Release is published once with immutability enabled and verified from the
-      public channel.
-
-Stop on any mismatch. Schedule pressure is never an exception to the license,
-privacy, signing, user-facing claim, or receiver-verification gate.
+After release, monitor support and security channels. Do not replace a published
+binary or retarget a tag; ship a new version and retain the prior release
+evidence.
 
 ## Primary operational references
 
-- [Apple: Distributing software on macOS](https://developer.apple.com/macos/distribution/)
-- [Apple: Notarizing macOS software before distribution](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)
-- [Apple: Preparing an app for distribution](https://developer.apple.com/documentation/xcode/preparing-your-app-for-distribution)
-- [Apple: Configuring the macOS App Sandbox](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox)
+- [Apple: Setting up a project to use Xcode Cloud](https://developer.apple.com/documentation/xcode/setting-up-your-project-to-use-xcode-cloud)
+- [Apple: Xcode Cloud workflow reference](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference)
+- [Apple: Configuring workflow actions](https://developer.apple.com/documentation/xcode/configuring-your-xcode-cloud-workflow-s-actions)
+- [Apple: Setting the next Xcode Cloud build number](https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds/)
 - [Apple: App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - [Apple: App privacy details](https://developer.apple.com/app-store/app-privacy-details/)
-- [GitHub: Immutable releases](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases)
-- [GitHub: Artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
-External documentation is not immutable. The release record must capture the
-rules and agreements actually reviewed for that version and publisher.
+External requirements change. The release record must capture the rules,
+agreements, and App Store Connect state reviewed for the submitted version.

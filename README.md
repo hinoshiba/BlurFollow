@@ -162,7 +162,7 @@ Xcode projectを再生成する場合:
     xcodegen generate
     open BlurFollow.xcodeproj
 
-build.shは署名なしのローカル開発用app bundleをdistへ作ります。公開用の署名、公証、Mac App Store archiveは別途必要です。
+build.shはad-hoc署名したローカル開発用app bundleをdistへ作ります。公開用buildは、review済みのsemantic-version tagからXcode Cloudが作成し、App Store Connectへ送ります。
 
 ### 文書
 

@@ -2,25 +2,19 @@
 set -euo pipefail
 
 ROOT_DIR=${0:A:h}
-MODE="dev"
-if [[ "${1:-}" == "--dist" ]]; then
-    MODE="dist"
-fi
-
 cd "$ROOT_DIR"
 
-if [[ "$MODE" == "dist" ]]; then
-    if [[ -z "${BLURFOLLOW_SIGN_IDENTITY:-}" ]]; then
-        print -u2 "BLURFOLLOW_SIGN_IDENTITY must name a Developer ID Application certificate."
-        exit 1
-    fi
-    swift build -c release --arch arm64 --arch x86_64
-    BIN="$ROOT_DIR/.build/apple/Products/Release/BlurFollow"
-else
-    swift build -c debug
-    BIN_PATH=$(swift build -c debug --show-bin-path)
-    BIN="$BIN_PATH/BlurFollow"
+if [[ $# -ne 0 ]]; then
+    print -u2 "Usage: ./build.sh"
+    print -u2 "Official releases are built from v<version> tags by Xcode Cloud."
+    exit 64
 fi
+
+swift build -c debug
+BIN_PATH=$(swift build -c debug --show-bin-path)
+BIN="$BIN_PATH/BlurFollow"
+VERSION=$(awk '$1 == "MARKETING_VERSION:" { gsub(/"/, "", $2); print $2; exit }' project.yml)
+BUILD_NUMBER=$(awk '$1 == "CURRENT_PROJECT_VERSION:" { gsub(/"/, "", $2); print $2; exit }' project.yml)
 
 APP="$ROOT_DIR/dist/BlurFollow.app"
 CONTENTS="$APP/Contents"
@@ -33,8 +27,8 @@ cp "$ROOT_DIR/BlurFollow/Resources/Info.plist" "$CONTENTS/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :CFBundleExecutable BlurFollow" "$CONTENTS/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.hinoshiba.blurfollow" "$CONTENTS/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :CFBundleName BlurFollow" "$CONTENTS/Info.plist"
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${BLURFOLLOW_VERSION:-0.1.0}" "$CONTENTS/Info.plist"
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${BLURFOLLOW_BUILD_NUMBER:-1}" "$CONTENTS/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$CONTENTS/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$CONTENTS/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :LSMinimumSystemVersion 14.0" "$CONTENTS/Info.plist"
 
 ICONSET="$ROOT_DIR/BlurFollow/Resources/Assets.xcassets/AppIcon.appiconset"
@@ -62,15 +56,9 @@ cp "$ROOT_DIR/Docs/THREAT_MODEL.md" "$CONTENTS/Resources/Docs/THREAT_MODEL.md"
 cp "$ROOT_DIR/Docs/COMPATIBILITY.md" "$CONTENTS/Resources/Docs/COMPATIBILITY.md"
 printf 'APPL????' > "$CONTENTS/PkgInfo"
 
-if [[ "$MODE" == "dist" ]]; then
-    codesign --force --options runtime --timestamp \
-        --entitlements "$ROOT_DIR/BlurFollow/Resources/BlurFollow.entitlements" \
-        --sign "$BLURFOLLOW_SIGN_IDENTITY" "$APP"
-else
-    codesign --force \
-        --entitlements "$ROOT_DIR/BlurFollow/Resources/BlurFollow.entitlements" \
-        --sign - "$APP"
-fi
-
+codesign --force \
+    --entitlements "$ROOT_DIR/BlurFollow/Resources/BlurFollow.entitlements" \
+    --sign - "$APP"
 codesign --verify --strict --verbose=2 "$APP"
-print "Built $APP"
+print "Built development app $APP"
+print -u2 "DEVELOPMENT ONLY — dist/BlurFollow.app must not be published."

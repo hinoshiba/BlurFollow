@@ -71,7 +71,7 @@ state names in this document.
    receiver-side meeting/recording preview before sharing.
 6. Update architecture, compatibility, privacy, dependency, threat-model, and
    release documents when their statements would otherwise become stale.
-7. Do not commit signing identities, notarization credentials, App Store API
+7. Do not commit signing identities, Apple Account credentials, App Store API
    keys, provisioning profiles, private crash data, or real captured content.
 
 ## Developer Certificate of Origin
@@ -119,6 +119,7 @@ agreement from the maintainers.
 
 Approval is not guaranteed. Maintainers may request a smaller change, threat
 analysis, design revision, or independent legal/security review. Only release
-managers may sign, notarize, submit, publish, or claim an artifact is official.
+managers may push release tags, administer Xcode Cloud, submit, publish, or
+claim an artifact is official.
 Contributors must not use the BlurFollow marks to imply endorsement; see
 [TRADEMARKS.md](TRADEMARKS.md).

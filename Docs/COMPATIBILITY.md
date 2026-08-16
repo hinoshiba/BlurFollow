@@ -11,8 +11,8 @@ exact signed artifact and current versions of macOS and sharing products.
 
 | Area | Current contract |
 | --- | --- |
-| macOS | 14.0 or later (`Package.swift`, Xcode settings, and direct build agree). |
-| CPU | Development builds target the current host architecture; the direct distribution script produces a universal `arm64` + `x86_64` binary. |
+| macOS | 14.0 or later (`Package.swift`, Xcode settings, and development build agree). |
+| CPU | Development builds target the current host architecture; the Xcode Cloud App Store archive targets `arm64` + `x86_64`. |
 | UI | Native AppKit/SwiftUI; no browser engine or third-party UI runtime. |
 | Capture | ScreenCaptureKit with Apple's single-window content picker. macOS 14–15.1 first requires broad Screen Recording permission for exact identity resolution without guessing; macOS 15.2+ uses the picker's selected-window identity without proactively requesting that broader grant. |
 | Overlay tracking | Public `CGWindowList` metadata; no Accessibility permission or private window API. |
@@ -67,8 +67,8 @@ do not imply testing, support, or endorsement.
 - macOS 14 through 15.1 require a persistent broad Screen Recording grant for
   BlurFollow's identity-resolution path. macOS 15.2+ normally uses picker-scoped
   authorization instead. Grants are tied to macOS privacy controls and code
-  identity; moving between unsigned development, Developer ID, and App Store
-  builds can change behavior or require separate consent/relaunch.
+  identity; moving between development and App Store builds can change behavior
+  or require separate consent/relaunch.
 - Virtual machines and remote-desktop sessions may not expose capture or display
   behavior equivalent to physical hardware; they cannot be the sole release
   evidence.
@@ -86,9 +86,10 @@ At minimum test:
 - the oldest supported macOS 14.x release environment available to the team;
 - the latest security update of every macOS major version still claimed;
 - the current macOS release on Apple silicon;
-- the current macOS release on an Intel Mac for a universal direct artifact;
-- the Developer ID artifact from a clean standard user account; and
-- the sandboxed/App Store archive independently when that channel is offered.
+- the current macOS release on an Intel Mac when Intel support is advertised;
+  and
+- the Xcode Cloud/TestFlight App Store candidate from a clean standard user
+  account.
 
 If hardware or an OS version cannot be tested, narrow the published support
 claim or document the exception and risk approval in the release record.
@@ -194,7 +195,7 @@ Use a synthetic source and include:
 
 - exact BlurFollow version and artifact hash;
 - macOS version/build and Mac model/architecture;
-- sandbox/Developer ID/development channel and permission state;
+- App Store/development channel and permission state;
 - source and sharing product versions;
 - display layout/scale, Space/full-screen state, and mask mode/style;
 - receiver-side expected and observed behavior; and
