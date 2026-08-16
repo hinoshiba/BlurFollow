@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://blurfollow.app/sitemap.xml
+Sitemap: https://blurfollow.hinoshiba.com/sitemap.xml

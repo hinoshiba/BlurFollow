@@ -43,7 +43,7 @@ from a source-tree assumption.
 - [ ] Run `python3 StoreAssets/Scripts/validate_metadata.py` with no errors.
 - [ ] Read every localized field in App Store Connect after upload; line breaks,
   punctuation, Japanese glyphs, and URLs match the checked-in text.
-- [ ] `https://blurfollow.app/` and `/en/` resolve over HTTPS without redirects
+- [ ] `https://blurfollow.hinoshiba.com/` and `/en/` resolve over HTTPS without redirects
   to an unrelated host.
 - [ ] Privacy, support, and OSS pages resolve for both locales and remain usable
   without an account.

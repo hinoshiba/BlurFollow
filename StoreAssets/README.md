@@ -37,7 +37,7 @@ size.
 an equivalent reviewer-facing translation that can replace it when the assigned
 review team requests English.
 
-The public URLs in metadata assume deployment at `https://blurfollow.app`.
+The public URLs in metadata assume deployment at `https://blurfollow.hinoshiba.com`.
 Verify domain control, HTTPS, page content, and the support mailbox before
 submitting the listing.
 
