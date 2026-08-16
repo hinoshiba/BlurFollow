@@ -1,1 +1,1 @@
-blurfollow.hinoshiba.com
+com.hinoshiba.blurfollow

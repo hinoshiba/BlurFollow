@@ -13,7 +13,7 @@ fi
 
 codesign --verify --strict --verbose=2 "$APP"
 plutil -lint "$APP/Contents/Info.plist"
-if [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist")" != "blurfollow.hinoshiba.com" ]]; then
+if [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist")" != "com.hinoshiba.blurfollow" ]]; then
     print -u2 "Unexpected bundle identifier."
     exit 1
 fi

@@ -74,7 +74,7 @@ A sandboxed Mac App Store build stores the equivalent file inside the app's
 container, normally under:
 
 ```text
-~/Library/Containers/blurfollow.hinoshiba.com/Data/Library/Application Support/BlurFollow/Masks.json
+~/Library/Containers/com.hinoshiba.blurfollow/Data/Library/Application Support/BlurFollow/Masks.json
 ```
 
 The exact container can vary with bundle identifier and distribution. Window

@@ -457,9 +457,9 @@ struct LatestFrameSlot<Value> {
 }
 
 final class SharePreviewFrameProcessor: NSObject, SCStreamOutput, @unchecked Sendable {
-    static let queue = DispatchQueue(label: "blurfollow.hinoshiba.com.share-preview.frames", qos: .userInteractive)
+    static let queue = DispatchQueue(label: "com.hinoshiba.blurfollow.share-preview.frames", qos: .userInteractive)
     private static let renderQueue = DispatchQueue(
-        label: "blurfollow.hinoshiba.com.share-preview.render",
+        label: "com.hinoshiba.blurfollow.share-preview.render",
         qos: .userInitiated
     )
 
