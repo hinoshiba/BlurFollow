@@ -47,7 +47,7 @@ from a source-tree assumption.
   to an unrelated host.
 - [ ] Privacy, support, and OSS pages resolve for both locales and remain usable
   without an account.
-- [ ] `support@blurfollow.app` is provisioned, receives external mail, and has a
+- [ ] `support@hinoshiba.com` is provisioned, receives external mail, and has a
   monitored response workflow before any listing points to the support page.
 - [ ] The public privacy page names the accountable publisher and supplies any
   address, representative, rights-request process, or additional contact detail
