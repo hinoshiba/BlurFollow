@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BlurFollow — Blur that follows your window.</title>
+  <meta name="description" content="Pin a mask to a display or let it follow a selected window, then inspect the composited Share Preview before sharing on macOS.">
+  <link rel="canonical" href="https://blurfollow.app/en/">
+  <link rel="alternate" hreflang="ja" href="https://blurfollow.app/">
+  <link rel="alternate" hreflang="en" href="https://blurfollow.app/en/">
+  <link rel="alternate" hreflang="x-default" href="https://blurfollow.app/">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/site.css">
+  <meta name="theme-color" content="#101116">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BlurFollow — Blur that follows your window.">
+  <meta property="og:description" content="A macOS visual masking and pre-share inspection utility.">
+  <meta property="og:url" content="https://blurfollow.app/en/">
+  <meta property="og:image" content="https://blurfollow.app/assets/blurfollow-icon.png">
+  <meta property="og:locale" content="en_US">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a class="brand" href="/en/" aria-label="BlurFollow home">
+        <img src="/assets/blurfollow-icon.png" alt="" width="38" height="38">
+        <span>BlurFollow</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="/en/support/">Support</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/oss/">Open source</a>
+        <a class="language-link" href="/" lang="ja" hreflang="ja">日本語</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Window-following blur for Mac</p>
+          <h1>Blur that follows your window.</h1>
+          <p class="lede">Pin a mask to a display or update it as your selected window moves and resizes. Inspect the composited result before you share.</p>
+          <div class="hero-actions">
+            <a class="button" href="#how-it-works">See how it works</a>
+            <a class="button secondary" href="/en/support/">Help and support</a>
+          </div>
+          <p class="compat">macOS 14.0 or later</p>
+        </div>
+        <div class="product-visual" role="img" aria-label="A proportional mask displayed in the same relative location after a window moves">
+          <div class="mock-window back" aria-hidden="true">
+            <div class="mock-bar"></div>
+            <div class="mock-lines">
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-line"></div>
+            </div>
+            <div class="mask-block"></div>
+          </div>
+          <div class="mock-window front" aria-hidden="true">
+            <div class="mock-bar"></div>
+            <div class="mock-lines">
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-line"></div>
+            </div>
+            <div class="mask-block"></div>
+          </div>
+          <div class="motion-path" aria-hidden="true">↘</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Two coordinate modes</p>
+          <h2>Pin it. Follow it. Inspect it.</h2>
+          <p class="section-intro">Match the sharing method with two placement modes and a separate preview you can check.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">D</div>
+            <h3>Display Pin</h3>
+            <p>For notification areas and fixed layouts. Place a mask at a proportional position on one display.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">W</div>
+            <h3>Window Pin</h3>
+            <p>For moving windows. Update a mask's position and size from proportional window coordinates.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">P</div>
+            <h3>Share Preview</h3>
+            <p>Composite matching Window Pins on your Mac and inspect the result in a separate regular window.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">G</div>
+            <h3>Share Guide</h3>
+            <p>See the different workflows for full-display, single-window, and browser-tab sharing.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">3</div>
+            <h3>Three visual styles</h3>
+            <p>Choose Frost, Mosaic, or Redact for an area you have visually identified.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">L</div>
+            <h3>Last-position cover</h3>
+            <p>Optionally cover the latest position known to the app after tracking stops. It may not be current.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact" aria-labelledby="screenshots-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Inside the app</p>
+          <h2 id="screenshots-title">A clear path to the receiving preview.</h2>
+        </div>
+        <div class="screenshot-grid">
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/en-US/02-display-window-modes.png" width="1440" height="900" loading="lazy" alt="BlurFollow screen comparing Display Pin and Window Pin">
+            <figcaption><strong>Pin to a display. Follow a window.</strong>Compare both placement modes in the first-run guide.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/en-US/04-share-guide.png" width="1440" height="900" loading="lazy" alt="Share Guide explaining full-display, single-window, and browser-tab workflows">
+            <figcaption><strong>Choose for your sharing method.</strong>Share Guide explains single-window and browser-tab capture boundaries.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark" id="how-it-works">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Single-window workflow</p>
+          <h2>Share Share Preview—not the original window.</h2>
+          <p class="section-intro">A desktop overlay from another app is normally excluded from single-window capture in apps such as Chrome and from browser-tab sharing.</p>
+        </div>
+        <div class="boundary-grid">
+          <article class="boundary-card">
+            <p><strong>Sharing a full display</strong></p>
+            <p>Inspect BlurFollow's desktop masks, then inspect the meeting application's own preview.</p>
+          </article>
+          <article class="boundary-card">
+            <p><strong>Single window or browser tab</strong></p>
+            <p>Composite the source and its Window Pins in Share Preview, then select BlurFollow Share Preview in the meeting app.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Check before presenting</p>
+          <h2>Three steps to the share button.</h2>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-number">STEP 01</span>
+            <h3>Place the area</h3>
+            <p>Choose Display Pin or Window Pin and drag over an area you have inspected.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">STEP 02</span>
+            <h3>Inspect the composite</h3>
+            <p>For a single window, open Share Preview and visually inspect the source, layout, and every mask.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">STEP 03</span>
+            <h3>Check the receiving preview</h3>
+            <p>Select the intended target in the meeting app and inspect that app's own receiving preview again.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact">
+      <div class="container">
+        <div class="notice">
+          <h2>BlurFollow is a visual aid.</h2>
+          <p>It is not a security control and does not automatically detect confidential information. It does not guarantee mask placement, blur unreadability, or inclusion in the shared output. After scrolling, zooming, opening child windows, or changing capture methods, always inspect both BlurFollow and the meeting application's preview.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <h2>Check permissions and compatibility.</h2>
+          <p>Display Pin works without Screen Recording permission. Window Pin and Share Preview use different authorization paths depending on the macOS version.</p>
+          <div class="button-row">
+            <a class="button" href="/en/support/#permissions">Read permission details</a>
+            <a class="button secondary" href="/en/privacy/">Read data handling</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>BlurFollow</strong>
+        <p class="footer-note">Blur that follows your window. A macOS visual placement and pre-share inspection utility.</p>
+        <p>© 2026 The BlurFollow Authors</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="/en/support/">Support</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/oss/">Open source</a>
+        <a href="/" lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

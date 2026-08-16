@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "app_version": "0.1.0",
+  "info_plist_key": "ITSAppUsesNonExemptEncryption",
+  "info_plist_value": false,
+  "questionnaire_answer_proposal": "The app uses no non-exempt encryption.",
+  "audit_basis": {
+    "custom_or_proprietary_cryptography": false,
+    "bundled_third_party_cryptography": false,
+    "network_client_or_remote_endpoint": false,
+    "current_archive_documentation_expected": false
+  },
+  "verification_required": "Re-audit the exact archive and every linked library, answer the live App Store Connect export-compliance questions, and obtain qualified export review for all selected territories. Do not rely on this file if networking, licensing, payments, updates, or dependencies change.",
+  "apple_reference": "https://developer.apple.com/help/app-store-connect/manage-app-information/overview-of-export-compliance"
+}

@@ -1,0 +1,103 @@
+name: BlurFollow
+options:
+  developmentLanguage: ja
+  knownRegions:
+    - ja
+    - en
+  bundleIdPrefix: com.blurfollow
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_HARDENED_RUNTIME: YES
+    ENABLE_APP_SANDBOX: YES
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    CODE_SIGN_STYLE: Automatic
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+    DEAD_CODE_STRIPPING: YES
+configs:
+  Debug: debug
+  Release: release
+targets:
+  BlurFollow:
+    type: application
+    platform: macOS
+    sources:
+      - path: BlurFollow
+        excludes:
+          - Resources/Info.plist
+          - Resources/BlurFollow.entitlements
+    resources:
+      - path: BlurFollow/Resources
+        excludes:
+          - Info.plist
+          - BlurFollow.entitlements
+    postBuildScripts:
+      - name: Embed OSS and provenance documents
+        script: |
+          set -euo pipefail
+          RESOURCE_DIR="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+          mkdir -p "${RESOURCE_DIR}/Brand" "${RESOURCE_DIR}/Docs"
+          cp "${SRCROOT}/LICENSE" "${RESOURCE_DIR}/LICENSE"
+          cp "${SRCROOT}/NOTICE" "${RESOURCE_DIR}/NOTICE"
+          cp "${SRCROOT}/THIRD_PARTY_NOTICES.md" "${RESOURCE_DIR}/THIRD_PARTY_NOTICES.md"
+          cp "${SRCROOT}/TRADEMARKS.md" "${RESOURCE_DIR}/TRADEMARKS.md"
+          cp "${SRCROOT}/PRIVACY.md" "${RESOURCE_DIR}/PRIVACY.md"
+          cp "${SRCROOT}/DEPENDENCIES.md" "${RESOURCE_DIR}/DEPENDENCIES.md"
+          cp "${SRCROOT}/SECURITY.md" "${RESOURCE_DIR}/SECURITY.md"
+          cp "${SRCROOT}/Brand/PROVENANCE.md" "${RESOURCE_DIR}/Brand/PROVENANCE.md"
+          cp "${SRCROOT}/Docs/RELEASE.md" "${RESOURCE_DIR}/Docs/RELEASE.md"
+          cp "${SRCROOT}/Docs/THREAT_MODEL.md" "${RESOURCE_DIR}/Docs/THREAT_MODEL.md"
+          cp "${SRCROOT}/Docs/COMPATIBILITY.md" "${RESOURCE_DIR}/Docs/COMPATIBILITY.md"
+        inputFiles:
+          - $(SRCROOT)/LICENSE
+          - $(SRCROOT)/NOTICE
+          - $(SRCROOT)/THIRD_PARTY_NOTICES.md
+          - $(SRCROOT)/TRADEMARKS.md
+          - $(SRCROOT)/PRIVACY.md
+          - $(SRCROOT)/DEPENDENCIES.md
+          - $(SRCROOT)/SECURITY.md
+          - $(SRCROOT)/Brand/PROVENANCE.md
+          - $(SRCROOT)/Docs/RELEASE.md
+          - $(SRCROOT)/Docs/THREAT_MODEL.md
+          - $(SRCROOT)/Docs/COMPATIBILITY.md
+        outputFiles:
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/LICENSE
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/NOTICE
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/THIRD_PARTY_NOTICES.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/TRADEMARKS.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/PRIVACY.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/DEPENDENCIES.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/SECURITY.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Brand/PROVENANCE.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Docs/RELEASE.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Docs/THREAT_MODEL.md
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Docs/COMPATIBILITY.md
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.blurfollow.app
+        PRODUCT_NAME: BlurFollow
+        INFOPLIST_FILE: BlurFollow/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: BlurFollow/Resources/BlurFollow.entitlements
+        COMBINE_HIDPI_IMAGES: YES
+    scheme:
+      testTargets:
+        - BlurFollowTests
+      gatherCoverageData: true
+  BlurFollowTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: BlurFollowTests
+    dependencies:
+      - target: BlurFollow
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.blurfollow.tests
+        GENERATE_INFOPLIST_FILE: YES

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "app_version": "0.1.0",
+  "questionnaire_answer_proposal": {
+    "in_app_controls": {
+      "parental_controls": false,
+      "age_assurance": false
+    },
+    "capabilities": {
+      "unrestricted_web_access": false,
+      "user_generated_content": false,
+      "social_media": false,
+      "social_media_disabled_for_users_under_13": false,
+      "messaging_and_chat": false,
+      "advertising": false
+    },
+    "mature_themes": {
+      "profanity_or_crude_humor": "none",
+      "horror_or_fear_themes": "none",
+      "alcohol_tobacco_or_drug_use_or_references": "none"
+    },
+    "medical_or_wellness": {
+      "medical_or_treatment_information": "none",
+      "health_or_wellness_topics": "none"
+    },
+    "sexuality_or_nudity": {
+      "mature_or_suggestive_themes": "none",
+      "sexual_content_or_nudity": "none",
+      "graphic_sexual_content_and_nudity": "none"
+    },
+    "violence": {
+      "cartoon_or_fantasy_violence": "none",
+      "realistic_violence": "none",
+      "prolonged_graphic_or_sadistic_realistic_violence": "none",
+      "guns_or_other_weapons": "none"
+    },
+    "chance_based_activities": {
+      "gambling": false,
+      "simulated_gambling": "none",
+      "contests": "none",
+      "loot_boxes": false
+    },
+    "made_for_kids": false,
+    "override_to_higher_rating": false
+  },
+  "expected_global_rating": "4+",
+  "basis": "The current utility contains no publisher-provided objectionable content, social features, ads, web browser, chat, gambling, or commerce. User-selected window content is not distributed by the developer and must not be used as a test fixture with objectionable material.",
+  "verification_required": "Answer the live App Store Connect questionnaire from the exact final binary and storefront behavior. Apple calculates global and region-specific ratings; this proposal is not the assigned rating.",
+  "apple_reference": "https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating/"
+}

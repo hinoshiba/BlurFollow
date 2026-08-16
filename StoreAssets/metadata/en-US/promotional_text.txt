@@ -1,0 +1,1 @@
+Blur that follows your window. Pin a mask to a display or let it follow a window, then inspect the composited Share Preview before single-window sharing.

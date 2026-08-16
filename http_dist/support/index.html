@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>サポート — BlurFollow</title>
+  <meta name="description" content="BlurFollowの使い方、画面収録権限、Share Preview、よくある質問、お問い合わせ。">
+  <link rel="canonical" href="https://blurfollow.app/support/">
+  <link rel="alternate" hreflang="ja" href="https://blurfollow.app/support/">
+  <link rel="alternate" hreflang="en" href="https://blurfollow.app/en/support/">
+  <link rel="alternate" hreflang="x-default" href="https://blurfollow.app/support/">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/assets/site.css">
+  <meta name="theme-color" content="#101116">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <header class="site-header"><div class="container nav-row"><a class="brand" href="/" aria-label="BlurFollow ホーム"><img src="/assets/blurfollow-icon.png" alt="" width="38" height="38"><span>BlurFollow</span></a><nav class="site-nav" aria-label="メインナビゲーション"><a href="/">ホーム</a><a href="/support/" aria-current="page">サポート</a><a href="/privacy/">プライバシー</a><a href="/oss/">OSS</a><a class="language-link" href="/en/support/" lang="en" hreflang="en">English</a></nav></div></header>
+  <main id="main">
+    <header class="page-hero"><div class="container"><p class="eyebrow">Support</p><h1>使い方とサポート</h1><p class="lede">まず共有方式を決め、マスクを置き、共有先へ渡る映像まで目視します。</p></div></header>
+    <div class="container article-wrap">
+      <nav class="article-nav" aria-label="ページ内ナビゲーション"><a href="#start">基本操作</a><a href="#sharing">共有方法</a><a href="#permissions">権限</a><a href="#faq">よくある質問</a><a href="#contact">お問い合わせ</a></nav>
+      <article class="prose">
+        <section id="start">
+          <h2>基本操作</h2>
+          <h3>画面へ固定する</h3>
+          <ol><li>ホームで「Display Pin」を選びます。</li><li>対象ディスプレイ上で、マスクを置きたい領域をドラッグします。</li><li>MasksでFrost、Mosaic、Redactを選び、FrostまたはMosaicのStrengthを調整して、実際の画面で位置と見え方を確認します。Redactは不透明のままです。</li></ol>
+          <h3>ウインドウへ追従させる</h3>
+          <ol><li>ホームで「Window Pin」を選びます。</li><li>Appleのシステムピッカーから対象窓を選びます。</li><li>窓内で領域をドラッグし、窓を移動・リサイズしてマスク位置を確認します。</li><li>窓が再作成された、タイトルが変わった、または状態が「Select again／選び直す」になった場合はMasksの「Reconnect…」から窓を選び直します。再接続後もレイアウトを確認してください。</li></ol>
+          <h3>既存マスクを調整する</h3>
+          <ol><li>Masksで対象マスクを開きます。StrengthはFrostの見え方とMosaicの粒の大きさ・濃さへ反映されます。RedactはStrengthにかかわらず不透明です。</li><li>位置を変えるには「Move…」を押し、画面上のマスク本体をドラッグします。マウスまたはトラックパッドを離すと保存され、保存前にEscを押すと取り消せます。「Move…」は全体と対象マスクがOnで、位置を取得できている場合に使えます。</li><li>メニューバーのBlurFollowアイコンから、名前、Display Pin / Window Pin、状態を確認し、各マスクを個別にOn/Offできます。「Show Masks」はデスクトップ上の通常マスクの全体スイッチで、Offの場合は個別設定がOnでも通常マスクを表示しません。Share Previewは個別にOnのWindow Pinを使うため、別に表示を確認してください。</li></ol>
+          <p>Window Pinは対象窓の移動・リサイズに合わせて表示位置を更新します。対応するマスクの位置、表現、Strength、On/OffやShare Previewのキャプチャ状態が変わると、Share Previewは表示を更新し、更新中に直前の表示を消すか覆う場合があります。「位置を確認しました」が解除されたら、現在の合成結果を待ってすべてのマスクを見直してください。表示更新は、遅延ゼロや移動中の完全な位置一致、マスク位置や共有内容の正しさを保証しません。</p>
+        </section>
+        <section id="sharing">
+          <h2>共有方法を選ぶ</h2>
+          <h3>ディスプレイ全体</h3><p>デスクトップ上のマスクを目視したあと、会議アプリでディスプレイ全体を選び、そのアプリ自身のプレビューを確認します。通知、別のSpace、フルスクリーン切り替えにも注意してください。</p>
+          <h3>単一ウインドウ</h3><p>別アプリが描くオーバーレイは、単一ウインドウのキャプチャに通常は含まれません。BlurFollowでShare Previewを開き、対象窓を選び、すべてのWindow Pinを確認します。その後、会議アプリでは元窓ではなく「BlurFollow Share Preview」を選びます。</p>
+          <h3>ブラウザタブ</h3><p>タブ共有もデスクトップオーバーレイを含みません。Share Previewではブラウザのウインドウを選ぶため、タブ以外のブラウザUIが含まれうる点も確認してください。会議アプリにはBlurFollow Share Previewを共有し、受信側プレビューを見ます。</p>
+          <div class="notice"><h3>共有ボタンの前に</h3><p>「Following」「Placed」「Preview active」は、BlurFollowが把握した技術状態です。内容を認定する表示ではありません。スクロール、ズーム、窓移動、再接続、マスク編集の後は、BlurFollowと会議アプリの両方で再確認してください。</p></div>
+        </section>
+        <section id="permissions">
+          <h2>画面収録権限</h2>
+          <ul><li><strong>Display Pin:</strong> 権限は不要です。</li><li><strong>macOS 15.2以降:</strong> Appleのシステムピッカーで選択した窓ごとにWindow PinとShare Previewを許可します。</li><li><strong>macOS 14〜15.1:</strong> 選択窓の識別に画面収録の広い許可が必要です。システム設定で許可した後、BlurFollowを終了してもう一度開きます。</li></ul>
+          <p>許可を拒否した場合、Window PinとShare Previewは窓を推測せず停止します。システム設定の「プライバシーとセキュリティ」→「画面収録」で設定を確認できます。macOS 14〜15.1で不要になった広い許可は同じ画面から取り消せます。</p>
+        </section>
+        <section id="faq">
+          <h2>よくある質問</h2>
+          <div class="faq-list">
+            <details><summary>Chromeの窓やタブを共有すると、デスクトップ上のマスクが映りません。</summary><div class="faq-answer"><p>単一窓やタブのキャプチャは、別アプリのオーバーレイを通常含みません。Share Previewでブラウザ窓と対応するWindow Pinを合成し、会議アプリではBlurFollow Share Previewを共有対象に選んでください。</p></div></details>
+            <details><summary>Window Pinが窓についてきません。</summary><div class="faq-answer"><p>対象窓が閉じた、非表示になった、別の窓として再作成された、または同じ候補を特定できない可能性があります。Masksで状態を確認し、「Reconnect…」からAppleのピッカーで対象窓を選び直してください。割合座標は残りますが、内容レイアウトが変わっていないか目視します。</p></div></details>
+            <details><summary>Last-position coverとは何ですか。</summary><div class="faq-answer"><p>窓位置を取得できなくなったとき、BlurFollowが最後に利用できた位置を不透明に覆う表示です。移動後の現在位置とは限らず、再接続や共有先確認の代わりにはなりません。</p></div></details>
+            <details><summary>Share Previewが「Preview paused」または覆われた表示になります。</summary><div class="faq-answer"><p>対応するWindow Pinがない、窓の識別やフレームを検証できない、設定の復旧確認が必要、またはキャプチャが停止した場合に、通常の合成結果を表示しない状態です。画面の理由表示に従い、Window Pinの追加・再接続・設定確認・対象窓の再選択を行ってください。</p></div></details>
+            <details><summary>ぼかしとモザイクは情報を読めなくしますか。</summary><div class="faq-answer"><p>読みにくく見せますが、元情報の推測や復元が不可能になるとは限りません。可能なら元データから秘密情報を除き、視覚的に置き換える用途には不透明なRedactを検討し、共有先の映像を目視してください。</p></div></details>
+            <details><summary>録画や音声取得、外部送信をしますか。</summary><div class="faq-answer"><p>現在の0.1.0は音声を取得せず、画面フレームを録画ファイルへ保存せず、開発者へ送信しません。Share Previewを会議アプリに共有した後は、そのアプリが各自の規約で映像を扱います。詳しくはプライバシーポリシーをご覧ください。</p></div></details>
+            <details><summary>保存したマスクを消すには。</summary><div class="faq-answer"><p>Masksで個別に削除するか、「Delete All Masks」を使います。すべてのアプリ設定を消す場合は、BlurFollowを終了後、sandboxコンテナ内のMasks.jsonとMasks.json.backupを削除します。書き出した設定は別に削除してください。</p></div></details>
+          </div>
+        </section>
+        <section id="contact">
+          <div class="contact-card">
+            <h2>お問い合わせ</h2>
+            <p>日本語または英語で <a href="mailto:support@blurfollow.app?subject=BlurFollow%20Support">support@blurfollow.app</a> へお送りください。</p>
+            <p>アプリのバージョン、macOSのバージョン、Macの種類、共有方式、対象アプリ、表示された状態、再現手順、期待した結果と実際の結果を添えると確認しやすくなります。実際の機密画面、窓タイトル、個人情報、認証情報は送らず、架空データで再現してください。</p>
+            <p>脆弱性の可能性がある場合は件名に「Security」を含め、公開issueへ詳細を書かないでください。</p>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="container footer-grid"><div><strong>BlurFollow</strong><p>© 2026 The BlurFollow Authors</p></div><nav class="footer-links" aria-label="フッターナビゲーション"><a href="/">ホーム</a><a href="/privacy/">プライバシー</a><a href="/oss/">OSS</a><a href="/en/support/" lang="en">English</a></nav></div></footer>
+</body>
+</html>

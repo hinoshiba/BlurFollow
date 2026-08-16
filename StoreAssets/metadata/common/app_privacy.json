@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "app_version": "0.1.0",
+  "tracking": false,
+  "data_collected_by_developer": [],
+  "third_party_analytics": false,
+  "advertising": false,
+  "audio_capture": false,
+  "screen_frame_recording": false,
+  "screen_frame_upload": false,
+  "on_device_processing": [
+    {
+      "data": "User-selected window frames",
+      "purpose": "Render Share Preview",
+      "transient": true,
+      "sent_to_developer": false
+    }
+  ],
+  "local_storage": [
+    "Mask name and geometry",
+    "Mask style and strength",
+    "Selected display identifier",
+    "Selected app, process, window title, window identifier, and saved bounds",
+    "Preferences and recovery backup"
+  ],
+  "submission_answer": "No, this app does not collect data",
+  "verification_required": "Re-audit the exact archive, PrivacyInfo.xcprivacy, linked SDKs, and network behavior immediately before submission."
+}

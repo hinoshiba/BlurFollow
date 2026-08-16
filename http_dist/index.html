@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BlurFollow — ぼかしが、ウインドウについてくる。</title>
+  <meta name="description" content="画面へ固定するマスクと、選んだウインドウの移動・リサイズに追従するマスク。Share Previewで合成結果を確認できるmacOSアプリ。">
+  <link rel="canonical" href="https://blurfollow.app/">
+  <link rel="alternate" hreflang="ja" href="https://blurfollow.app/">
+  <link rel="alternate" hreflang="en" href="https://blurfollow.app/en/">
+  <link rel="alternate" hreflang="x-default" href="https://blurfollow.app/">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/site.css">
+  <meta name="theme-color" content="#101116">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BlurFollow — ぼかしが、ウインドウについてくる。">
+  <meta property="og:description" content="画面共有前のマスク位置を、見て確認するためのmacOSアプリ。">
+  <meta property="og:url" content="https://blurfollow.app/">
+  <meta property="og:image" content="https://blurfollow.app/assets/blurfollow-icon.png">
+  <meta property="og:locale" content="ja_JP">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a class="brand" href="/" aria-label="BlurFollow ホーム">
+        <img src="/assets/blurfollow-icon.png" alt="" width="38" height="38">
+        <span>BlurFollow</span>
+      </a>
+      <nav class="site-nav" aria-label="メインナビゲーション">
+        <a href="#features">機能</a>
+        <a href="/support/">サポート</a>
+        <a href="/privacy/">プライバシー</a>
+        <a href="/oss/">OSS</a>
+        <a class="language-link" href="/en/" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Window-following blur for Mac</p>
+          <h1>ぼかしが、<br>ウインドウについてくる。</h1>
+          <p class="lede">画面へ固定するマスクと、選んだ窓の移動・リサイズに合わせるマスク。共有前に、合成結果を自分の目で確認できます。</p>
+          <div class="hero-actions">
+            <a class="button" href="#how-it-works">仕組みを見る</a>
+            <a class="button secondary" href="/support/">使い方とサポート</a>
+          </div>
+          <p class="compat">macOS 14.0以降</p>
+        </div>
+        <div class="product-visual" role="img" aria-label="同じ割合位置のマスクが移動後のウインドウにも合わせて表示される図">
+          <div class="mock-window back" aria-hidden="true">
+            <div class="mock-bar"></div>
+            <div class="mock-lines">
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-line"></div>
+            </div>
+            <div class="mask-block"></div>
+          </div>
+          <div class="mock-window front" aria-hidden="true">
+            <div class="mock-bar"></div>
+            <div class="mock-lines">
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-line"></div>
+            </div>
+            <div class="mask-block"></div>
+          </div>
+          <div class="motion-path" aria-hidden="true">↘</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Two coordinate modes</p>
+          <h2>固定する。追従させる。共有前に見る。</h2>
+          <p class="section-intro">共有する画面と作業の流れに合わせて、2種類の位置指定と確認用プレビューを使い分けます。</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">D</div>
+            <h3>Display Pin</h3>
+            <p>通知領域や固定レイアウトへ。ひとつのディスプレイ内の割合位置へマスクを置きます。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">W</div>
+            <h3>Window Pin</h3>
+            <p>選んだ窓の移動とリサイズへ。窓内の割合座標からマスク位置と大きさを更新します。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">P</div>
+            <h3>Share Preview</h3>
+            <p>選んだ窓へ対応するWindow PinをMac内で合成し、別の通常ウインドウとして確認できます。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">G</div>
+            <h3>Share Guide</h3>
+            <p>ディスプレイ全体、単一ウインドウ、ブラウザタブで異なる共有方法を画面内で案内します。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">3</div>
+            <h3>3つの表示スタイル</h3>
+            <p>Frost、Mosaic、Redact。目視で選んだ領域と目的に合わせて切り替えられます。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">L</div>
+            <h3>Last-position cover</h3>
+            <p>追跡できないとき、最後に把握した位置を不透明に覆う選択肢。現在位置とは限りません。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact" aria-labelledby="screenshots-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Inside the app</p>
+          <h2 id="screenshots-title">迷わず選べる、共有前の導線。</h2>
+        </div>
+        <div class="screenshot-grid">
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/ja-JP/02-display-window-modes.png" width="1440" height="900" loading="lazy" alt="Display PinとWindow Pinを比較するBlurFollowの画面">
+            <figcaption><strong>画面に固定。窓に追従。</strong>2つの位置指定を、最初の案内で見比べられます。</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <img src="/assets/screenshots/ja-JP/04-share-guide.png" width="1440" height="900" loading="lazy" alt="ディスプレイ全体、単一窓、ブラウザタブを案内するShare Guide">
+            <figcaption><strong>共有方式に合わせて選ぶ。</strong>Share Guideが単一窓とタブ共有の違いを案内します。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark" id="how-it-works">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Single-window workflow</p>
+          <h2>単一窓の共有は、Share Previewを選ぶ。</h2>
+          <p class="section-intro">別アプリのデスクトップオーバーレイは、Chromeなどの単一ウインドウ共有やブラウザタブ共有に通常は含まれません。</p>
+        </div>
+        <div class="boundary-grid">
+          <article class="boundary-card">
+            <p><strong>ディスプレイ全体を共有</strong></p>
+            <p>BlurFollowのデスクトップマスクを画面上で確認してから、会議アプリ側のプレビューも確認します。</p>
+          </article>
+          <article class="boundary-card">
+            <p><strong>単一ウインドウ／ブラウザタブ</strong></p>
+            <p>Share Previewで対象窓とマスクを合成し、元の窓ではなくBlurFollow Share Previewを共有対象に選びます。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Check before presenting</p>
+          <h2>共有までの3ステップ。</h2>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-number">STEP 01</span>
+            <h3>領域を置く</h3>
+            <p>Display PinまたはWindow Pinを選び、実際に見て確認した領域をドラッグします。</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">STEP 02</span>
+            <h3>合成結果を見る</h3>
+            <p>単一窓ではShare Previewを開き、元窓・レイアウト・すべてのマスク位置を目視します。</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">STEP 03</span>
+            <h3>共有先でも確認する</h3>
+            <p>会議アプリで正しい対象を選び、そのアプリ自身の受信側プレビューをもう一度確認します。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact">
+      <div class="container">
+        <div class="notice">
+          <h2>BlurFollowは視覚的補助です。</h2>
+          <p>セキュリティ対策そのものではなく、文字や機密情報を自動検出しません。マスク位置、ぼかしの読みにくさ、共有先への反映を保証しません。スクロール、ズーム、子ウインドウ、共有方式の変更後は、BlurFollowと会議アプリの両方で必ず出力を確認してください。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <h2>権限と動作環境を確認する。</h2>
+          <p>Display Pinは画面収録権限なしで使えます。Window PinとShare Previewは、macOSのバージョンにより許可方法が異なります。</p>
+          <div class="button-row">
+            <a class="button" href="/support/#permissions">権限の説明を読む</a>
+            <a class="button secondary" href="/privacy/">データの扱いを読む</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>BlurFollow</strong>
+        <p class="footer-note">ぼかしが、ウインドウについてくる。macOS向けの視覚的な位置合わせ・共有前確認ツール。</p>
+        <p>© 2026 The BlurFollow Authors</p>
+      </div>
+      <nav class="footer-links" aria-label="フッターナビゲーション">
+        <a href="/support/">サポート</a>
+        <a href="/privacy/">プライバシー</a>
+        <a href="/oss/">OSS</a>
+        <a href="/en/" lang="en">English</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

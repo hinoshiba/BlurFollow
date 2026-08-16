@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>プライバシーポリシー — BlurFollow</title>
+  <meta name="description" content="BlurFollow 0.1.0の画面フレーム、ローカル設定、権限、外部送信、削除に関するプライバシーポリシー。">
+  <link rel="canonical" href="https://blurfollow.app/privacy/">
+  <link rel="alternate" hreflang="ja" href="https://blurfollow.app/privacy/">
+  <link rel="alternate" hreflang="en" href="https://blurfollow.app/en/privacy/">
+  <link rel="alternate" hreflang="x-default" href="https://blurfollow.app/privacy/">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/assets/site.css">
+  <meta name="theme-color" content="#101116">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a class="brand" href="/" aria-label="BlurFollow ホーム"><img src="/assets/blurfollow-icon.png" alt="" width="38" height="38"><span>BlurFollow</span></a>
+      <nav class="site-nav" aria-label="メインナビゲーション">
+        <a href="/">ホーム</a><a href="/support/">サポート</a><a href="/privacy/" aria-current="page">プライバシー</a><a href="/oss/">OSS</a><a class="language-link" href="/en/privacy/" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <header class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Privacy policy</p>
+        <h1>プライバシーポリシー</h1>
+        <p class="lede">BlurFollowが画面と設定をどのように扱うかを、機能ごとに説明します。</p>
+        <p class="meta-line">最終更新: 2026年8月16日 · 対象: BlurFollow 0.1.0 macOSアプリ</p>
+      </div>
+    </header>
+    <div class="container article-wrap">
+      <nav class="article-nav" aria-label="ページ内ナビゲーション">
+        <a href="#summary">概要</a><a href="#screen">画面フレーム</a><a href="#local">ローカル設定</a><a href="#permissions">権限</a><a href="#network">外部送信</a><a href="#choices">削除と選択</a><a href="#limits">制約</a><a href="#contact">お問い合わせ</a>
+      </nav>
+      <article class="prose">
+        <section id="summary">
+          <h2>概要</h2>
+          <ul>
+            <li>アカウント、広告、分析、トラッキング、第三者ランタイムSDKはありません。</li>
+            <li>画面フレームはShare PreviewのためにMac上で一時処理し、録画ファイルへ保存せず、BlurFollowの開発者へ送信しません。</li>
+            <li>音声、カメラ、キーボード入力、クリップボードを取得しません。</li>
+            <li>マスク設定と、選択した窓を再び識別するための限定的なメタデータをMac内へ保存します。</li>
+          </ul>
+        </section>
+        <section id="screen">
+          <h2>画面フレーム</h2>
+          <p>Share Previewでは、Appleのシステムピッカーで利用者が選んだひとつのウインドウをScreenCaptureKitが提供します。BlurFollowは対応するWindow Pinをメモリ上で合成し、別の通常ウインドウへ表示します。音声取得は無効です。</p>
+          <p>現在のアプリには、フレームを動画や画像としてエンコードして保存する処理、ネットワークへ送る処理、分析や学習へ使う処理はありません。キャプチャ停止時にはアプリが保持する現在のプレビュー画像を解除します。ただし、macOSのスワップ、GPUバッファ、クラッシュ診断、利用者自身のスクリーンショット、バックアップ、画面収録権限を持つ別プロセスまで完全に制御するものではありません。</p>
+          <p>利用者がBlurFollow Share Previewを会議・配信・録画アプリへ共有した後、そのアプリと受信者が扱う映像には各サービスの規約とポリシーが適用されます。BlurFollowは会議の参加者、録画、再配布を管理しません。</p>
+        </section>
+        <section id="local">
+          <h2>ローカル設定</h2>
+          <p>次の情報をJSON設定として保存します。</p>
+          <ul>
+            <li>マスク名、割合座標、表示スタイル、強度、角丸、使用状態、作成日、ディスプレイ識別子</li>
+            <li>Window Pinの窓ID、プロセスID、アプリ名、bundle ID、窓タイトル、保存時の窓位置と大きさ</li>
+            <li>全体表示、Last-position cover、オンボーディングなどの設定</li>
+          </ul>
+          <p>Mac App Storeのsandbox版では、通常はアプリコンテナ内の <code>Library/Application Support/BlurFollow/Masks.json</code> に保存します。最後に検証できた設定を同じ場所の <code>Masks.json.backup</code> に保持する場合があります。窓タイトルや利用者が付けたマスク名自体に個人情報が含まれうるため、名前付けにもご注意ください。</p>
+          <p>「Export Mask Settings」は、同じ種類の設定を利用者が選んだ場所へ書き出します。書き出し後のコピーには、保存先、同期、バックアップを提供する別ソフトウェアの取り扱いが適用されます。</p>
+        </section>
+        <section id="permissions">
+          <h2>権限</h2>
+          <ul>
+            <li><strong>Display Pin:</strong> 画面収録権限を必要としません。</li>
+            <li><strong>macOS 15.2以降:</strong> Window PinとShare PreviewはAppleのシステムピッカーで選んだ窓ごとの許可を使います。</li>
+            <li><strong>macOS 14〜15.1:</strong> 選んだ窓を推測せず識別する互換処理のため、画面収録の広い許可が必要です。新しく許可した後はBlurFollowを終了し、もう一度開きます。拒否時は処理を開始しません。</li>
+          </ul>
+          <p>BlurFollowはアクセシビリティ、フルディスクアクセス、カメラ、マイクの権限を要求しません。macOS 14〜15.1の画面収録許可が不要になった場合は、システム設定から取り消せます。</p>
+        </section>
+        <section id="network">
+          <h2>外部送信とApp Privacy</h2>
+          <p>監査対象の0.1.0アプリにはネットワーククライアントやリモート接続先がなく、開発者による個人データ収集、広告目的の共有、アプリ横断トラッキングを行いません。AppleのApp Privacy上、現在の未改変ビルドについて想定する回答は「このアプリからデータを収集しない」です。</p>
+          <p>App Store、署名・公証、ダウンロードホスト、macOS、会議アプリは、それぞれの提供者として別に情報を扱う場合があります。BlurFollowの実行時送信とは異なります。</p>
+        </section>
+        <section id="choices">
+          <h2>保持、削除、利用者の選択</h2>
+          <ul>
+            <li>Share Previewを停止するとキャプチャを終了し、現在のプレビューをアプリの状態から解除します。</li>
+            <li>個別のマスクを無効化・削除できます。「Delete All Masks」はマスク一覧を空にし、回復用backupを削除します。</li>
+            <li>すべての保存設定を消す場合はBlurFollowを終了し、sandboxコンテナ内の <code>Masks.json</code> と <code>Masks.json.backup</code> を削除します。</li>
+            <li>書き出した設定、クラウド同期、バックアップ内のコピーは別に削除してください。</li>
+            <li>アンインストールだけではApplication Supportやsandboxコンテナが残る場合があります。</li>
+          </ul>
+          <p>BlurFollowのアカウントやサーバー保存領域はないため、サーバー上の利用者プロフィールはありません。</p>
+        </section>
+        <section id="limits">
+          <h2>視覚的補助としての制約</h2>
+          <p>BlurFollowはマスクの位置合わせと共有前確認を助けます。機密情報を自動検出せず、マスク位置、ぼかしやモザイクの読みにくさ、共有出力への反映を保証しません。スクロール、ズーム、レイアウト、子ウインドウ、追跡停止、共有方式により見え方は変わります。元データから秘密情報を除き、必要に応じて不透明なRedactを選び、BlurFollowと会議アプリの受信側プレビューを毎回目視してください。</p>
+        </section>
+        <section id="contact">
+          <h2>変更とお問い合わせ</h2>
+          <p>ネットワーク、アカウント、分析、課金、クラウド同期などデータの扱いを変える機能を追加した場合、このポリシーとApp Privacy回答を配布前に更新します。</p>
+          <p>プライバシーに関するお問い合わせは <a href="mailto:support@blurfollow.app?subject=BlurFollow%20Privacy">support@blurfollow.app</a> へお送りください。実際の画面フレーム、窓タイトル、個人情報、認証情報は添付しないでください。</p>
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="container footer-grid"><div><strong>BlurFollow</strong><p>© 2026 The BlurFollow Authors</p></div><nav class="footer-links" aria-label="フッターナビゲーション"><a href="/">ホーム</a><a href="/support/">サポート</a><a href="/oss/">OSS</a><a href="/en/privacy/" lang="en">English</a></nav></div></footer>
+</body>
+</html>

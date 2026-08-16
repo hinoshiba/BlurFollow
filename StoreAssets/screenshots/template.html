@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BlurFollow screenshot compositor</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif;
+      background: #101116;
+      color: #f7f8ff;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 1440px; height: 900px; margin: 0; overflow: hidden; }
+    body {
+      background:
+        radial-gradient(circle at 78% 14%, rgba(124,108,255,.34), transparent 31%),
+        radial-gradient(circle at 18% 70%, rgba(66,217,200,.2), transparent 36%),
+        linear-gradient(145deg, #101116 0%, #111a32 100%);
+    }
+    .canvas {
+      position: relative;
+      width: 1440px;
+      height: 900px;
+      padding: 58px 76px 54px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 34px;
+      isolation: isolate;
+    }
+    .canvas::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .18;
+      background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(to bottom, transparent, black 25%, transparent 90%);
+    }
+    header { display: flex; align-items: flex-start; justify-content: space-between; gap: 48px; }
+    .eyebrow { display: flex; align-items: center; gap: 14px; color: #42d9c8; font-size: 22px; font-weight: 700; letter-spacing: .01em; }
+    .eyebrow img { width: 46px; height: 46px; border-radius: 11px; box-shadow: 0 10px 28px rgba(0,0,0,.32); }
+    h1 { margin: 15px 0 0; max-width: 980px; font-size: 58px; line-height: 1.08; letter-spacing: -.035em; }
+    .number { color: rgba(247,248,255,.42); font-size: 24px; font-weight: 750; padding-top: 10px; }
+    .stage {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 286px;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .capture {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 24px;
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 26px 70px rgba(0,0,0,.42);
+      display: grid;
+      place-items: center;
+    }
+    .capture img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    .source-frame {
+      max-width: 100%;
+      max-height: 100%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    .source-frame.crop-onboarding {
+      width: min(86%, 828px);
+      aspect-ratio: 720 / 410;
+    }
+    .source-frame.crop-onboarding img {
+      width: 100%;
+      max-width: none;
+      max-height: none;
+      align-self: start;
+    }
+    .missing {
+      display: none;
+      position: absolute;
+      inset: 18px;
+      border: 2px dashed #ffb44c;
+      border-radius: 16px;
+      place-items: center;
+      padding: 40px;
+      text-align: center;
+      color: #ffcb85;
+      background: rgba(16,17,22,.9);
+      font-size: 24px;
+      font-weight: 750;
+    }
+    .details {
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 24px;
+      padding: 28px 26px;
+      background: rgba(16,17,22,.64);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .details p { margin: 0; color: #d7dbec; font-size: 22px; line-height: 1.48; }
+    .chip { align-self: flex-start; color: #0b1020; background: #42d9c8; padding: 10px 14px; border-radius: 999px; font-size: 16px; font-weight: 800; }
+    .accent { width: 74px; height: 5px; margin-top: 26px; border-radius: 999px; background: linear-gradient(90deg, #42d9c8, #7c6cff); }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <header>
+      <div>
+        <div class="eyebrow">
+          <img src="../../Brand/BlurFollowIcon-Source.png" alt="">
+          <span>BlurFollow</span>
+        </div>
+        <h1 id="headline"></h1>
+      </div>
+      <div class="number" id="number"></div>
+    </header>
+    <section class="stage" aria-label="Store screenshot composition">
+      <div class="capture">
+        <div class="source-frame" id="source-frame">
+          <img id="capture" alt="BlurFollow application capture">
+        </div>
+        <div class="missing" id="missing">RAW CAPTURE MISSING</div>
+      </div>
+      <aside class="details">
+        <div>
+          <p id="detail"></p>
+          <div class="accent"></div>
+        </div>
+        <div class="chip">macOS 14.0+</div>
+      </aside>
+    </section>
+  </main>
+  <script>
+    const copy = {
+      "ja-JP": [
+        ["ぼかしが、ウインドウについてくる。", "選んだ窓の移動とリサイズに、割合位置のマスクが追従。"],
+        ["画面に固定。窓に追従。", "固定レイアウトのDisplay Pinと、窓に合わせるWindow Pin。"],
+        ["共有前に、すべてのマスクを確認。", "Share Previewで合成結果を目視し、会議アプリ側でも再確認。"],
+        ["共有方式に合わせて選ぶ。", "ディスプレイ、単一窓、ブラウザタブの違いをShare Guideで確認。"],
+        ["設定は、Mac内で管理。", "表示、権限、書き出し、削除をひとつの画面で確認。"]
+      ],
+      "en-US": [
+        ["Blur that follows your window.", "A proportional mask updates as your selected window moves and resizes."],
+        ["Pin to a display. Follow a window.", "Display Pin for fixed layouts. Window Pin for moving windows."],
+        ["Check every mask before sharing.", "Inspect Share Preview, then check the meeting app's own preview again."],
+        ["Choose for your sharing method.", "Use Share Guide for full-display, single-window, and browser-tab workflows."],
+        ["Local controls, on your Mac.", "Review visibility, permission, export, and deletion in one place."]
+      ]
+    };
+    const rawFilenames = [
+      "00-onboarding.jpg",
+      "02-modes.jpg",
+      "03-review-before-sharing.jpg",
+      "03-share-guide.jpg",
+      "04-settings.jpg"
+    ];
+    const params = new URLSearchParams(location.search);
+    const locale = copy[params.get("locale")] ? params.get("locale") : "ja-JP";
+    const requested = Number.parseInt(params.get("shot") || "1", 10);
+    const shot = Number.isInteger(requested) && requested >= 1 && requested <= 5 ? requested : 1;
+    const index = shot - 1;
+    document.documentElement.lang = locale === "ja-JP" ? "ja" : "en";
+    document.getElementById("headline").textContent = copy[locale][index][0];
+    document.getElementById("detail").textContent = copy[locale][index][1];
+    document.getElementById("number").textContent = String(shot).padStart(2, "0") + " / 05";
+    const image = document.getElementById("capture");
+    const sourceFrame = document.getElementById("source-frame");
+    const missing = document.getElementById("missing");
+    if (shot === 1) sourceFrame.classList.add("crop-onboarding");
+    image.src = `raw/${locale}/${rawFilenames[index]}`;
+    image.addEventListener("error", () => {
+      image.style.display = "none";
+      missing.style.display = "grid";
+      missing.textContent = `RAW CAPTURE MISSING\nraw/${locale}/${rawFilenames[index]}`;
+    });
+  </script>
+</body>
+</html>

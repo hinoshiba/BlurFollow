@@ -1,0 +1,29 @@
+Blur that follows your window.
+
+BlurFollow is a visual masking utility for macOS screen-sharing workflows.
+
+FOLLOW A WINDOW
+Place a mask at a proportional position inside a window you select. BlurFollow updates its position and size as the window moves or resizes. Use it for an area you have visually identified, such as a name, email address, customer field, or internal URL.
+
+PIN TO A DISPLAY
+For a notification area or fixed layout, place a Display Pin at a proportional position on one display.
+
+SHARE PREVIEW
+An overlay from another app is normally not included when you share a single Chrome window or browser tab. BlurFollow processes the window selected with Apple's system picker, composites its matching Window Pins on your Mac, and shows the result in a separate BlurFollow Share Preview window.
+
+For a single-window workflow, choose BlurFollow Share Preview as the sharing target instead of the original window. Inspect every mask inside Share Preview before sharing, then check the meeting application's own preview again.
+
+SHARE GUIDE
+See which workflow fits full-display, single-window, and browser-tab sharing.
+
+THREE VISUAL STYLES
+Choose Frost, Mosaic, or opaque Redact. If window-position metadata becomes unavailable, Last-position cover can cover the latest position available to BlurFollow. That may not be the window's current position, so reconnect and inspect it.
+
+ON-DEVICE PROCESSING
+BlurFollow does not record audio, save screen frames to files, send frames to the developer, or include analytics or advertising SDKs. Mask settings and limited app/window identity metadata are stored locally. After you share BlurFollow Share Preview through a meeting service, that service handles the resulting video under its own terms.
+
+COMPATIBILITY
+Requires macOS 14.0 or later. On macOS 15.2 and later, Apple's system picker authorizes each selected window. On macOS 14 through 15.1, identifying the selected window requires broader Screen Recording permission and reopening the app after permission is granted. Display Pin alone does not require Screen Recording permission.
+
+IMPORTANT
+BlurFollow is a visual placement and verification aid, not a security control. It does not automatically detect text or confidential information, and it does not guarantee mask placement, blur unreadability, or inclusion in the shared output. Layout, scrolling, zoom, child windows, capture method, and meeting-app behavior can change what appears. Always inspect both BlurFollow Share Preview and the meeting application's preview before presenting.

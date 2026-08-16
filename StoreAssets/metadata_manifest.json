@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "platform": "macOS",
+  "primary_locale": "ja-JP",
+  "locales": [
+    "ja-JP",
+    "en-US"
+  ],
+  "localized_fields": {
+    "name.txt": {
+      "min_characters": 2,
+      "max_characters": 30,
+      "required": true
+    },
+    "subtitle.txt": {
+      "max_characters": 30,
+      "required": true
+    },
+    "promotional_text.txt": {
+      "max_characters": 170,
+      "required": true
+    },
+    "description.txt": {
+      "max_characters": 4000,
+      "required": true,
+      "plain_text": true
+    },
+    "keywords.txt": {
+      "max_utf8_bytes": 100,
+      "required": true,
+      "comma_separated": true,
+      "minimum_keyword_characters": 3,
+      "forbidden_terms": [
+        "blurfollow"
+      ]
+    },
+    "support_url.txt": {
+      "required": true,
+      "https_url": true
+    },
+    "marketing_url.txt": {
+      "required": true,
+      "https_url": true
+    },
+    "privacy_url.txt": {
+      "required": true,
+      "https_url": true
+    },
+    "review_notes.txt": {
+      "max_utf8_bytes": 4000,
+      "required": true,
+      "plain_text": true
+    }
+  },
+  "common_fields": [
+    "bundle_id.txt",
+    "version.txt",
+    "primary_category.txt",
+    "secondary_category.txt",
+    "copyright.txt",
+    "app_privacy.json",
+    "age_rating.json",
+    "export_compliance.json",
+    "content_rights.json"
+  ],
+  "intended_origin": "https://blurfollow.app"
+}

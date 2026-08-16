@@ -1,0 +1,17 @@
+{
+  "name": "BlurFollow",
+  "short_name": "BlurFollow",
+  "description": "ぼかしが、ウインドウについてくる。",
+  "lang": "ja",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f7f9ff",
+  "theme_color": "#101116",
+  "icons": [
+    {
+      "src": "/assets/blurfollow-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}

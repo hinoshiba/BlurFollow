@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "platform": "macOS",
+  "primary_locale": "ja-JP",
+  "locales": [
+    "ja-JP",
+    "en-US"
+  ],
+  "format": "png",
+  "allow_alpha": false,
+  "master_size": {
+    "width": 1440,
+    "height": 900,
+    "aspect_ratio": "16:10"
+  },
+  "accepted_sizes": [
+    [1280, 800],
+    [1440, 900],
+    [2560, 1600],
+    [2880, 1800]
+  ],
+  "minimum_count": 1,
+  "maximum_count": 10,
+  "required_files": [
+    {
+      "filename": "01-window-following.png",
+      "ja_headline": "ぼかしが、ウインドウについてくる。",
+      "en_headline": "Blur that follows your window.",
+      "raw_filename": "00-onboarding.jpg",
+      "scene": "The shipping onboarding screen with its window-following illustration and primary tagline.",
+      "assertions": [
+        "Use the current shipping onboarding screen.",
+        "Keep the full illustration and product tagline legible.",
+        "The illustration describes proportional geometry, not semantic tracking of text or fields."
+      ]
+    },
+    {
+      "filename": "02-display-window-modes.png",
+      "ja_headline": "画面に固定。窓に追従。",
+      "en_headline": "Pin to a display. Follow a window.",
+      "raw_filename": "02-modes.jpg",
+      "scene": "The shipping onboarding comparison of Display Pin and Window Pin.",
+      "assertions": [
+        "Use the current product terminology.",
+        "Keep the two coordinate modes visually distinct."
+      ]
+    },
+    {
+      "filename": "03-share-preview-check.png",
+      "ja_headline": "共有前に、すべてのマスクを確認。",
+      "en_headline": "Check every mask before sharing.",
+      "raw_filename": "03-review-before-sharing.jpg",
+      "scene": "The shipping onboarding screen that tells the user how to inspect each sharing method before presenting.",
+      "assertions": [
+        "Keep full-display, single-window, and browser-tab instructions legible.",
+        "Show that the user checks the preview; do not imply automatic certification.",
+        "Do not present a technical status as a content verdict."
+      ]
+    },
+    {
+      "filename": "04-share-guide.png",
+      "ja_headline": "共有方式に合わせて選ぶ。",
+      "en_headline": "Choose for your sharing method.",
+      "raw_filename": "03-share-guide.jpg",
+      "scene": "The shipping Share Guide with full-display, single-window, and browser-tab guidance visible.",
+      "assertions": [
+        "State that another app's overlay is normally excluded from single-window and browser-tab capture.",
+        "Point single-window users to Share Preview."
+      ]
+    },
+    {
+      "filename": "05-local-controls.png",
+      "ja_headline": "設定は、Mac内で管理。",
+      "en_headline": "Local controls, on your Mac.",
+      "raw_filename": "04-settings.jpg",
+      "scene": "The shipping Settings screen showing Last-position cover, mask visibility, permission state, local export/deletion, version, and license summary.",
+      "assertions": [
+        "Keep the local-data and permission sections legible.",
+        "Do not imply that local processing controls what a meeting app does after sharing."
+      ]
+    }
+  ],
+  "global_requirements": [
+    "Capture the shipping UI and icon from the same build submitted to review.",
+    "Use no real customer name, email, token, internal URL, or meeting participant.",
+    "Keep macOS menu-bar details and notifications free of personal data.",
+    "Use each locale's headline; do not place both languages in one image.",
+    "Use legible text, sufficient contrast, and safe margins at every accepted size.",
+    "Do not use absolute claims such as guaranteed, leak-proof, secure, or always hidden.",
+    "Do not include competitor names, ratings, prices, unavailable features, or an App Store badge."
+  ],
+  "raw_capture_directories": {
+    "ja-JP": "screenshots/raw/ja-JP/",
+    "en-US": "screenshots/raw/en-US/"
+  },
+  "render_template": "screenshots/template.html",
+  "render_query_example": "template.html?locale=ja-JP&shot=1"
+}

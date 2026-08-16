@@ -1,0 +1,23 @@
+BlurFollow is a macOS utility that places visual masks on screen and updates a mask as its selected window moves or resizes. It has no login, account, or in-app purchase flow.
+
+Review flow
+1. Launch the app and complete onboarding.
+2. From Home, choose Display Pin and drag on the selection overlay. Display Pin requires no Screen Recording permission.
+3. Choose Window Pin, then select a non-sensitive test window in Apple's system picker. Move and resize the source and verify that the mask updates from its proportional coordinates.
+4. In Masks, adjust Strength for Frost or Mosaic. Choose Move…, drag the mask itself, and release to save; start Move… again and press Esc to cancel. From the menu-bar list, switch one mask off and on while leaving Show Masks enabled.
+5. Open Share Guide and create Share Preview. Select the same test window in the system picker.
+6. Inspect the matching Window Pin in BlurFollow Share Preview and select “I checked every mask.” Changing the source or a mask may briefly clear or cover the preview while the current composite is prepared, and resets that acknowledgement.
+7. Stop or close Share Preview and verify that its frame is cleared and capture stops.
+
+Permissions
+• macOS 15.2 or later: Apple's system picker authorizes each selected window.
+• macOS 14 through 15.1: broader Screen Recording permission is required to identify the selected window. After granting it, quit and reopen BlurFollow. If permission is denied, BlurFollow stops instead of guessing a window.
+• The app does not request Accessibility, Full Disk Access, camera, or microphone access.
+
+Data handling
+Share Preview processes the selected window frames on device. It does not capture audio, write a screen recording, send frames to the developer, or include analytics or advertising SDKs. Mask settings and limited selected-window identity metadata are stored locally.
+
+Display caveat
+“Preview active” reports that a current composited frame is displayed; it does not certify the content. Evaluation requires visual inspection in both BlurFollow Share Preview and the receiving preview of the sharing application. Single-window and browser-tab sharing normally exclude another app's overlay, so the reviewer should share BlurFollow Share Preview rather than the original source in that workflow.
+
+Any non-sensitive test window can be used. No special account or server configuration is required.

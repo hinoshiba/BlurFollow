@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible BlurFollow problem.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include screenshots or titles containing confidential information.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Include the mask mode and sharing method.
+    validations:
+      required: true
+  - type: dropdown
+    id: share-mode
+    attributes:
+      label: Sharing method
+      options:
+        - No active share
+        - Entire display
+        - Single app or window
+        - Browser tab
+        - BlurFollow Share Preview
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true

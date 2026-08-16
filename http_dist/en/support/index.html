@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support — BlurFollow</title>
+  <meta name="description" content="BlurFollow setup, Screen Recording permission, Share Preview, frequently asked questions, and contact information.">
+  <link rel="canonical" href="https://blurfollow.app/en/support/">
+  <link rel="alternate" hreflang="ja" href="https://blurfollow.app/support/">
+  <link rel="alternate" hreflang="en" href="https://blurfollow.app/en/support/">
+  <link rel="alternate" hreflang="x-default" href="https://blurfollow.app/support/">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/assets/site.css">
+  <meta name="theme-color" content="#101116">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="container nav-row"><a class="brand" href="/en/" aria-label="BlurFollow home"><img src="/assets/blurfollow-icon.png" alt="" width="38" height="38"><span>BlurFollow</span></a><nav class="site-nav" aria-label="Main navigation"><a href="/en/">Home</a><a href="/en/support/" aria-current="page">Support</a><a href="/en/privacy/">Privacy</a><a href="/en/oss/">Open source</a><a class="language-link" href="/support/" lang="ja" hreflang="ja">日本語</a></nav></div></header>
+  <main id="main">
+    <header class="page-hero"><div class="container"><p class="eyebrow">Support</p><h1>Help and support</h1><p class="lede">Choose a sharing method, place the mask, and visually inspect what reaches the receiver.</p></div></header>
+    <div class="container article-wrap">
+      <nav class="article-nav" aria-label="On this page"><a href="#start">Basics</a><a href="#sharing">Sharing</a><a href="#permissions">Permissions</a><a href="#faq">FAQ</a><a href="#contact">Contact</a></nav>
+      <article class="prose">
+        <section id="start">
+          <h2>Basic use</h2>
+          <h3>Pin to a display</h3>
+          <ol><li>Choose Display Pin from Home.</li><li>Drag over the area on the target display.</li><li>In Masks, choose Frost, Mosaic, or Redact. Adjust Strength for Frost or Mosaic, then inspect the position and appearance on the actual display. Redact remains opaque.</li></ol>
+          <h3>Follow a window</h3>
+          <ol><li>Choose Window Pin from Home.</li><li>Select the source in Apple's system picker.</li><li>Drag over an area inside the window. Move and resize the source to inspect the resulting mask position.</li><li>If the source was recreated, its title changed, or its state becomes Select again, use Reconnect… in Masks. Inspect the layout again after reconnecting.</li></ol>
+          <h3>Adjust an existing mask</h3>
+          <ol><li>Open the mask in Masks. Strength changes the appearance of Frost and the tile size and opacity of Mosaic. Redact remains opaque regardless of Strength.</li><li>To change its position, choose Move…, then drag the mask itself on screen. Release the mouse or trackpad to save the position; press Esc before saving to cancel. Move… is available when masks are shown, that mask is on, and its position is known.</li><li>Open the BlurFollow menu-bar icon to identify each Display Pin or Window Pin by name and state, then switch that mask on or off. Show Masks is the master switch for desktop overlays; when it is off, no desktop mask is displayed even if its individual setting is on. Share Preview uses individually enabled Window Pins, so inspect it separately.</li></ol>
+          <p>A Window Pin updates its displayed position as its source moves or resizes. When a matching mask's position, style, Strength, or on/off state changes—or Share Preview's capture state changes—Share Preview updates its display and may clear or cover the previous image while updating. If “I checked every mask” is reset, wait for the current composite and inspect every mask again. A display update does not guarantee zero latency, exact alignment while moving, correct mask placement, or correct shared content.</p>
+        </section>
+        <section id="sharing"><h2>Choose a sharing method</h2><h3>Full display</h3><p>Inspect the desktop masks first, choose the full display in the meeting app, and inspect that app's own preview. Watch for notifications, other Spaces, and full-screen changes.</p><h3>Single window</h3><p>An overlay drawn by another app is normally excluded from single-window capture. Open Share Preview in BlurFollow, select the source, and inspect every matching Window Pin. In the meeting app, select BlurFollow Share Preview instead of the original window.</p><h3>Browser tab</h3><p>Tab sharing also excludes desktop overlays. Share Preview selects the browser window, so inspect whether browser chrome or content outside the intended tab is visible. Share BlurFollow Share Preview to the meeting app and inspect its receiving preview.</p><div class="notice"><h3>Before pressing Share</h3><p>Following, Placed, and Preview active describe technical state observed by BlurFollow. They do not certify the content. Recheck BlurFollow and the meeting app after scrolling, zooming, moving, reconnecting, or editing a mask.</p></div></section>
+        <section id="permissions"><h2>Screen Recording permission</h2><ul><li><strong>Display Pin:</strong> no permission required.</li><li><strong>macOS 15.2 or later:</strong> Apple's system picker authorizes the selected window for Window Pin and Share Preview.</li><li><strong>macOS 14 through 15.1:</strong> broader Screen Recording permission is required to identify the selected window. After granting access in System Settings, quit and reopen BlurFollow.</li></ul><p>If access is denied, Window Pin and Share Preview stop instead of guessing a window. Check System Settings → Privacy &amp; Security → Screen Recording. On macOS 14 through 15.1, revoke the broader permission there when it is no longer needed.</p></section>
+        <section id="faq"><h2>Frequently asked questions</h2><div class="faq-list">
+          <details><summary>The desktop mask is missing when I share a Chrome window or tab.</summary><div class="faq-answer"><p>Single-window and tab capture normally excludes another app's overlay. Composite the browser window and matching Window Pins in Share Preview, then select BlurFollow Share Preview as the meeting app's sharing target.</p></div></details>
+          <details><summary>A Window Pin no longer follows its window.</summary><div class="faq-answer"><p>The window may have closed, become hidden, been recreated, or become ambiguous among similar candidates. Check Masks and use Reconnect… to choose it again with Apple's picker. Proportional coordinates remain, but visually inspect whether the content layout changed.</p></div></details>
+          <details><summary>What is Last-position cover?</summary><div class="faq-answer"><p>When window position becomes unavailable, it can cover the latest position BlurFollow had available. That may not be the source's current position and does not replace reconnecting or checking the shared output.</p></div></details>
+          <details><summary>Share Preview says Preview paused or shows a covered frame.</summary><div class="faq-answer"><p>BlurFollow does not show its normal composite if no matching Window Pin exists, the source or frame cannot be validated, restored settings need acknowledgement, or capture stopped. Follow the reason shown in the window: add or reconnect a Window Pin, review restored settings, or select the source again.</p></div></details>
+          <details><summary>Do blur and mosaic make information unreadable?</summary><div class="faq-answer"><p>They can reduce visual readability but do not make inference or reconstruction impossible. Remove secrets from the source when possible, consider opaque Redact for visual replacement, and inspect what the receiver sees.</p></div></details>
+          <details><summary>Does BlurFollow record or upload screen content or audio?</summary><div class="faq-answer"><p>Version 0.1.0 does not capture audio, save screen frames to a recording, or send frames to the developer. Once Share Preview is shared to a meeting app, that app processes the output under its own terms. See the Privacy Policy for details.</p></div></details>
+          <details><summary>How do I delete stored masks?</summary><div class="faq-answer"><p>Delete masks individually or use Delete All Masks. To remove all app settings, quit BlurFollow and remove Masks.json and Masks.json.backup from its sandbox container. Delete exported settings separately.</p></div></details>
+        </div></section>
+        <section id="contact"><div class="contact-card"><h2>Contact support</h2><p>Email <a href="mailto:support@blurfollow.app?subject=BlurFollow%20Support">support@blurfollow.app</a> in Japanese or English.</p><p>Include the BlurFollow version, macOS version, Mac model/architecture, sharing method, source and meeting app, displayed state, reproduction steps, expected result, and actual result. Reproduce with fabricated data. Do not send real confidential frames, window titles, personal data, or credentials.</p><p>For a suspected vulnerability, include “Security” in the subject and do not post details in a public issue.</p></div></section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="container footer-grid"><div><strong>BlurFollow</strong><p>© 2026 The BlurFollow Authors</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/en/">Home</a><a href="/en/privacy/">Privacy</a><a href="/en/oss/">Open source</a><a href="/support/" lang="ja">日本語</a></nav></div></footer>
+</body>
+</html>
