@@ -421,8 +421,8 @@ Before distribution:
 - validate Privacy Manifest and data statement
 - run the full permission and sharing matrix
 - review LICENSE, NOTICE, third-party notices, trademark policy, and brand provenance
-- sign and notarize outside the Mac App Store
-- complete App Store validation for Store distribution
+- push an immutable semantic-version tag and preserve the Xcode Cloud record
+- complete Xcode Cloud and App Store Connect validation
 
 Passing unit tests and local app-bundle checks is not evidence that every meeting workflow renders as expected.
 

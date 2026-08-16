@@ -35,24 +35,26 @@ assumed from the direct Swift imports above.
 ## Build, CI, and release tooling
 
 The scripts invoke Apple- or OS-supplied tools including `swift`, `xcodebuild`
-when using the Xcode project, `codesign`, `xcrun notarytool`, `stapler`,
-`iconutil`, `PlistBuddy`, `plutil`, `otool`, `hdiutil`, `spctl`, and `shasum`.
+when using the Xcode project, `codesign`, `iconutil`, `PlistBuddy`, `plutil`,
+and `otool`.
 `rg` (ripgrep) is used by `Scripts/check-release.sh` as a maintainer-side check.
-XcodeGen may be used to regenerate the checked-in project from `project.yml`.
-These tools are not bundled with the app. Their own licenses still apply to
-the person or service running them.
+XcodeGen 2.45.4 regenerates and verifies the checked-in project from
+`project.yml` in GitHub CI and may also be used during development. These tools
+are not bundled with the app. Their own licenses still apply to the person or
+service running them.
 
 | Tool/input | Audited revision or local version | License/terms | Artifact status |
 | --- | --- | --- | --- |
 | `actions/checkout` | `11bd71901bbe5b1630ceea73d27597364c9af683` (v4.2.2) | Top-level MIT; upstream vendored npm notices also apply | Pinned CI action; not bundled. |
-| ripgrep | 15.2.0 in the 2026-08-16 local audit | MIT OR Unlicense upstream | Runs a release check; not bundled. Runner version must be recorded. |
-| XcodeGen | 2.45.4 in the 2026-08-16 local audit | MIT upstream | Optional project generator; not invoked by the normal build or bundled. |
+| ripgrep | 15.2.0 with verified architecture-specific SHA-256 downloads in GitHub CI | MIT OR Unlicense upstream | Pinned CI check tool; not bundled. |
+| XcodeGen | 2.45.4 with a verified SHA-256 download in GitHub CI | MIT upstream | Pinned CI drift generator and development tool; not bundled. |
 | Apple Swift/Xcode | Swift 6.3.3 / Xcode 26.6 in the local audit | Applicable Apple/toolchain terms | Compiler/SDK input; not copied as an SDK into the app. |
 
-Tool versions above document the audit machine, not a promise that an unpinned
-developer machine or hosted runner uses the same version. A release workflow
-must pin downloadable actions/tools where possible, record the runner image and
-digests, and treat the build environment as part of supply-chain provenance.
+Local tool versions above document the audit machine, while GitHub CI downloads
+the recorded ripgrep and XcodeGen versions only after verifying their digests.
+A release workflow must pin downloadable actions/tools where possible, record
+the runner image and digests, and treat the build environment as part of
+supply-chain provenance.
 
 ## Repeatable audit
 

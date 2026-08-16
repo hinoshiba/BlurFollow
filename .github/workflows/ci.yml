@@ -16,8 +16,47 @@ jobs:
       - name: Check out source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Install ripgrep
-        run: brew install ripgrep
+      - name: Install pinned XcodeGen and ripgrep
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$(uname -m)" in
+            arm64)
+              rg_target=aarch64-apple-darwin
+              rg_sha256=3750b2e93f37e0c692657da574d7019a101c0084da05a790c83fd335bad973e4
+              ;;
+            x86_64)
+              rg_target=x86_64-apple-darwin
+              rg_sha256=af7825fcc69a2afc7a7aea55fc9af90e26421d8f20fe59df32e233c0b8a231c1
+              ;;
+            *)
+              echo "Unsupported macOS runner architecture: $(uname -m)" >&2
+              exit 1
+              ;;
+          esac
+          curl --fail --location --silent --show-error \
+            "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-${rg_target}.tar.gz" \
+            --output "${RUNNER_TEMP}/ripgrep.tar.gz"
+          echo "${rg_sha256}  ${RUNNER_TEMP}/ripgrep.tar.gz" | shasum -a 256 --check
+          tar -xzf "${RUNNER_TEMP}/ripgrep.tar.gz" -C "${RUNNER_TEMP}"
+          echo "${RUNNER_TEMP}/ripgrep-15.2.0-${rg_target}" >> "${GITHUB_PATH}"
+          curl --fail --location --silent --show-error \
+            https://github.com/yonaskolb/XcodeGen/releases/download/2.45.4/xcodegen.zip \
+            --output "${RUNNER_TEMP}/xcodegen.zip"
+          echo "090ec29491aad50aec10631bf6e62253fed733c50f3aab0f5ffc86bc170bdbef  ${RUNNER_TEMP}/xcodegen.zip" \
+            | shasum -a 256 --check
+          unzip -q "${RUNNER_TEMP}/xcodegen.zip" -d "${RUNNER_TEMP}"
+          echo "${RUNNER_TEMP}/xcodegen/bin" >> "${GITHUB_PATH}"
+
+      - name: Verify generated Xcode project
+        run: |
+          set -euo pipefail
+          xcodegen generate
+          generated_state=$(git status --porcelain=v1 --untracked-files=all)
+          if [ -n "${generated_state}" ]; then
+            git status --short --untracked-files=all
+            exit 1
+          fi
 
       - name: Test
         run: swift test

@@ -35,8 +35,8 @@ limitations.
   names, bundle identifiers, window titles, IDs, and bounds;
 - the user's decision about which window and which BlurFollow output to share;
 - privacy permission and entitlement state;
-- signing/notarization credentials, source tags, binaries, update/store records,
-  checksums, SBOMs, and the BlurFollow brand; and
+- Xcode Cloud/App Store credentials, source tags, binaries, store records,
+  SBOMs, and the BlurFollow brand; and
 - user trust in mask placement and status indicators.
 
 ## Data flows and trust boundaries
@@ -117,8 +117,8 @@ unrecoverable snapshot starts with Share Preview inactive. â€œDelete All Masksâ€
 writes an empty primary region list and removes the recovery copy. It never intentionally stores
 a captured frame. A user-initiated export copies configuration to a chosen file.
 
-Official source, CI, signing, notarization, App Store, download hosting, and the
-user's Gatekeeper verification form a separate software-supply-chain boundary.
+Official source, GitHub CI, Xcode Cloud signing, App Store Connect, and the
+user's store receipt form a separate software-supply-chain boundary.
 
 ## Actors and assumptions
 
@@ -152,7 +152,7 @@ identity defeats important assumptions.
 | Recipient records or redistributes output | None beyond masking the pixels BlurFollow displays. | Meeting services and participants control received output. Follow their policy and minimize disclosure. |
 | Configuration is corrupted or tampered with | Snapshot schema and geometry are validated; a damaged primary can restore a validated backup, `Preview active` remains unavailable pending review, and unrecoverable data stops preview processing. Frame metadata and mask geometry are revalidated before output. | Recovery may restore an older configuration; local same-user malware can alter files or memory. The user must review recovery state. Invalid geometry must invoke the opaque fallback rather than intentionally display raw pixels. |
 | Crafted window causes denial of service or resource exhaustion | Capture width and queue depth are bounded; one picker stream. | GPU/WindowServer pressure or extreme display transitions can drop frames. Stop sharing if preview stalls. |
-| Official binary is replaced | Developer ID/App Store signing, hardened runtime, notarization, checksums, SBOM, attestations, signed tags, immutable releases. | Users must obtain from an official channel and verify; signing-key or publisher-account compromise remains high impact. |
+| Official binary is replaced | Xcode Cloud/App Store signing, hardened runtime, SBOM, signed tags, immutable build records, and store receipts. | Users must obtain it from the App Store and verify the publisher; source-control, cloud-signing, or publisher-account compromise remains high impact. |
 | Fork impersonates the official product | Apache code/brand separation and trademark policy. | Trademark controls do not technically prevent impersonation; users must verify publisher and signature. |
 
 ## Explicit non-goals
@@ -223,8 +223,8 @@ Release tests must demonstrate:
 - ambiguous rebind never silently claims the intended window without a usable
   warning/verification path;
 - all sharing modes explain their actual capture boundary; and
-- the exact shipped artifact matches its signature, notarization/store record,
-  checksum, SBOM, source commit, and immutable release.
+- the exact shipped artifact matches its App Store record, SBOM, source commit,
+  and immutable Xcode Cloud build.
 
 Security reports follow [../SECURITY.md](../SECURITY.md). Compatibility and
 manual cases are in [COMPATIBILITY.md](COMPATIBILITY.md).

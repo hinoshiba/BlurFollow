@@ -82,8 +82,10 @@ from a source-tree assumption.
 
 - [ ] Regenerate the Xcode project if required and confirm there is no drift from
   `project.yml`.
-- [ ] Build an App Store Release archive with the approved Xcode/macOS SDK and
-  App Store distribution signing; validate it in Organizer and App Store Connect.
+- [ ] Push the reviewed semantic-version tag and confirm the `App Store Release`
+  Xcode Cloud workflow tests, archives, signs, and uploads the exact commit.
+- [ ] Confirm Xcode Cloud's next build number is greater than every previously
+  uploaded macOS build number before the first cloud release.
 - [ ] Scan the final executable, symbols, archive, and package for local absolute
   paths and usernames. If found, rebuild from a clean path with Swift file/debug
   prefix mapping (or an equivalent toolchain control) before signing.

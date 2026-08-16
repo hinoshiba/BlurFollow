@@ -66,8 +66,8 @@ affected vendor.
 - ScreenCaptureKit begins without the intended user selection or permission;
 - an input causes memory corruption, code execution, privilege escalation, or
   sandbox escape; or
-- a release artifact, update path, signature, notarization record, checksum,
-  SBOM, tag, or build credential can be substituted or compromised.
+- a release artifact, update path, App Store record, SBOM, tag, Xcode Cloud
+  configuration, or build credential can be substituted or compromised.
 
 Pure feature requests, known blur/mosaic reversibility, and limitations already
 documented in [Docs/THREAT_MODEL.md](Docs/THREAT_MODEL.md) or

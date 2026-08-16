@@ -132,8 +132,8 @@ Apple's platform privacy practices.
 
 The audited 0.1.0 application target has no network client and no remote
 endpoint. BlurFollow does not sell personal information, share it for advertising,
-or track users across apps or websites. The OS, App Store, notarization and
-code-signing services, a download host, or a third-party conferencing app may
+or track users across apps or websites. The OS, App Store and code-signing
+services, or a third-party conferencing app may
 process information independently under their own terms; that is not an app
 runtime transmission to a BlurFollow service.
 
