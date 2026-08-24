@@ -13,7 +13,9 @@
 "%lld masks are finding their windows. The optional cover stays only at the last position." = "%lld masks are finding their windows. The optional cover stays only at the last position.";
 "%lld%%" = "%lld%%";
 "A tab share does not include desktop overlays. Select the browser window in Share Preview." = "A tab share does not include desktop overlays. Select the browser window in Share Preview.";
-"Access granted per picker selection" = "Access granted per picker selection";
+"Access is requested for each picker selection" = "Access is requested for each picker selection";
+"Access is requested when you use a Window Pin or Share Preview" = "Access is requested when you use a Window Pin or Share Preview";
+"Access not allowed" = "Access not allowed";
 "Add a Window Pin to this source" = "Add a Window Pin to this source";
 "Add at least one mask, then check where it appears." = "Add at least one mask, then check where it appears.";
 "Adjust the look and tracking behavior of every blur area." = "Adjust the look and tracking behavior of every blur area.";
@@ -32,7 +34,6 @@
 "BlurFollow name and logo are governed by the trademark policy." = "BlurFollow name and logo are governed by the trademark policy.";
 "Broad access allowed" = "Broad access allowed";
 "Broad access granted" = "Broad access granted";
-"Broad access required" = "Broad access required";
 "Browser Tab" = "Browser Tab";
 "Browser tab: select the browser window in Share Preview" = "Browser tab: select the browser window in Share Preview";
 "CHECK MASK POSITIONS" = "CHECK MASK POSITIONS";
@@ -66,7 +67,6 @@
 "Fixed to one display. Works without screen recording permission." = "Fixed to one display. Works without screen recording permission.";
 "Following" = "Following";
 "Frost" = "Frost";
-"Granted per selection" = "Granted per selection";
 "Home" = "Home";
 "I checked every mask position" = "I checked every mask position";
 "I reviewed the masks — continue" = "I reviewed the masks — continue";
@@ -127,6 +127,8 @@
 "Review" = "Review";
 "Review masks" = "Review masks";
 "Review saved masks and their positions before presenting." = "Review saved masks and their positions before presenting.";
+"Requested when needed" = "Requested when needed";
+"Requested per selection" = "Requested per selection";
 "Saved data needs review" = "Saved data needs review";
 "Saved mask data could not be validated." = "Saved mask data could not be validated.";
 "Saved masks could not be recovered. Masks are paused; recreate and check them before sharing." = "Saved masks could not be recovered. Masks are paused; recreate and check them before sharing.";
@@ -137,6 +139,9 @@
 "Share Preview" = "Share Preview";
 "Share Preview stopped" = "Share Preview stopped";
 "Share Preview uses Apple's per-selection system picker. Frames stay in memory and are never uploaded." = "Share Preview uses Apple's per-selection system picker. Frames stay in memory and are never uploaded.";
+"Screen Recording access was granted. Reopen BlurFollow to continue." = "Screen Recording access was granted. Reopen BlurFollow to continue.";
+"Screen Recording access was not allowed. Enable it in System Settings, then reopen BlurFollow." = "Screen Recording access was not allowed. Enable it in System Settings, then reopen BlurFollow.";
+"Screen capture access was not allowed. You can enable it in System Settings, then try again." = "Screen capture access was not allowed. You can enable it in System Settings, then try again.";
 "Show Masks" = "Show Masks";
 "Single window or app: open Share Preview" = "Single window or app: open Share Preview";
 "Softens the selected area. Check readability before sharing." = "Softens the selected area. Check readability before sharing.";
@@ -165,7 +170,6 @@
 "Window-following" = "Window-following";
 "macOS 14 through 15.1 needs Screen Recording access to identify a selected window. Frames remain local and are never saved." = "macOS 14 through 15.1 needs Screen Recording access to identify a selected window. Frames remain local and are never saved.";
 "macOS 14 through 15.1 requires Screen Recording access for window identity. Frames stay local." = "macOS 14 through 15.1 requires Screen Recording access for window identity. Frames stay local.";
-"macOS 14 through 15.1 requires Screen Recording access to identify the selected window. Allow it in System Settings, then reopen BlurFollow." = "macOS 14 through 15.1 requires Screen Recording access to identify the selected window. Allow it in System Settings, then reopen BlurFollow.";
 "selected window" = "the selected window";
 "Cancel Move" = "Cancel Move";
 "Move…" = "Move…";

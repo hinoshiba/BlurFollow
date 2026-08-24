@@ -79,6 +79,7 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
 
     private let store: MaskStore
     private let tracker: WindowTracker
+    private let onAccessDenied: @MainActor () -> Void
     private let processor = SharePreviewFrameProcessor()
     private var stream: SCStream?
     private var cancellables: Set<AnyCancellable> = []
@@ -119,9 +120,14 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
         }
     }
 
-    init(store: MaskStore, tracker: WindowTracker) {
+    init(
+        store: MaskStore,
+        tracker: WindowTracker,
+        onAccessDenied: @escaping @MainActor () -> Void = {}
+    ) {
         self.store = store
         self.tracker = tracker
+        self.onAccessDenied = onAccessDenied
         super.init()
 
         processor.onDelivery = { [weak self] delivery in
@@ -219,6 +225,9 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
             isPreparing = false
         } catch {
             guard captureGeneration == generation, stream === newStream else { return }
+            if ScreenCapturePermission.isUserDeclinedError(error) {
+                onAccessDenied()
+            }
             processor.deactivate()
             activeMaskSnapshot = nil
             stream = nil
@@ -269,6 +278,9 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
     nonisolated func stream(_ stoppedStream: SCStream, didStopWithError error: Error) {
         Task { @MainActor [weak self] in
             guard let self, self.stream === stoppedStream else { return }
+            if ScreenCapturePermission.isUserDeclinedError(error) {
+                self.onAccessDenied()
+            }
             self.captureGeneration &+= 1
             self.processor.deactivate()
             self.activeMaskSnapshot = nil

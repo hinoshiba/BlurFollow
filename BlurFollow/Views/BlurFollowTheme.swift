@@ -1,6 +1,8 @@
 import SwiftUI
 
 enum BlurFollowTheme {
+    // The custom background and translucent surfaces are designed as one light appearance.
+    static let colorScheme: ColorScheme = .light
     static let carbon = Color(red: 0.063, green: 0.067, blue: 0.086)
     static let ink = Color(red: 0.043, green: 0.063, blue: 0.125)
     static let iris = Color(red: 0.486, green: 0.424, blue: 1.0)

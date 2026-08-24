@@ -20,7 +20,9 @@ enum ContentPickerError: LocalizedError {
     case busy
     case noWindow
     case ambiguousWindow
-    case legacyPermissionRequired
+    case legacyPermissionDenied
+    case legacyPermissionGrantedRestartRequired
+    case pickerPermissionDenied
     case system(Error)
 
     var errorDescription: String? {
@@ -33,8 +35,12 @@ enum ContentPickerError: LocalizedError {
             return String(localized: "The selected window could not be identified.")
         case .ambiguousWindow:
             return String(localized: "More than one window matched the selection. Bring the target window forward and try again.")
-        case .legacyPermissionRequired:
-            return String(localized: "macOS 14 through 15.1 requires Screen Recording access to identify the selected window. Allow it in System Settings, then reopen BlurFollow.")
+        case .legacyPermissionDenied:
+            return String(localized: "Screen Recording access was not allowed. Enable it in System Settings, then reopen BlurFollow.")
+        case .legacyPermissionGrantedRestartRequired:
+            return String(localized: "Screen Recording access was granted. Reopen BlurFollow to continue.")
+        case .pickerPermissionDenied:
+            return String(localized: "Screen capture access was not allowed. You can enable it in System Settings, then try again.")
         case .system:
             // Do not surface arbitrary system text in a window that may itself be shared. Future
             // OS errors could include a window title, path, or application metadata.
@@ -56,6 +62,10 @@ final class ContentPickerService: NSObject, ObservableObject, SCContentSharingPi
     private let presentPicker: () -> Void
     private let preflightScreenCaptureAccess: () -> Bool
     private let requestScreenCaptureAccess: () -> Bool
+    private let requiresLegacyScreenCaptureAccess: () -> Bool
+    private let onLegacyAccessRequestCompleted: @MainActor (Bool) -> Void
+    private let onPickerAuthorization: @MainActor () -> Void
+    private let onAccessDenied: @MainActor () -> Void
 
     init(
         presentPicker: @escaping () -> Void = {
@@ -63,11 +73,22 @@ final class ContentPickerService: NSObject, ObservableObject, SCContentSharingPi
             SCContentSharingPicker.shared.present(using: .window)
         },
         preflightScreenCaptureAccess: @escaping () -> Bool = { CGPreflightScreenCaptureAccess() },
-        requestScreenCaptureAccess: @escaping () -> Bool = { CGRequestScreenCaptureAccess() }
+        requestScreenCaptureAccess: @escaping () -> Bool = { CGRequestScreenCaptureAccess() },
+        requiresLegacyScreenCaptureAccess: @escaping () -> Bool = {
+            if #available(macOS 15.2, *) { return false }
+            return true
+        },
+        onLegacyAccessRequestCompleted: @escaping @MainActor (Bool) -> Void = { _ in },
+        onPickerAuthorization: @escaping @MainActor () -> Void = {},
+        onAccessDenied: @escaping @MainActor () -> Void = {}
     ) {
         self.presentPicker = presentPicker
         self.preflightScreenCaptureAccess = preflightScreenCaptureAccess
         self.requestScreenCaptureAccess = requestScreenCaptureAccess
+        self.requiresLegacyScreenCaptureAccess = requiresLegacyScreenCaptureAccess
+        self.onLegacyAccessRequestCompleted = onLegacyAccessRequestCompleted
+        self.onPickerAuthorization = onPickerAuthorization
+        self.onAccessDenied = onAccessDenied
         super.init()
         let picker = SCContentSharingPicker.shared
         var configuration = SCContentSharingPickerConfiguration()
@@ -97,13 +118,14 @@ final class ContentPickerService: NSObject, ObservableObject, SCContentSharingPi
             completion(.failure(error))
             return nil
         }
-        if #available(macOS 15.2, *) {
-            // includedWindows provides exact picker identity with per-selection authorization.
-        } else if !preflightScreenCaptureAccess() {
+        if requiresLegacyScreenCaptureAccess(), !preflightScreenCaptureAccess() {
             // Legacy authorization is only reliable after the app restarts. Never continue into
             // broad window enumeration in the same process and mistake an incomplete grant for success.
-            _ = requestScreenCaptureAccess()
-            let error = ContentPickerError.legacyPermissionRequired
+            let isGranted = requestScreenCaptureAccess()
+            onLegacyAccessRequestCompleted(isGranted)
+            let error = isGranted
+                ? ContentPickerError.legacyPermissionGrantedRestartRequired
+                : ContentPickerError.legacyPermissionDenied
             lastError = error.localizedDescription
             completion(.failure(error))
             return nil
@@ -158,8 +180,14 @@ final class ContentPickerService: NSObject, ObservableObject, SCContentSharingPi
     ) {
         Task { @MainActor [weak self] in
             guard let self else { return }
+            // The shared picker can report a Control Center selection that BlurFollow did not
+            // initiate. Such a callback must not clear this app's denial recovery state.
+            guard self.requestToken != nil, self.isPicking else { return }
             if self.discardActiveRequest { self.finishDiscardedRequest() }
-            else { self.startResolution(for: filter) }
+            else {
+                self.onPickerAuthorization()
+                self.startResolution(for: filter)
+            }
         }
     }
 
@@ -170,7 +198,12 @@ final class ContentPickerService: NSObject, ObservableObject, SCContentSharingPi
                 self.finishDiscardedRequest()
                 return
             }
-            self.finish(.failure(.system(error)), requestToken: requestToken)
+            if ScreenCapturePermission.isUserDeclinedError(error) {
+                self.onAccessDenied()
+                self.finish(.failure(.pickerPermissionDenied), requestToken: requestToken)
+            } else {
+                self.finish(.failure(.system(error)), requestToken: requestToken)
+            }
         }
     }
 

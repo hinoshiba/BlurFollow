@@ -70,10 +70,10 @@ struct SettingsView: View {
                 GlassCard {
                     VStack(alignment: .leading, spacing: 14) {
                         SettingLabel(
-                            icon: permission.isAuthorized ? "checkmark.circle.fill" : "record.circle",
+                            icon: captureAccessIcon,
                             title: String(localized: "Capture Access"),
                             detail: captureAccessDetail,
-                            color: permission.isAuthorized ? BlurFollowTheme.mint : BlurFollowTheme.amber
+                            color: captureAccessColor
                         )
                         HStack {
                             Text(captureAccessStatus)
@@ -81,7 +81,9 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Button("Refresh") { permission.refresh() }
-                            Button("Open System Settings") { permission.openSystemSettings() }
+                            if permission.shouldOfferSystemSettings {
+                                Button("Open System Settings") { permission.openSystemSettings() }
+                            }
                         }
                     }
                 }
@@ -142,10 +144,23 @@ struct SettingsView: View {
     }
 
     private var captureAccessStatus: String {
-        if #available(macOS 15.2, *) { return String(localized: "Access granted per picker selection") }
+        if permission.shouldOfferSystemSettings { return String(localized: "Access not allowed") }
+        if #available(macOS 15.2, *) { return String(localized: "Access is requested for each picker selection") }
         return permission.isAuthorized
             ? String(localized: "Broad access granted")
-            : String(localized: "Broad access required")
+            : String(localized: "Access is requested when you use a Window Pin or Share Preview")
+    }
+
+    private var captureAccessIcon: String {
+        if permission.shouldOfferSystemSettings { return "exclamationmark.circle.fill" }
+        if #available(macOS 15.2, *) { return "hand.raised.fill" }
+        return permission.isAuthorized ? "checkmark.circle.fill" : "record.circle"
+    }
+
+    private var captureAccessColor: Color {
+        if permission.shouldOfferSystemSettings { return BlurFollowTheme.amber }
+        if #available(macOS 15.2, *) { return BlurFollowTheme.iris }
+        return permission.isAuthorized ? BlurFollowTheme.mint : BlurFollowTheme.iris
     }
 
     private func exportSettings() {

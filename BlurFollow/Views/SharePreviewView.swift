@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SharePreviewView: View {
     @EnvironmentObject private var picker: ContentPickerService
+    @EnvironmentObject private var permission: ScreenCapturePermission
     @EnvironmentObject private var sharePreview: SharePreviewSession
     @State private var pickerRequestID = UUID()
     @State private var activePickerRequest: ContentPickerRequestToken?
@@ -108,6 +109,10 @@ struct SharePreviewView: View {
                 .foregroundStyle(.white)
             Text("The last captured frame is cleared whenever capture stops.")
                 .foregroundStyle(.white.opacity(0.65))
+            if permission.shouldOfferSystemSettings {
+                Button("Open System Settings") { permission.openSystemSettings() }
+                    .buttonStyle(.borderedProminent)
+            }
         }
         .animation(.easeInOut(duration: 0.16), value: previewIsUpdating)
     }
@@ -182,6 +187,9 @@ struct SharePreviewView: View {
             return String(localized: "Updating preview — check it before sharing.")
         }
         if let pickerMessage { return pickerMessage }
+        if permission.shouldOfferSystemSettings {
+            return String(localized: "Screen capture access was not allowed. You can enable it in System Settings, then try again.")
+        }
         if sharePreview.errorMessage != nil {
             return String(localized: "The preview stopped. Choose the window again.")
         }
@@ -239,8 +247,10 @@ struct SharePreviewView: View {
             return String(localized: "The selected window could not be identified.")
         case .ambiguousWindow:
             return String(localized: "More than one window matched the selection. Bring the target window forward and try again.")
-        case .legacyPermissionRequired:
-            return String(localized: "macOS 14 through 15.1 requires Screen Recording access to identify the selected window. Allow it in System Settings, then reopen BlurFollow.")
+        case .legacyPermissionDenied,
+             .legacyPermissionGrantedRestartRequired,
+             .pickerPermissionDenied:
+            return error.localizedDescription
         case .system:
             return String(localized: "The preview could not start. Choose the window again.")
         }

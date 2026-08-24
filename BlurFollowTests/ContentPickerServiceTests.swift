@@ -4,6 +4,127 @@ import ScreenCaptureKit
 
 @MainActor
 final class ContentPickerServiceTests: XCTestCase {
+    func testSystemSettingsRecoveryAppearsOnlyAfterDenialInCurrentSession() {
+        let permission = ScreenCapturePermission(
+            preflightScreenCaptureAccess: { false }
+        )
+
+        XCTAssertFalse(permission.isAuthorized)
+        XCTAssertFalse(permission.shouldOfferSystemSettings)
+
+        permission.recordDenial()
+
+        XCTAssertTrue(permission.shouldOfferSystemSettings)
+        let freshSession = ScreenCapturePermission(preflightScreenCaptureAccess: { false })
+        XCTAssertFalse(freshSession.shouldOfferSystemSettings)
+    }
+
+    func testPickerAuthorizationClearsSystemSettingsRecovery() {
+        let permission = ScreenCapturePermission(
+            preflightScreenCaptureAccess: { false }
+        )
+        permission.recordDenial()
+
+        permission.recordPickerAuthorization()
+
+        XCTAssertFalse(permission.shouldOfferSystemSettings)
+    }
+
+    func testLegacyDenialStopsBeforePickerAndOffersSystemSettings() {
+        let permission = ScreenCapturePermission(
+            preflightScreenCaptureAccess: { false }
+        )
+        var presentationCount = 0
+        var result: Result<PickedWindow, ContentPickerError>?
+        let picker = ContentPickerService(
+            presentPicker: { presentationCount += 1 },
+            preflightScreenCaptureAccess: { false },
+            requestScreenCaptureAccess: { false },
+            requiresLegacyScreenCaptureAccess: { true },
+            onLegacyAccessRequestCompleted: { permission.recordLegacyRequestResult($0) }
+        )
+
+        let request = picker.pickWindow { result = $0 }
+
+        XCTAssertNil(request)
+        XCTAssertEqual(presentationCount, 0)
+        XCTAssertTrue(permission.shouldOfferSystemSettings)
+        guard case .failure(let error)? = result, case .legacyPermissionDenied = error else {
+            return XCTFail("A declined legacy request must return the denial-specific error")
+        }
+    }
+
+    func testLegacyGrantRequiresRestartWithoutOfferingSystemSettings() {
+        let permission = ScreenCapturePermission(
+            preflightScreenCaptureAccess: { false }
+        )
+        var result: Result<PickedWindow, ContentPickerError>?
+        let picker = ContentPickerService(
+            presentPicker: { XCTFail("The picker must wait for the required reopen") },
+            preflightScreenCaptureAccess: { false },
+            requestScreenCaptureAccess: { true },
+            requiresLegacyScreenCaptureAccess: { true },
+            onLegacyAccessRequestCompleted: { permission.recordLegacyRequestResult($0) }
+        )
+
+        let request = picker.pickWindow { result = $0 }
+
+        XCTAssertNil(request)
+        XCTAssertFalse(permission.isAuthorized)
+        XCTAssertFalse(permission.shouldOfferSystemSettings)
+        guard case .failure(let error)? = result,
+              case .legacyPermissionGrantedRestartRequired = error else {
+            return XCTFail("A newly granted legacy request must ask only for an app reopen")
+        }
+    }
+
+    func testPickerUserDeclinedErrorEnablesRecovery() async {
+        var accessWasDenied = false
+        var result: Result<PickedWindow, ContentPickerError>?
+        let picker = ContentPickerService(
+            presentPicker: {},
+            requiresLegacyScreenCaptureAccess: { false },
+            onAccessDenied: { accessWasDenied = true }
+        )
+        XCTAssertNotNil(picker.pickWindow { result = $0 })
+        let error = NSError(
+            domain: SCStreamErrorDomain,
+            code: SCStreamError.Code.userDeclined.rawValue
+        )
+
+        picker.contentSharingPickerStartDidFailWithError(error)
+        for _ in 0..<5 where result == nil {
+            await Task.yield()
+        }
+
+        XCTAssertTrue(accessWasDenied)
+        guard case .failure(let pickerError)? = result,
+              case .pickerPermissionDenied = pickerError else {
+            return XCTFail("A system-picker denial must return the denial-specific error")
+        }
+    }
+
+    func testPickerCancellationDoesNotEnableRecovery() async {
+        var accessWasDenied = false
+        var result: Result<PickedWindow, ContentPickerError>?
+        let picker = ContentPickerService(
+            presentPicker: {},
+            requiresLegacyScreenCaptureAccess: { false },
+            onAccessDenied: { accessWasDenied = true }
+        )
+        XCTAssertNotNil(picker.pickWindow { result = $0 })
+
+        picker.contentSharingPicker(SCContentSharingPicker.shared, didCancelFor: nil)
+        for _ in 0..<5 where result == nil {
+            await Task.yield()
+        }
+
+        XCTAssertFalse(accessWasDenied)
+        guard case .failure(let pickerError)? = result, case .cancelled = pickerError else {
+            return XCTFail("Cancelling the system picker must remain a non-denial outcome")
+        }
+    }
+
     func testBusyRequestCompletesWithoutReplacingActiveOwner() {
         var presentationCount = 0
         let picker = makePicker {

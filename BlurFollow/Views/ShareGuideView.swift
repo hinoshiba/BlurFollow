@@ -113,9 +113,9 @@ struct ShareGuideView: View {
     private var permissionCard: some View {
         GlassCard {
             HStack(spacing: 15) {
-                Image(systemName: permission.isAuthorized ? "checkmark.circle.fill" : "record.circle")
+                Image(systemName: captureAccessIcon)
                     .font(.title2)
-                    .foregroundStyle(permission.isAuthorized ? BlurFollowTheme.mint : BlurFollowTheme.amber)
+                    .foregroundStyle(captureAccessColor)
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Capture Access")
                         .font(.headline)
@@ -124,13 +124,16 @@ struct ShareGuideView: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                if #available(macOS 15.2, *) {
-                    Text("Granted per selection")
-                        .foregroundStyle(BlurFollowTheme.mint)
+                if permission.shouldOfferSystemSettings {
+                    Button("Open Settings") { permission.openSystemSettings() }
+                } else if #available(macOS 15.2, *) {
+                    Text("Requested per selection")
+                        .foregroundStyle(.secondary)
                 } else if permission.isAuthorized {
                     Text("Broad access allowed").foregroundStyle(BlurFollowTheme.mint)
                 } else {
-                    Button("Open Settings") { permission.openSystemSettings() }
+                    Text("Requested when needed")
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -141,6 +144,18 @@ struct ShareGuideView: View {
             return String(localized: "Apple's system picker grants access to the window you choose. Frames stay on this Mac and are never saved.")
         }
         return String(localized: "macOS 14 through 15.1 needs Screen Recording access to identify a selected window. Frames remain local and are never saved.")
+    }
+
+    private var captureAccessIcon: String {
+        if permission.shouldOfferSystemSettings { return "exclamationmark.circle.fill" }
+        if #available(macOS 15.2, *) { return "hand.raised.fill" }
+        return permission.isAuthorized ? "checkmark.circle.fill" : "record.circle"
+    }
+
+    private var captureAccessColor: Color {
+        if permission.shouldOfferSystemSettings { return BlurFollowTheme.amber }
+        if #available(macOS 15.2, *) { return BlurFollowTheme.iris }
+        return permission.isAuthorized ? BlurFollowTheme.mint : BlurFollowTheme.iris
     }
 
     private var enabledMasks: [MaskRegion] { store.regions.filter(\.isEnabled) }

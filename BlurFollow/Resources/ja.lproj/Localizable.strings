@@ -86,7 +86,7 @@
 "%lld mask positions have not been checked yet." = "%lld件のマスク位置がまだ確認されていません。";
 "%lld mask position has not been checked yet." = "%lld件のマスク位置がまだ確認されていません。";
 "Capture Access" = "画面キャプチャへのアクセス";
-"Granted per selection" = "選択ごとに許可";
+"Requested per selection" = "選択ごとに要求";
 "Broad access allowed" = "広域アクセスを許可済み";
 "Open Settings" = "システム設定を開く";
 "Check meeting preview" = "会議アプリ側を確認";
@@ -132,11 +132,13 @@
 "Display all enabled Display Pins and Window Pins." = "有効な画面固定・ウインドウ追従マスクをすべて表示します。";
 "Share Preview uses Apple's per-selection system picker. Frames stay in memory and are never uploaded." = "共有プレビューはAppleの選択式システムピッカーを使います。フレームはメモリ内に留まり、送信されません。";
 "macOS 14 through 15.1 requires Screen Recording access for window identity. Frames stay local." = "macOS 14〜15.1では窓の識別に画面収録の許可が必要です。フレームはMac内だけで処理します。";
-"Access granted per picker selection" = "選択ごとにアクセスを許可";
+"Access is requested for each picker selection" = "選択ごとにアクセスを要求";
+"Access is requested when you use a Window Pin or Share Preview" = "ウインドウ追従または共有プレビューの使用時に要求";
+"Access not allowed" = "アクセスは許可されていません";
 "Broad access granted" = "広域アクセスを許可済み";
-"Broad access required" = "広域アクセスが必要";
 "Refresh" = "更新";
 "Open System Settings" = "システム設定を開く";
+"Requested when needed" = "機能の使用時に要求";
 "Local Data" = "ローカルデータ";
 "Mask geometry and window identity are stored in Application Support. Screen pixels are never persisted." = "マスクの形状と対象窓情報はApplication Supportに保存します。画面ピクセルは保存しません。";
 "Export Mask Settings…" = "マスク設定を書き出す…";
@@ -167,7 +169,9 @@
 "Another window selection is already in progress." = "別のウインドウ選択が進行中です。";
 "The selected window could not be identified." = "選択したウインドウを識別できませんでした。";
 "More than one window matched the selection. Bring the target window forward and try again." = "複数のウインドウが候補になりました。対象を手前に表示して、もう一度選んでください。";
-"macOS 14 through 15.1 requires Screen Recording access to identify the selected window. Allow it in System Settings, then reopen BlurFollow." = "macOS 14〜15.1では選択窓の識別に画面収録の許可が必要です。システム設定で許可し、BlurFollowを再起動してください。";
+"Screen Recording access was granted. Reopen BlurFollow to continue." = "画面収録へのアクセスが許可されました。続けるにはBlurFollowを再起動してください。";
+"Screen Recording access was not allowed. Enable it in System Settings, then reopen BlurFollow." = "画面収録へのアクセスは許可されませんでした。システム設定で許可し、BlurFollowを再起動してください。";
+"Screen capture access was not allowed. You can enable it in System Settings, then try again." = "画面キャプチャへのアクセスは許可されませんでした。システム設定で許可してから、もう一度お試しください。";
 "The system window picker could not complete the request." = "システムのウインドウ選択を完了できませんでした。";
 "Untitled Window" = "名称のないウインドウ";
 "Unknown App" = "不明なアプリ";

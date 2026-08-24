@@ -14,13 +14,22 @@ struct BlurFollowApp: App {
     init() {
         let store = MaskStore()
         let tracker = WindowTracker()
+        let permission = ScreenCapturePermission()
         _store = StateObject(wrappedValue: store)
         _tracker = StateObject(wrappedValue: tracker)
         _overlay = StateObject(wrappedValue: OverlayCoordinator(store: store, tracker: tracker))
         _selector = StateObject(wrappedValue: RegionSelectionCoordinator())
-        _picker = StateObject(wrappedValue: ContentPickerService())
-        _permission = StateObject(wrappedValue: ScreenCapturePermission())
-        _sharePreview = StateObject(wrappedValue: SharePreviewSession(store: store, tracker: tracker))
+        _permission = StateObject(wrappedValue: permission)
+        _picker = StateObject(wrappedValue: ContentPickerService(
+            onLegacyAccessRequestCompleted: { permission.recordLegacyRequestResult($0) },
+            onPickerAuthorization: { permission.recordPickerAuthorization() },
+            onAccessDenied: { permission.recordDenial() }
+        ))
+        _sharePreview = StateObject(wrappedValue: SharePreviewSession(
+            store: store,
+            tracker: tracker,
+            onAccessDenied: { permission.recordDenial() }
+        ))
     }
 
     var body: some Scene {
@@ -33,6 +42,7 @@ struct BlurFollowApp: App {
                 .environmentObject(picker)
                 .environmentObject(permission)
                 .environmentObject(sharePreview)
+                .preferredColorScheme(BlurFollowTheme.colorScheme)
                 .frame(minWidth: 920, minHeight: 620)
                 .onAppear {
                     overlay.start()
@@ -46,6 +56,7 @@ struct BlurFollowApp: App {
             SharePreviewView()
                 .environmentObject(store)
                 .environmentObject(picker)
+                .environmentObject(permission)
                 .environmentObject(sharePreview)
                 .frame(minWidth: 720, minHeight: 480)
         }
@@ -64,6 +75,7 @@ struct BlurFollowApp: App {
             SettingsView()
                 .environmentObject(store)
                 .environmentObject(permission)
+                .preferredColorScheme(BlurFollowTheme.colorScheme)
                 .frame(width: 620, height: 480)
         }
     }
