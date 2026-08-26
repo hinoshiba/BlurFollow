@@ -6,10 +6,13 @@ struct DashboardView: View {
     @EnvironmentObject private var selector: RegionSelectionCoordinator
     @EnvironmentObject private var picker: ContentPickerService
     @EnvironmentObject private var sharePreview: SharePreviewSession
+    @EnvironmentObject private var purchases: PurchaseManager
     @Environment(\.openWindow) private var openWindow
 
     @State private var transientMessage: String?
     @State private var isPreparingSharePicker = false
+    @State private var unlimitedMasksTrigger: UnlimitedMasksTrigger?
+    @State private var pendingMaskCreationAfterUnlock: UnlimitedMasksTrigger?
     let onMaskCreated: () -> Void
 
     var body: some View {
@@ -22,6 +25,16 @@ struct DashboardView: View {
             }
             .padding(32)
             .frame(maxWidth: 980, alignment: .leading)
+        }
+        .sheet(item: $unlimitedMasksTrigger, onDismiss: resumeUnlockedMaskCreationIfNeeded) { trigger in
+            UnlimitedMasksView(
+                purchases: purchases,
+                trigger: trigger,
+                onUnlocked: {
+                    pendingMaskCreationAfterUnlock = trigger
+                    unlimitedMasksTrigger = nil
+                }
+            )
         }
     }
 
@@ -71,14 +84,14 @@ struct DashboardView: View {
                 detail: String(localized: "Keep a mask at one place on a display."),
                 icon: "display",
                 tint: BlurFollowTheme.iris,
-                action: addDisplayPin
+                action: { requestMaskCreation(for: .displayPin) }
             )
             ActionCard(
                 title: String(localized: "Window Pin"),
                 detail: String(localized: "Keep the selected area aligned as its window moves."),
                 icon: "macwindow.badge.plus",
                 tint: BlurFollowTheme.cyan,
-                action: addWindowPin
+                action: { requestMaskCreation(for: .windowPin) }
             )
             .disabled(picker.isPicking)
         }
@@ -124,10 +137,7 @@ struct DashboardView: View {
                 Text("Recent Masks")
                     .font(.headline)
                 Spacer()
-                Text(String.localizedStringWithFormat(
-                    String(localized: "Total: %lld"),
-                    Int64(store.regions.count)
-                ))
+                Text(maskCountSummary)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -168,7 +178,13 @@ struct DashboardView: View {
                 displayIdentifier: screen.blurFollowIdentifier,
                 style: .frost
             )
-            store.add(region)
+            guard store.add(
+                region,
+                hasUnlimitedAccess: purchases.hasUnlimitedAccess
+            ) != nil else {
+                unlimitedMasksTrigger = .displayPin
+                return
+            }
         }
     }
 
@@ -192,8 +208,14 @@ struct DashboardView: View {
                         windowAnchor: selection.candidate.anchor,
                         style: .frost
                     )
-                    tracker.bind(selection.candidate, to: region.id)
-                    store.add(region)
+                    guard let addedRegion = store.add(
+                        region,
+                        hasUnlimitedAccess: purchases.hasUnlimitedAccess
+                    ) else {
+                        unlimitedMasksTrigger = .windowPin
+                        return
+                    }
+                    tracker.bind(selection.candidate, to: addedRegion.id)
                     onMaskCreated()
                 }
             case .failure(let error):
@@ -202,6 +224,54 @@ struct DashboardView: View {
                 transientMessage = error.localizedDescription
             }
         }
+    }
+
+    private func requestMaskCreation(for trigger: UnlimitedMasksTrigger) {
+        guard purchases.canCreateMask(currentCount: store.regions.count) else {
+            unlimitedMasksTrigger = trigger
+            return
+        }
+        resumeMaskCreation(for: trigger)
+    }
+
+    private func resumeMaskCreation(for trigger: UnlimitedMasksTrigger) {
+        switch trigger {
+        case .displayPin:
+            addDisplayPin()
+        case .windowPin:
+            addWindowPin()
+        case .settings:
+            break
+        }
+    }
+
+    private func resumeUnlockedMaskCreationIfNeeded() {
+        guard let trigger = pendingMaskCreationAfterUnlock else { return }
+        pendingMaskCreationAfterUnlock = nil
+        // sheet(onDismiss:) runs only after the purchase surface has finished closing. This keeps
+        // the selection overlay/system picker attached to the real app window, not a retiring sheet.
+        resumeMaskCreation(for: trigger)
+    }
+
+    private var maskCountSummary: String {
+        if purchases.hasUnlimitedAccess {
+            return String.localizedStringWithFormat(
+                String(localized: "Total: %lld · Unlimited"),
+                Int64(store.regions.count)
+            )
+        }
+        if store.regions.count > MaskAccessPolicy.freeMaskLimit {
+            return String.localizedStringWithFormat(
+                String(localized: "Total: %lld · Free limit: %lld"),
+                Int64(store.regions.count),
+                Int64(MaskAccessPolicy.freeMaskLimit)
+            )
+        }
+        return String.localizedStringWithFormat(
+            String(localized: "%lld / %lld free masks"),
+            Int64(store.regions.count),
+            Int64(MaskAccessPolicy.freeMaskLimit)
+        )
     }
 
     private func startSharePreview() {

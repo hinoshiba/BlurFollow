@@ -1,1 +1,1 @@
-screen share,blur,mosaic,mask,window follow,presentation,meeting,demo
+mosaic,pixelate,redact,presentation,meeting,demo,privacy,overlay,obscure,hide,streaming,webinar

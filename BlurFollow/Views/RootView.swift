@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 
 private enum AppSection: String, CaseIterable, Identifiable {
@@ -29,7 +30,15 @@ private enum AppSection: String, CaseIterable, Identifiable {
 
 struct RootView: View {
     @EnvironmentObject private var store: MaskStore
+    @EnvironmentObject private var selector: RegionSelectionCoordinator
+    @EnvironmentObject private var picker: ContentPickerService
+    @EnvironmentObject private var purchases: PurchaseManager
+    @EnvironmentObject private var reviewPrompts: ReviewPromptCoordinator
+    @EnvironmentObject private var sharePreview: SharePreviewSession
+    @Environment(\.requestReview) private var requestReview
+    @Environment(\.controlActiveState) private var controlActiveState
     @State private var selection: AppSection? = .home
+    @State private var reviewRequestTask: Task<Void, Never>?
 
     var body: some View {
         NavigationSplitView {
@@ -86,6 +95,38 @@ struct RootView: View {
             OnboardingView()
                 .environmentObject(store)
                 .interactiveDismissDisabled()
+        }
+        .onAppear { scheduleReviewRequestIfAppropriate() }
+        .onChange(of: reviewPrompts.hasPendingRequest) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: controlActiveState) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: picker.isPicking) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: selector.isSelecting) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: purchases.operationState) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: purchases.isPurchaseViewPresented) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: sharePreview.isRunning) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: sharePreview.isPreparing) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onChange(of: store.hasCompletedOnboarding) { _, _ in
+            scheduleReviewRequestIfAppropriate()
+        }
+        .onDisappear {
+            reviewRequestTask?.cancel()
+            reviewRequestTask = nil
         }
     }
 
@@ -203,5 +244,49 @@ struct RootView: View {
             ? String(localized: "%lld active mask")
             : String(localized: "%lld active masks")
         return String.localizedStringWithFormat(format, Int64(count))
+    }
+
+    private func scheduleReviewRequestIfAppropriate() {
+        guard reviewRequestTask == nil,
+              reviewPrompts.hasPendingRequest,
+              controlActiveState == .key,
+              NSApp.isActive,
+              store.hasCompletedOnboarding,
+              !picker.isPicking,
+              !selector.isSelecting,
+              !sharePreview.isRunning,
+              !sharePreview.isPreparing,
+              !purchases.isPurchaseViewPresented,
+              !purchases.isBusy,
+              purchases.operationState != .pending else { return }
+
+        reviewRequestTask = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .seconds(2))
+            } catch {
+                reviewRequestTask = nil
+                return
+            }
+
+            guard !Task.isCancelled,
+                  reviewPrompts.hasPendingRequest,
+                  controlActiveState == .key,
+                  NSApp.isActive,
+                  store.hasCompletedOnboarding,
+                  !picker.isPicking,
+                  !selector.isSelecting,
+                  !sharePreview.isRunning,
+                  !sharePreview.isPreparing,
+                  !purchases.isPurchaseViewPresented,
+                  !purchases.isBusy,
+                  purchases.operationState != .pending else {
+                reviewRequestTask = nil
+                return
+            }
+
+            reviewPrompts.markRequestAttempted()
+            requestReview()
+            reviewRequestTask = nil
+        }
     }
 }

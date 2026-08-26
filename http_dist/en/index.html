@@ -52,7 +52,7 @@
             <a class="button" href="https://apps.apple.com/us/app/blurfollow/id6801985073">View on the Mac App Store</a>
             <a class="button secondary" href="#examples">See the screens</a>
           </div>
-          <p class="compat">macOS 14.0 or later · Local-first · Apache-2.0</p>
+          <p class="compat">macOS 14.0 or later · 5 masks free · One-time unlimited unlock · Local-first · Apache-2.0</p>
         </div>
         <div class="product-visual" role="img" aria-label="A proportional mask displayed in the same relative location after a window moves">
           <div class="mock-window back" aria-hidden="true">
@@ -145,8 +145,8 @@
             <figcaption><strong>Check every mask before sharing.</strong>Inspect the composite, then verify it again in the meeting application's preview.</figcaption>
           </figure>
           <figure class="screenshot-card">
-            <img src="/assets/screenshots/en-US/05-local-controls.png" width="1440" height="900" loading="lazy" alt="BlurFollow Settings screen showing mask visibility, Screen Recording access, local export and deletion, version, and license information">
-            <figcaption><strong>Local controls, on your Mac.</strong>Review visibility, permission, export, deletion, version, and licensing in one place.</figcaption>
+            <img src="/assets/screenshots/en-US/05-local-controls.png" width="1440" height="900" loading="lazy" alt="BlurFollow Settings screen showing five free masks, a one-time unlimited unlock, purchase restoration, and support links">
+            <figcaption><strong>Five masks free. One-time unlock.</strong>Keep normal use free, then unlock unlimited masks, restore a purchase, or reach support from Settings.</figcaption>
           </figure>
         </div>
       </div>
@@ -263,7 +263,7 @@
                 </details>
                 <details>
                   <summary>Does BlurFollow record or upload screen content or audio?</summary>
-                  <div class="faq-answer"><p>See <a href="#privacy-summary">the privacy summary</a> and <a href="#screen">Screen frames</a> for the exact behavior of version 0.1.1 and the separate role of a meeting app.</p></div>
+                  <div class="faq-answer"><p>See <a href="#privacy-summary">the privacy summary</a> and <a href="#screen">Screen frames</a> for the exact behavior of version 0.2.0, StoreKit's separate role, and the separate role of a meeting app.</p></div>
                 </details>
                 <details>
                   <summary>How do I delete stored masks?</summary>
@@ -291,7 +291,7 @@
           <p class="eyebrow">Privacy policy</p>
           <h2 id="privacy-title">How BlurFollow handles screen content and settings.</h2>
           <p class="section-intro">The policy below describes each feature of the audited macOS build.</p>
-          <p class="meta-line">Last updated: August 17, 2026 · Applies to: BlurFollow 0.1.1 for macOS</p>
+          <p class="meta-line">Last updated: August 26, 2026 · Applies to: BlurFollow 0.2.0 for macOS</p>
         </div>
         <div class="article-wrap">
           <nav class="article-nav" aria-label="Privacy topics">
@@ -312,6 +312,7 @@
                 <li>Window frames are processed transiently on the Mac for Share Preview. BlurFollow does not write them to a recording or send them to its developer.</li>
                 <li>No audio, camera input, keystrokes, or clipboard content is captured.</li>
                 <li>Mask settings and limited metadata used to identify a selected window again are stored locally.</li>
+                <li>The official App Store build uses Apple StoreKit for its optional one-time product, entitlement, restore, and system rating prompt. BlurFollow has no commerce server.</li>
               </ul>
             </section>
 
@@ -331,13 +332,15 @@
                 <li>global visibility, Last-position cover, onboarding, and related preferences.</li>
               </ul>
               <p>In a sandboxed Mac App Store build, the file normally resides at <code>Library/Application Support/BlurFollow/Masks.json</code> inside the app container. BlurFollow may keep the last validated settings at <code>Masks.json.backup</code> in the same folder. Window titles and user-entered mask names may themselves be sensitive.</p>
+              <p>Local preferences store the first-use date, successful Share Preview check count, and last rating-request version/date solely to delay and limit Apple's standard rating prompt. They are not used for analytics or purchase eligibility and are not sent to the developer.</p>
               <p>Export Mask Settings writes the same categories to a user-selected location. That copy is then subject to the storage, synchronization, and backup software chosen by the user.</p>
             </section>
 
             <section id="network">
-              <h3>Transfers and App Privacy</h3>
-              <p>The audited 0.1.1 app has no network client or remote endpoint. The developer does not collect personal data through the app, share data for advertising, or track users across apps or websites. For the current unmodified build, the expected Apple App Privacy answer is “No, this app does not collect data.”</p>
-              <p>The App Store, code-signing services, macOS, and a meeting app may process information separately as their respective providers. That is distinct from a BlurFollow runtime transmission.</p>
+              <h3>Transfers, StoreKit, and App Privacy</h3>
+              <p>The audited 0.2.0 app has no developer-operated endpoint, account, analytics collector, or commerce server. The developer does not collect personal data through the app, share data for advertising, or track users across apps or websites. For the current unmodified build, the expected Apple App Privacy answer is “No, this app does not collect data.”</p>
+              <p>In the official App Store build, StoreKit may contact Apple's App Store services to load the localized product and price, obtain and verify signed purchase/app transactions, complete a purchase, explicitly restore purchases, or show Apple's rating UI. Apple handles Apple Account authentication and billing. BlurFollow does not provide screen frames, window or mask information, or usage analytics to this purchase flow.</p>
+              <p>The App Store, code-signing services, macOS, and a meeting app may process information separately as their respective providers. That is distinct from a transmission to a BlurFollow-operated service.</p>
             </section>
 
             <section id="choices">
@@ -345,16 +348,17 @@
               <ul>
                 <li>Stop Share Preview to end capture and release the current preview from app state.</li>
                 <li>Disable or delete individual masks. Delete All Masks empties the mask list and removes the recovery backup.</li>
-                <li>To remove every stored setting, quit BlurFollow, then delete <code>Masks.json</code> and <code>Masks.json.backup</code> from its sandbox container.</li>
+                <li>To remove every stored setting, quit BlurFollow, then delete <code>Masks.json</code>, <code>Masks.json.backup</code>, and the app's local preferences from its sandbox container.</li>
                 <li>Delete exported settings and copies held by synchronization or backup products separately.</li>
                 <li>Uninstalling the app may leave Application Support or sandbox-container data behind.</li>
+                <li>Apple manages App Store purchase records. Restore Purchases synchronizes rather than deletes those records.</li>
               </ul>
-              <p>There is no BlurFollow account or server profile to access or delete.</p>
+              <p>There is no BlurFollow account or developer-server profile to access or delete.</p>
             </section>
 
             <section id="privacy-changes">
               <h3>Policy changes</h3>
-              <p>If a future build adds networking, accounts, analytics, payments, cloud sync, or another change to data handling, this policy and the App Privacy answers will be updated before distribution.</p>
+              <p>If a future build adds developer-operated networking, accounts, analytics, another payment provider, cloud sync, or another change to data handling, this policy and the App Privacy answers will be updated before distribution.</p>
             </section>
           </article>
         </div>
@@ -384,7 +388,7 @@
 
             <section id="dependencies">
               <h3>Current distribution dependencies</h3>
-              <p>The audited 0.1.1 app bundles no third-party runtime library, SDK, package, executable, model, font, analytics SDK, advertising SDK, or updater. It links to frameworks supplied by macOS, including AppKit, SwiftUI, ScreenCaptureKit, and Core Image. Apple frameworks and the Swift runtime are not relicensed under BlurFollow's Apache-2.0 terms.</p>
+              <p>The audited 0.2.0 app bundles no third-party runtime library, SDK, package, executable, model, font, analytics SDK, advertising SDK, or updater. It links to frameworks supplied by macOS, including AppKit, SwiftUI, ScreenCaptureKit, Core Image, and StoreKit. Apple frameworks and the Swift runtime are not relicensed under BlurFollow's Apache-2.0 terms.</p>
               <p>Each future release must re-audit packages, embedded frameworks, resources, fonts, build tools, and CI actions, then update notices for what is actually distributed.</p>
             </section>
 

@@ -4,7 +4,7 @@ import Combine
 
 @MainActor
 final class MaskStore: ObservableObject {
-    @Published var regions: [MaskRegion] {
+    @Published private(set) var regions: [MaskRegion] {
         didSet { persistRegionChangeIfNeeded() }
     }
     @Published var masksEnabled: Bool {
@@ -92,7 +92,11 @@ final class MaskStore: ObservableObject {
     }
 
     @discardableResult
-    func add(_ region: MaskRegion) -> MaskRegion {
+    func add(_ region: MaskRegion, hasUnlimitedAccess: Bool) -> MaskRegion? {
+        guard MaskAccessPolicy.canCreateMask(
+            currentCount: regions.count,
+            hasUnlimitedAccess: hasUnlimitedAccess
+        ) else { return nil }
         regions.append(region)
         return region
     }

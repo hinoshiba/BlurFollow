@@ -70,12 +70,13 @@
     },
     {
       "filename": "05-local-controls.png",
-      "ja_headline": "設定は、Mac内で管理。",
-      "en_headline": "Local controls, on your Mac.",
+      "ja_headline": "5件まで無料。追加は買い切り。",
+      "en_headline": "Five masks free. One-time unlock.",
       "raw_filename": "04-settings.jpg",
-      "scene": "The shipping Settings screen showing Last-position cover, mask visibility, permission state, local export/deletion, version, and license summary.",
+      "scene": "The shipping Settings screen showing five free masks, the one-time unlock entry, support links, permission state, local export/deletion, version, and license summary.",
       "assertions": [
-        "Keep the local-data and permission sections legible.",
+        "Show the five-mask free allowance and one-time unlock without a fixed price.",
+        "Keep the support, local-data, permission, and version sections legible.",
         "Do not imply that local processing controls what a meeting app does after sharing."
       ]
     }

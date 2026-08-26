@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "app_version": "0.1.1",
+  "app_version": "0.2.0",
   "tracking": false,
   "data_collected_by_developer": [],
   "third_party_analytics": false,
@@ -21,8 +21,14 @@
     "Mask style and strength",
     "Selected display identifier",
     "Selected app, process, window title, window identifier, and saved bounds",
-    "Preferences and recovery backup"
+    "Preferences and recovery backup",
+    "Local review-prompt eligibility dates and counters"
   ],
+  "apple_storekit_commerce": {
+    "optional_non_consumable": true,
+    "developer_commerce_server": false,
+    "screen_or_mask_content_sent_to_purchase_flow": false
+  },
   "submission_answer": "No, this app does not collect data",
   "verification_required": "Re-audit the exact archive, PrivacyInfo.xcprivacy, linked SDKs, and network behavior immediately before submission."
 }

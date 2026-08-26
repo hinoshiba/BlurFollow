@@ -4,6 +4,7 @@ struct SharePreviewView: View {
     @EnvironmentObject private var picker: ContentPickerService
     @EnvironmentObject private var permission: ScreenCapturePermission
     @EnvironmentObject private var sharePreview: SharePreviewSession
+    @EnvironmentObject private var reviewPrompts: ReviewPromptCoordinator
     @State private var pickerRequestID = UUID()
     @State private var activePickerRequest: ContentPickerRequestToken?
     @State private var isPreparingPicker = false
@@ -128,7 +129,9 @@ struct SharePreviewView: View {
                     ? String(localized: "Positions checked")
                     : String(localized: "I checked every mask position")
             ) {
+                guard !previewWasChecked else { return }
                 reviewedRevision = sharePreview.reviewRevision
+                reviewPrompts.recordSuccessfulPreviewCheck()
             }
             .contentTransition(.opacity)
             .animation(.easeInOut(duration: 0.16), value: previewWasChecked)
@@ -255,6 +258,7 @@ struct SharePreviewView: View {
             return String(localized: "The preview could not start. Choose the window again.")
         }
     }
+
 }
 
 private enum PreviewChromeState: Equatable {

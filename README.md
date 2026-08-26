@@ -10,7 +10,7 @@ BlurFollowは、macOSの画面へぼかし・モザイク・不透明カバー�
 
 BlurFollowは位置合わせと確認を助ける視覚的補助であり、security controlではありません。共有前にShare Previewと会議アプリ側の共有プレビューを必ず目視し、見せたくない領域が覆われていることを利用者自身で確認してください。
 
-現在は **0.1.1のプレリリース**です。機密性の高い本番共有へ投入する前に、利用するmacOS、会議アプリ、共有方式、画面構成で実機確認してください。
+現在は **0.2.0のプレリリース**です。機密性の高い本番共有へ投入する前に、利用するmacOS、会議アプリ、共有方式、画面構成で実機確認してください。
 
 ## 特徴
 
@@ -24,6 +24,7 @@ BlurFollowは位置合わせと確認を助ける視覚的補助であり、secu
 - **Share Guide** — ディスプレイ共有、単一窓共有、タブ共有の違いと、選ぶべきBlurFollow側の表示方法を案内します。
 - **Reconnect** — 対象窓を閉じた、作り直した、または再接続が曖昧な場合に、Appleのピッカーで対象を選び直せます。
 - **Local-first** — 画面フレームのファイル保存、音声取得、録画、分析SDK、広告SDK、BlurFollowからのフレーム送信を行いません。
+- **通常利用は無料** — 公式Mac App Store版は保存済みマスク5件まで無料です。6件目以降は買い切りの「無制限マスク」でアプリ側の上限を解除でき、既存マスクや安全・確認機能は課金状態にかかわらず利用できます。0.1.1以前からのApp Storeユーザとソースビルドは無制限です。
 
 ## どれを共有するか
 
@@ -125,6 +126,8 @@ Share Previewへ合成されるのはWindow Pinだけです。Display Pinは合�
 - 音声、録画
 - 利用分析
 
+公式Mac App Store版では、任意の「無制限マスク」の商品情報、購入、購入状態の検証、復元にAppleのStoreKitを使います。Apple Accountの認証情報や決済情報をBlurFollowが受け取ることはなく、画面内容、マスク内容、利用解析を購入処理へ渡しません。評価依頼の表示判断に使う初回利用日、Share Preview確認回数、最後に依頼した版と日時は端末内のUserDefaultsだけに保存します。
+
 設定はApplication Support配下のJSONへatomic writeし、検証済みの直前snapshotをbackupとして保持します。破損からbackupを復元した場合は警告を出し、全マスクの確認を求めます。「Delete All Masks」はprimaryとbackupの双方を削除対象にします。
 
 マスク名とウインドウタイトル自体が機密情報になり得ます。設定JSONをIssueへ添付する前に内容を確認してください。Share PreviewをZoomやMeetなどへ共有した後の映像送信・保存は、その第三者サービスの処理です。BlurFollowがframeを送信しないことと、会議アプリが共有映像を送信することは別です。
@@ -168,6 +171,7 @@ build.shはad-hoc署名したローカル開発用app bundleをdistへ作りま�
 ### 文書
 
 - [アーキテクチャ](Docs/ARCHITECTURE.md)
+- [課金・レビュー導線](Docs/MONETIZATION.md)
 - [互換性](Docs/COMPATIBILITY.md)
 - [リリース手順](Docs/RELEASE.md)
 - [脅威・制約モデル](Docs/THREAT_MODEL.md)

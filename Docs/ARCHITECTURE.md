@@ -1,6 +1,6 @@
 # BlurFollow Architecture
 
-> Status: architecture of the 0.1.1 implementation<br>
+> Status: architecture of the 0.2.0 implementation<br>
 > Platform: macOS 14.0+, Swift tools 5.10, SwiftUI, AppKit, ScreenCaptureKit, Core Image
 
 ## 1. System goal and boundary
@@ -48,6 +48,8 @@ The names below describe the post-rename architecture. Source paths should be ke
 | Overlay | Floating panels, frame updates, AppKit rendering |
 | Share Preview | Single-window capture, frame validation, Core Image composition, preview lifecycle |
 | UI | Onboarding, Dashboard, Masks, Share Guide, Settings, Share Preview |
+| Commerce | StoreKit product loading, verified entitlement/grandfather checks, purchase/restore, and the five-mask creation policy |
+| Engagement | Local-only neutral review-prompt eligibility after repeated successful Share Preview checks |
 
 The implementation should use product-neutral type names such as SharePreviewSession, SharePreviewCompositor, MaskOverlayPanel, and BlurFollowTheme. User-facing state terms and internal state names should not imply that a technical condition certifies the content.
 
@@ -354,6 +356,13 @@ The application does not request Full Disk Access, Accessibility, camera, microp
 The checked-in project, generated project, built app signature, and archive entitlements must be compared during every release.
 
 ## 10. Limits and misuse boundaries
+
+The official Mac App Store target applies a plan boundary only when a new mask
+is added: five saved masks are free and a verified Non-Consumable, or a verified
+pre-0.2.0 app transaction, removes the app-imposed count limit. `MaskStore.add`
+is the final atomic check. Existing masks are never removed or disabled when
+StoreKit state changes. Source builds compile without `BLURFOLLOW_APP_STORE` and
+retain unlimited access. See [MONETIZATION.md](MONETIZATION.md).
 
 BlurFollow does not address:
 

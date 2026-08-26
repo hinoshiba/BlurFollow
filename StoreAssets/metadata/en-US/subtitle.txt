@@ -1,1 +1,1 @@
-Window-following blur
+Masks that follow windows

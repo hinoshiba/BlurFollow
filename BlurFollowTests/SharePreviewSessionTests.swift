@@ -105,7 +105,7 @@ final class SharePreviewSessionTests: XCTestCase {
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2),
             style: .redact
-        ))
+        ), hasUnlimitedAccess: true)
 
         XCTAssertNotNil(store.recoveryIssue)
         XCTAssertTrue(session.savedDataNeedsReview)

@@ -32,6 +32,8 @@ size.
 - Screenshot filenames, scenes, and assertions: `screenshot_manifest.json`
 - Final screenshot files: `screenshots/<locale>/`
 - Submission gates: `SUBMISSION_CHECKLIST.md`
+- Local StoreKit test product: `../Config/BlurFollow.storekit` (not an App Store
+  Connect upload or substitute for Sandbox/TestFlight validation)
 
 `ja-JP/review_notes.txt` is the canonical App Review note. The English file is
 an equivalent reviewer-facing translation that can replace it when the assigned
@@ -48,3 +50,4 @@ submitting the listing.
 - [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)
 - [Upload screenshots and app previews](https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots/)
 - [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
+- [Submit an In-App Purchase](https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase/)

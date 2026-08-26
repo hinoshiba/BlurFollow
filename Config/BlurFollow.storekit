@@ -1,0 +1,72 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "66013340",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "66013341",
+      "localizations" : [
+        {
+          "description" : "Create unlimited masks with one purchase.",
+          "displayName" : "BlurFollow Unlimited Masks",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "6件目以降のマスクを買い切りで解放します。",
+          "displayName" : "BlurFollow 無制限マスク",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "com.hinoshiba.blurfollow.unlimited-masks",
+      "referenceName" : "BlurFollow Unlimited Masks",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

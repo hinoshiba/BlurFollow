@@ -90,6 +90,9 @@ Choose a semantic marketing version and update it consistently in:
   copy;
 - privacy, security, compatibility, architecture, dependency, notice, and
   threat-model documents when behavior or inventory changed; and
+- the Non-Consumable product state, localized product metadata/price, In-App
+  Purchase review screenshot, Sandbox evidence, and purchase/restore/refund
+  matrix described in `MONETIZATION.md`; and
 - the private release record, metadata, screenshots, and review notes for the
   exact candidate.
 
@@ -143,8 +146,8 @@ must be exactly `v<major>.<minor>.<patch>` and its version must equal
 `MARKETING_VERSION`:
 
 ```sh
-git tag -s v0.1.1 -m "BlurFollow 0.1.1"
-git push origin v0.1.1
+git tag -s v0.2.0 -m "BlurFollow 0.2.0"
+git push origin v0.2.0
 ```
 
 `ci_scripts/ci_pre_xcodebuild.sh` rejects an Archive without Xcode Cloud, a

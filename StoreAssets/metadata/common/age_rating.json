@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "app_version": "0.1.1",
+  "app_version": "0.2.0",
   "questionnaire_answer_proposal": {
     "in_app_controls": {
       "parental_controls": false,
@@ -44,7 +44,7 @@
     "override_to_higher_rating": false
   },
   "expected_global_rating": "4+",
-  "basis": "The current utility contains no publisher-provided objectionable content, social features, ads, web browser, chat, gambling, or commerce. User-selected window content is not distributed by the developer and must not be used as a test fixture with objectionable material.",
+  "basis": "The current utility contains no publisher-provided objectionable content, social features, ads, web browser, chat, gambling, or randomized purchases. It offers one non-consumable Unlimited Masks product through Apple StoreKit. User-selected window content is not distributed by the developer and must not be used as a test fixture with objectionable material.",
   "verification_required": "Answer the live App Store Connect questionnaire from the exact final binary and storefront behavior. Apple calculates global and region-specific ratings; this proposal is not the assigned rating.",
   "apple_reference": "https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating/"
 }

@@ -1,1 +1,1 @@
-BlurFollow
+BlurFollow：画面共有ぼかし

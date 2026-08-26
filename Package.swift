@@ -11,7 +11,10 @@ let package = Package(
         .executableTarget(
             name: "BlurFollow",
             path: "BlurFollow",
-            exclude: ["Resources"]
+            exclude: ["Resources"],
+            linkerSettings: [
+                .linkedFramework("StoreKit")
+            ]
         ),
         .testTarget(
             name: "BlurFollowTests",

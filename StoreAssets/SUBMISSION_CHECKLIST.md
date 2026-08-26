@@ -19,6 +19,12 @@ from a source-tree assumption.
   and brand gates are closed.
 - [ ] Paid Applications agreement, tax forms, banking, pricing, territories,
   and availability dates are explicitly approved by the seller.
+- [ ] `com.hinoshiba.blurfollow.unlimited-masks` exists as a Non-Consumable,
+  its localized name/description and price are approved, and Family Sharing
+  remains off unless separately approved with its irreversible consequence.
+- [ ] The explicit App ID, Xcode target capability, signed App Store archive,
+  and final provisioning profile all include In-App Purchase support. Do not
+  substitute the Apple Pay entitlement or a Developer ID profile.
 
 ## App record
 
@@ -27,7 +33,7 @@ from a source-tree assumption.
 - [ ] Primary language is Japanese (`ja-JP`); English (`en-US`) localization is
   enabled.
 - [ ] Primary category is Utilities; secondary category is Productivity.
-- [ ] Version and build number match the archive. Version `0.1.1` in this folder
+- [ ] Version and build number match the archive. Version `0.2.0` in this folder
   must be updated if a different version is submitted.
 - [ ] Age-rating questionnaire is answered from the final behavior and content;
   no rating is assumed from this repository.
@@ -59,15 +65,23 @@ from a source-tree assumption.
 - [ ] No listing field contains competitor names, unverifiable rankings,
   incentivized-review language, unavailable features, draft prices, or private
   project planning.
+- [ ] Description and screenshots clearly disclose that five masks are free and
+  creation beyond five requires the one-time In-App Purchase.
+- [ ] The localized What's New fields describe the five-mask free plan, optional
+  one-time unlock, 0.1.1 grandfather treatment, restore path, and neutral rating
+  behavior without a hardcoded price or ranking claim.
 
 ## Privacy and permissions
 
 - [ ] Re-audit the exact archive for networking, embedded SDKs/frameworks,
   analytics, advertising, updater code, frame/audio persistence, and logging.
+- [ ] Confirm StoreKit is the only commerce path; it receives no screen frame,
+  window metadata, mask content, or usage analytics from BlurFollow.
 - [ ] App Privacy answers match that audit. For the current unmodified code, the
   expected answer is no data collected by the developer and no tracking.
 - [ ] `PrivacyInfo.xcprivacy` matches the archive and the current Apple required-
-  reason API rules.
+  reason API rules, including `NSPrivacyAccessedAPICategoryUserDefaults` reason
+  `CA92.1` for app-only review-prompt preferences.
 - [ ] The published policy accurately covers in-memory window-frame processing,
   local mask/window metadata, primary and backup settings, export, deletion,
   meeting-service boundaries, and operating-system memory limitations.
@@ -98,6 +112,14 @@ from a source-tree assumption.
   state on macOS 14.0, 14.2, 15.0, 15.1, and at least one macOS 15.2+ release.
 - [ ] Test Display Pin, Window Pin, Reconnect, Share Guide, Share Preview, stop,
   close, picker cancellation, app quit, settings recovery, and Delete All.
+- [ ] Test five free masks and the sixth-mask gate for both creation modes,
+  purchase success/cancel/failure/pending, relaunch, explicit restore with and
+  without entitlement, product-load failure, offline behavior, refund,
+  revocation, and the 0.1.1 grandfather path.
+- [ ] Confirm purchase or entitlement loss never deletes, disables, hides, or
+  changes an existing mask, including configurations already above five.
+- [ ] Confirm the rating request is independent of purchase and appears only
+  through Apple's system UI after the documented engagement/cooldown policy.
 - [ ] Test multiple displays, displays above/left of the primary display,
   mixed-DPI scaling, Spaces, full screen, sleep/wake, source-window recreation,
   hidden/minimized windows, scrolling, zoom, and child windows.
@@ -121,6 +143,11 @@ from a source-tree assumption.
   localized headlines.
 - [ ] App Review Notes reproduce from a clean macOS account using only the
   submitted binary and public instructions.
+- [ ] The first Non-Consumable is attached to the app-version submission, is in
+  Ready to Submit state, and includes an accurate In-App Purchase review
+  screenshot from the submitted UI.
+- [ ] Review Notes identify the Product ID and reproduce the sixth-mask,
+  purchase, and Restore Purchases paths with StoreKit's localized price.
 - [ ] Attach a synthetic test fixture and short permission-flow video if needed;
   neither contains private data or access credentials.
 - [ ] Explain any review-only setup in Review Notes. Never provide a real user,

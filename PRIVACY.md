@@ -1,13 +1,13 @@
 # BlurFollow privacy statement
 
-Last updated: 2026-08-17<br>
-Applies to: the open-source BlurFollow 0.1.1 macOS code and an unmodified build
+Last updated: 2026-08-26<br>
+Applies to: the open-source BlurFollow 0.2.0 macOS code and an unmodified build
 
 BlurFollow places visual effects over screen regions, can follow a saved region
 as its source window moves, and can create a locally processed Share Preview.
 It is a convenience and verification aid, not a confidentiality service. This
 statement describes the current code. A distributor that adds networking,
-accounts, licensing, payments,
+accounts, alternative payment providers,
 analytics, crash reporting, advertising, cloud sync, or an updater must publish
 its own accurate policy before distribution.
 
@@ -15,6 +15,10 @@ its own accurate policy before distribution.
 
 - BlurFollow has no account system, advertising, analytics, telemetry, or
   third-party runtime SDK.
+- The official Mac App Store build uses Apple's StoreKit for an optional
+  one-time Unlimited Masks product, purchase verification, restoration, and the
+  system rating prompt. BlurFollow operates no commerce server and does not
+  receive Apple Account credentials or payment-card details.
 - Share Preview uses Apple's ScreenCaptureKit system picker and only begins after
   the user deliberately chooses a window and macOS authorizes capture. On
   macOS 14 through 15.1, this build first requires the broader Screen Recording
@@ -27,6 +31,8 @@ its own accurate policy before distribution.
   from the app's preview state when capture stops or fails.
 - Mask definitions and limited window-identifying metadata are stored locally
   so masks can be restored.
+- Review-prompt eligibility counters and dates stay in local preferences and
+  are not sent to the developer.
 
 ## Screen content
 
@@ -63,6 +69,13 @@ BlurFollow stores a JSON configuration containing:
 - for a Window Pin, the source window ID, source process ID, application name,
   bundle identifier, window title, and initial window bounds; and
 - global enable, Last-position cover, and onboarding settings.
+
+Separately, local UserDefaults contain the first-use date, successful Share
+Preview check count, and last rating-request version/date. These values only
+delay and limit use of Apple's standard rating prompt. They are not used for
+analytics, profiling, purchase eligibility, or transmission to the developer.
+Purchase and grandfather access are derived from StoreKit-verified signed
+transactions, not from the mask JSON or a locally editable entitlement flag.
 
 An unsandboxed build normally stores this at:
 
@@ -128,14 +141,27 @@ BlurFollow uses Apple's system content-sharing picker rather than a custom picke
 The picker and permission controls are provided by macOS and are subject to
 Apple's platform privacy practices.
 
-## Network activity and disclosure
+## Network activity, StoreKit, and disclosure
 
-The audited 0.1.1 application target has no network client and no remote
-endpoint. BlurFollow does not sell personal information, share it for advertising,
-or track users across apps or websites. The OS, App Store and code-signing
-services, or a third-party conferencing app may
-process information independently under their own terms; that is not an app
-runtime transmission to a BlurFollow service.
+The audited 0.2.0 application has no developer-operated network client, remote
+endpoint, account service, analytics collector, or commerce server. BlurFollow
+does not sell personal information, share it for advertising, or track users
+across apps or websites.
+
+In the official Mac App Store build, Apple StoreKit may contact App Store
+services to load the localized Unlimited Masks product and price, obtain the
+signed app transaction, verify current purchase entitlement, complete a
+purchase, listen for transaction changes, restore a purchase after an explicit
+user request, or present Apple's rating UI. BlurFollow receives only the
+product and verified transaction/app-version state needed to display commerce
+and decide whether another mask may be created. It does not provide screen
+frames, window metadata, mask names or geometry, review-prompt counters, or
+usage analytics to the StoreKit purchase flow. Apple handles Apple Account
+authentication, billing, refunds, and its own records under Apple's terms.
+
+The OS, App Store, code-signing services, or a third-party conferencing app may
+process information independently under their own terms; that is not a
+transmission to a BlurFollow-operated service.
 
 Under Apple's App Privacy definition, data processed only on the device is not
 “collected.” On the present implementation, the expected App Store answer is
@@ -145,9 +171,11 @@ this statement is not a substitute for that submission review or for legal
 definitions in a user's jurisdiction.
 
 The checked-in `PrivacyInfo.xcprivacy` mirrors this baseline with tracking off
-and no collected-data or required-reason API declarations. It is a machine-
-readable assertion, not automatic proof: scan the exact archive and update the
-manifest before release if code, SDKs, or Apple's requirements change.
+and no collected-data declarations. It declares the app-only UserDefaults use
+under Apple's `NSPrivacyAccessedAPICategoryUserDefaults` reason `CA92.1` for the
+local review-prompt dates and counters described above. It is a machine-readable
+assertion, not automatic proof: scan the exact archive and update the manifest
+before release if code, SDKs, or Apple's requirements change.
 
 ## Retention, deletion, and choices
 
@@ -161,13 +189,16 @@ manifest before release if code, SDKs, or Apple's requirements change.
   app cannot restore or rewrite a snapshot during deletion.
 - Delete any configuration exports separately, including copies held by backup
   or synchronization products.
+- Local review-prompt counters can be removed with the app's container or
+  preferences. App Store purchase records are managed by Apple; Restore
+  Purchases asks StoreKit to synchronize them and does not delete them.
 - End the capture from BlurFollow or macOS's sharing control. On macOS 14 through
   15.1, also revoke the persistent Screen Recording grant in System Settings
   when it is no longer wanted.
 - Uninstalling the app may not automatically delete its Application Support or
   sandbox container data; remove it manually if desired.
 
-Because the current app has no BlurFollow account or server storage, there is no
+Because the current app has no BlurFollow account or developer server storage, there is no
 server-side profile for the project to access, export, or delete.
 
 ## Security and limitations

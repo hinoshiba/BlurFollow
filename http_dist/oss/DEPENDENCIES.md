@@ -1,7 +1,7 @@
 # Dependency and license policy
 
-Last audited: 2026-08-17<br>
-Baseline: BlurFollow 0.1.1, macOS deployment target 14.0
+Last audited: 2026-08-26<br>
+Baseline: BlurFollow 0.2.0, macOS deployment target 14.0
 
 This document records what the current app uses and the gate for accepting new
 dependencies. It is designed to keep an open-source build and paid official
@@ -14,7 +14,7 @@ distribution compatible. It is not legal advice.
 
 | Category | Components | Shipped inside `BlurFollow.app`? | Notes |
 | --- | --- | --- | --- |
-| Direct Apple application frameworks | AppKit, SwiftUI, Foundation, Combine | No | Resolved from macOS at runtime. |
+| Direct Apple application frameworks | AppKit, SwiftUI, Foundation, Combine, StoreKit | No | Resolved from macOS at runtime. StoreKit handles optional App Store product, purchase, verified entitlement, review prompt, and restore flows. |
 | Apple graphics and media frameworks | CoreGraphics, CoreImage, CoreMedia, CoreVideo | No | Share Preview processes video frames in memory; audio capture is disabled. |
 | Apple capture framework | ScreenCaptureKit | No | Used with Apple's system content picker and Screen Recording consent. |
 | Apple system UI assets | SF Symbols referenced by `systemName` | No | Rendered by the OS in the app UI. Apple's applicable SDK/SF Symbols terms govern use; do not repurpose a restricted symbol as product branding or export it as an independently distributed asset. |

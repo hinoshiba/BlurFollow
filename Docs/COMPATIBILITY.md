@@ -1,6 +1,6 @@
 # Compatibility and verification matrix
 
-Last reviewed: 2026-08-17<br>
+Last reviewed: 2026-08-26<br>
 Declared minimum: macOS 14.0
 
 This file distinguishes a declared target from recorded test evidence. A
@@ -16,7 +16,7 @@ exact signed artifact and current versions of macOS and sharing products.
 | UI | Native AppKit/SwiftUI; no browser engine or third-party UI runtime. |
 | Capture | ScreenCaptureKit with Apple's single-window content picker. macOS 14–15.1 first requires broad Screen Recording permission for exact identity resolution without guessing; macOS 15.2+ uses the picker's selected-window identity without proactively requesting that broader grant. |
 | Overlay tracking | Public `CGWindowList` metadata; no Accessibility permission or private window API. |
-| Network | None in the audited 0.1.1 app target. |
+| Network | No developer-operated network client or endpoint. The official 0.2.0 App Store target uses Apple StoreKit for optional product, purchase, entitlement, and restore operations. |
 | Audio | Not captured by Share Preview. |
 | Storage | Local mask JSON in Application Support; sandboxed builds use their app container. |
 
@@ -90,6 +90,21 @@ At minimum test:
   and
 - the Xcode Cloud/TestFlight App Store candidate from a clean standard user
   account.
+
+### StoreKit and plan boundary
+
+- Create five mixed Display/Window and enabled/disabled masks without purchase;
+  verify the sixth request is stopped before either picker opens.
+- Purchase, cancel, fail, defer/Ask to Buy, restore, relaunch, refund, revoke,
+  and test with product information unavailable or the Mac offline.
+- Verify 0.1.1 original app transactions retain unlimited creation and new
+  0.2.0 app transactions do not receive grandfather status.
+- Keep every existing mask visible and editable when entitlement becomes
+  unavailable, including configurations already above five.
+- Verify StoreKit's localized product name and price in Japanese and English;
+  never accept a hardcoded fallback price.
+- Exercise the neutral review request only after two successful Share Preview
+  checks and seven days, with no picker or commerce UI active.
 
 If hardware or an OS version cannot be tested, narrow the published support
 claim or document the exception and risk approval in the release record.

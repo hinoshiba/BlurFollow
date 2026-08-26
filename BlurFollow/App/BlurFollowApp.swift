@@ -10,6 +10,8 @@ struct BlurFollowApp: App {
     @StateObject private var picker: ContentPickerService
     @StateObject private var permission: ScreenCapturePermission
     @StateObject private var sharePreview: SharePreviewSession
+    @StateObject private var purchases: PurchaseManager
+    @StateObject private var reviewPrompts: ReviewPromptCoordinator
 
     init() {
         let store = MaskStore()
@@ -30,6 +32,8 @@ struct BlurFollowApp: App {
             tracker: tracker,
             onAccessDenied: { permission.recordDenial() }
         ))
+        _purchases = StateObject(wrappedValue: PurchaseManager())
+        _reviewPrompts = StateObject(wrappedValue: ReviewPromptCoordinator())
     }
 
     var body: some Scene {
@@ -42,6 +46,8 @@ struct BlurFollowApp: App {
                 .environmentObject(picker)
                 .environmentObject(permission)
                 .environmentObject(sharePreview)
+                .environmentObject(purchases)
+                .environmentObject(reviewPrompts)
                 .preferredColorScheme(BlurFollowTheme.colorScheme)
                 .frame(minWidth: 920, minHeight: 620)
                 .onAppear {
@@ -58,6 +64,8 @@ struct BlurFollowApp: App {
                 .environmentObject(picker)
                 .environmentObject(permission)
                 .environmentObject(sharePreview)
+                .environmentObject(purchases)
+                .environmentObject(reviewPrompts)
                 .frame(minWidth: 720, minHeight: 480)
         }
         .defaultSize(width: 1100, height: 720)
@@ -75,6 +83,7 @@ struct BlurFollowApp: App {
             SettingsView()
                 .environmentObject(store)
                 .environmentObject(permission)
+                .environmentObject(purchases)
                 .preferredColorScheme(BlurFollowTheme.colorScheme)
                 .frame(width: 620, height: 480)
         }

@@ -3,7 +3,9 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var store: MaskStore
     @EnvironmentObject private var permission: ScreenCapturePermission
+    @EnvironmentObject private var purchases: PurchaseManager
     @State private var exportMessage: String?
+    @State private var isShowingUnlimitedMasks = false
 
     var body: some View {
         ScrollView {
@@ -89,6 +91,39 @@ struct SettingsView: View {
                 }
 
                 GlassCard {
+                    HStack(alignment: .top, spacing: 14) {
+                        Image(systemName: purchases.hasUnlimitedAccess ? "checkmark.seal.fill" : "heart.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(purchases.hasUnlimitedAccess ? BlurFollowTheme.mint : BlurFollowTheme.iris)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(purchases.hasUnlimitedAccess ? String(localized: "Unlimited Masks") : String(localized: "Support BlurFollow"))
+                                .font(.headline)
+                            Text(purchaseSummary)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Button(purchases.hasUnlimitedAccess ? String(localized: "View Access") : String(localized: "View One-Time Unlock…")) {
+                            isShowingUnlimitedMasks = true
+                        }
+                    }
+                }
+
+                GlassCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Support & Feedback")
+                            .font(.headline)
+                        Text("Get help or share an App Store rating after you have used BlurFollow.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        HStack {
+                            Link("Contact Support", destination: supportURL)
+                            Link("Rate BlurFollow on the App Store", destination: reviewURL)
+                        }
+                    }
+                }
+
+                GlassCard {
                     VStack(alignment: .leading, spacing: 14) {
                         Text("Local Data")
                             .font(.headline)
@@ -129,6 +164,9 @@ struct SettingsView: View {
             .frame(maxWidth: 900, alignment: .leading)
         }
         .background(BlurFollowTheme.background)
+        .sheet(isPresented: $isShowingUnlimitedMasks) {
+            UnlimitedMasksView(purchases: purchases, trigger: .settings)
+        }
     }
 
     private var captureAccessDetail: String {
@@ -141,6 +179,34 @@ struct SettingsView: View {
     private var versionLabel: String {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
         return String.localizedStringWithFormat(String(localized: "BlurFollow %@"), version)
+    }
+
+    private var purchaseSummary: String {
+        switch purchases.entitlementState {
+        case .checking:
+            return String(localized: "Checking your App Store purchase status…")
+        case .purchased:
+            return String(localized: "Your one-time purchase removes BlurFollow's mask-count plan limit.")
+        case .grandfathered:
+            return String(localized: "As an early user, you keep the unlimited access included with the version you first downloaded.")
+        case .sourceBuild:
+            return String(localized: "Source builds include unlimited masks; the official App Store build offers an optional one-time unlock.")
+        case .free:
+            return String.localizedStringWithFormat(
+                String(localized: "%lld masks are included free. Unlocking more also supports continued development."),
+                Int64(MaskAccessPolicy.freeMaskLimit)
+            )
+        }
+    }
+
+    private var supportURL: URL {
+        let language = Locale.current.language.languageCode?.identifier ?? "en"
+        let path = language == "ja" ? "support/" : "en/support/"
+        return URL(string: "https://blurfollow.hinoshiba.com/\(path)")!
+    }
+
+    private var reviewURL: URL {
+        URL(string: "https://apps.apple.com/app/id6801985073?action=write-review")!
     }
 
     private var captureAccessStatus: String {

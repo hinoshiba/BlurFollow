@@ -1,0 +1,5 @@
+Five saved masks remain free. Unlimited Masks is a new optional one-time purchase for creating additional masks.
+
+Existing users whose original App Store download was version 0.1.1 or earlier keep unlimited mask creation. Existing masks and verification features such as Share Preview are never removed or restricted based on purchase state.
+
+Settings now includes purchase status, Restore Purchases, support, and a direct App Store rating link. The neutral system rating request is independent of purchase and can occur only after repeated Share Preview checks, once preview capture has stopped and the main window is active again.

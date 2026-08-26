@@ -3,6 +3,82 @@ import XCTest
 
 @MainActor
 final class MaskStoreTests: XCTestCase {
+    func testFreePlanRejectsSixthMaskButKeepsExistingMasks() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = MaskStore(storageURL: url)
+        for index in 0..<MaskAccessPolicy.freeMaskLimit {
+            XCTAssertNotNil(store.add(MaskRegion(
+                name: "Free mask \(index)",
+                mode: .display,
+                normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2),
+                isEnabled: index.isMultiple(of: 2)
+            ), hasUnlimitedAccess: false))
+        }
+
+        XCTAssertNil(store.add(MaskRegion(
+            name: "Sixth mask",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.2, y: 0.2, width: 0.2, height: 0.2)
+        ), hasUnlimitedAccess: false))
+        XCTAssertEqual(store.regions.count, MaskAccessPolicy.freeMaskLimit)
+        XCTAssertEqual(MaskStore(storageURL: url).regions.count, MaskAccessPolicy.freeMaskLimit)
+    }
+
+    func testDeletingAMaskReopensAFreeSlot() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = MaskStore(storageURL: url)
+        var firstID: UUID?
+        for index in 0..<MaskAccessPolicy.freeMaskLimit {
+            let added = try XCTUnwrap(store.add(MaskRegion(
+                name: "Mask \(index)",
+                mode: .display,
+                normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
+            ), hasUnlimitedAccess: false))
+            firstID = firstID ?? added.id
+        }
+
+        store.remove(id: try XCTUnwrap(firstID))
+        XCTAssertNotNil(store.add(MaskRegion(
+            name: "Replacement",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.3, y: 0.3, width: 0.2, height: 0.2)
+        ), hasUnlimitedAccess: false))
+        XCTAssertEqual(store.regions.count, MaskAccessPolicy.freeMaskLimit)
+    }
+
+    func testUnlimitedAccessCanAddBeyondFreeLimitAndReloadAllMasks() {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = MaskStore(storageURL: url)
+        for index in 0..<(MaskAccessPolicy.freeMaskLimit + 3) {
+            XCTAssertNotNil(store.add(MaskRegion(
+                name: "Unlimited mask \(index)",
+                mode: .display,
+                normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
+            ), hasUnlimitedAccess: true))
+        }
+
+        XCTAssertEqual(store.regions.count, 8)
+        let restored = MaskStore(storageURL: url)
+        XCTAssertEqual(restored.regions.count, 8)
+        XCTAssertFalse(MaskAccessPolicy.canCreateMask(
+            currentCount: restored.regions.count,
+            hasUnlimitedAccess: false
+        ))
+        XCTAssertEqual(restored.regions.count, 8, "Existing masks must never be removed by the plan boundary.")
+    }
+
     func testLiveUpdatePersistsOnlyNewestValueWhenFlushed() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
@@ -10,11 +86,11 @@ final class MaskStoreTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: directory) }
 
         let store = MaskStore(storageURL: url)
-        var region = store.add(MaskRegion(
+        var region = try XCTUnwrap(store.add(MaskRegion(
             name: "Live strength",
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
-        ))
+        ), hasUnlimitedAccess: true))
         let originalStrength = region.strength
 
         region.strength = 0.3
@@ -38,11 +114,11 @@ final class MaskStoreTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: directory) }
 
         let store = MaskStore(storageURL: url)
-        var region = store.add(MaskRegion(
+        var region = try XCTUnwrap(store.add(MaskRegion(
             name: "Live then toggle",
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
-        ))
+        ), hasUnlimitedAccess: true))
         region.strength = 0.42
         store.updateLive(region)
 
@@ -68,7 +144,7 @@ final class MaskStoreTests: XCTestCase {
             normalizedRect: UnitRect(x: 0.1, y: 0.2, width: 0.3, height: 0.1),
             displayIdentifier: "display-1",
             style: .redact
-        ))
+        ), hasUnlimitedAccess: true)
 
         let restored = MaskStore(storageURL: url)
         XCTAssertEqual(restored.regions.count, 1)
@@ -92,7 +168,7 @@ final class MaskStoreTests: XCTestCase {
             granularity: 0.27,
             tint: .warm,
             borderEnabled: false
-        ))
+        ), hasUnlimitedAccess: true)
 
         let restored = try XCTUnwrap(MaskStore(storageURL: url).regions.first)
         XCTAssertEqual(restored.strength, 0.42, accuracy: 0.000_001)
@@ -116,7 +192,7 @@ final class MaskStoreTests: XCTestCase {
             granularity: 0.91,
             tint: .warm,
             borderEnabled: false
-        ))
+        ), hasUnlimitedAccess: true)
 
         var root = try XCTUnwrap(
             JSONSerialization.jsonObject(with: store.exportData()) as? [String: Any]
@@ -144,11 +220,11 @@ final class MaskStoreTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: directory) }
 
         let store = MaskStore(storageURL: url)
-        var region = store.add(MaskRegion(
+        var region = try XCTUnwrap(store.add(MaskRegion(
             name: "Invalid granularity",
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.2, width: 0.3, height: 0.1)
-        ))
+        ), hasUnlimitedAccess: true))
         region.granularity = 1.01
         store.update(region)
 
@@ -168,7 +244,7 @@ final class MaskStoreTests: XCTestCase {
             mode: .display,
             normalizedRect: UnitRect(x: 0, y: 0, width: 0.2, height: 0.1),
             style: .redact
-        ))
+        ), hasUnlimitedAccess: true)
 
         let exported = try store.exportData()
         let text = String(decoding: exported, as: UTF8.self)
@@ -203,8 +279,8 @@ final class MaskStoreTests: XCTestCase {
             isEnabled: false
         )
         let store = MaskStore(storageURL: url)
-        store.add(displayMask)
-        store.add(windowMask)
+        store.add(displayMask, hasUnlimitedAccess: true)
+        store.add(windowMask, hasUnlimitedAccess: true)
 
         store.setEnabled(false, for: displayMask.id)
         XCTAssertFalse(store.regions.first(where: { $0.id == displayMask.id })?.isEnabled ?? true)
@@ -229,11 +305,11 @@ final class MaskStoreTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: directory) }
 
         let store = MaskStore(storageURL: url)
-        var region = store.add(MaskRegion(
+        var region = try XCTUnwrap(store.add(MaskRegion(
             name: "Toolbar mask",
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2)
-        ))
+        ), hasUnlimitedAccess: true))
         region.strength = 0.37
         store.updateLive(region)
 
@@ -256,7 +332,7 @@ final class MaskStoreTests: XCTestCase {
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2),
             style: .redact
-        ))
+        ), hasUnlimitedAccess: true)
         // A subsequent valid write promotes the previous snapshot to the backup file.
         original.coverLastPositionEnabled.toggle()
         try Data("{not-json".utf8).write(to: url, options: .atomic)
@@ -293,7 +369,7 @@ final class MaskStoreTests: XCTestCase {
             mode: .display,
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2),
             style: .redact
-        ))
+        ), hasUnlimitedAccess: true)
         store.coverLastPositionEnabled.toggle()
         XCTAssertTrue(FileManager.default.fileExists(atPath: backupURL.path))
 
@@ -323,7 +399,7 @@ final class MaskStoreTests: XCTestCase {
             normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.2, height: 0.2),
             windowAnchor: anchor,
             style: .redact
-        ))
+        ), hasUnlimitedAccess: true)
 
         XCTAssertThrowsError(try store.exportData())
         XCTAssertNotNil(store.recoveryIssue)

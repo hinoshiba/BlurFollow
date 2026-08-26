@@ -9,7 +9,7 @@ PIN TO A DISPLAY
 For a notification area or fixed layout, place a Display Pin at a proportional position on one display.
 
 SHARE PREVIEW
-An overlay from another app is normally not included when you share a single Chrome window or browser tab. BlurFollow processes the window selected with Apple's system picker, composites its matching Window Pins on your Mac, and shows the result in a separate BlurFollow Share Preview window.
+An overlay from another app is normally not included when you share a single browser window or browser tab. BlurFollow processes the window selected with Apple's system picker, composites its matching Window Pins on your Mac, and shows the result in a separate BlurFollow Share Preview window.
 
 For a single-window workflow, choose BlurFollow Share Preview as the sharing target instead of the original window. Inspect every mask inside Share Preview before sharing, then check the meeting application's own preview again.
 
@@ -18,6 +18,9 @@ See which workflow fits full-display, single-window, and browser-tab sharing.
 
 THREE VISUAL STYLES
 Choose Frost, Mosaic, or opaque Redact. If window-position metadata becomes unavailable, Last-position cover can cover the latest position available to BlurFollow. That may not be the window's current position, so reconnect and inspect it.
+
+FIVE MASKS FREE
+Save up to five Display and Window Pins at no charge. Creating more uses Unlimited Masks, a one-time In-App Purchase that removes the app's plan limit. It is not a subscription. Existing masks remain available to view, edit, and delete, and verification features including Share Preview remain included regardless of purchase status.
 
 ON-DEVICE PROCESSING
 BlurFollow does not record audio, save screen frames to files, send frames to the developer, or include analytics or advertising SDKs. Mask settings and limited app/window identity metadata are stored locally. After you share BlurFollow Share Preview through a meeting service, that service handles the resulting video under its own terms.

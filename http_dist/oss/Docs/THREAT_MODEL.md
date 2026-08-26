@@ -1,7 +1,7 @@
 # Threat model
 
-Last reviewed: 2026-08-17<br>
-Baseline: BlurFollow 0.1.1 on macOS 14 and later
+Last reviewed: 2026-08-26<br>
+Baseline: BlurFollow 0.2.0 on macOS 14 and later
 
 BlurFollow is intended to make a visual effect follow a saved window-relative
 position and to provide a processed preview the user can check before sharing.
@@ -154,6 +154,7 @@ identity defeats important assumptions.
 | Crafted window causes denial of service or resource exhaustion | Capture width and queue depth are bounded; one picker stream. | GPU/WindowServer pressure or extreme display transitions can drop frames. Stop sharing if preview stalls. |
 | Official binary is replaced | Xcode Cloud/App Store signing, hardened runtime, SBOM, signed tags, immutable build records, and store receipts. | Users must obtain it from the App Store and verify the publisher; source-control, cloud-signing, or publisher-account compromise remains high impact. |
 | Fork impersonates the official product | Apache code/brand separation and trademark policy. | Trademark controls do not technically prevent impersonation; users must verify publisher and signature. |
+| Local plan state is forged or a purchase is refunded | Unlimited access comes only from StoreKit-verified current entitlement, a verified pre-0.2.0 AppTransaction, or the explicit source-build condition. No mutable local Boolean grants paid access. | A modified local/source build can bypass plan logic by design; this is not a security boundary. Existing masks remain available after entitlement loss. |
 
 ## Explicit non-goals
 
@@ -179,9 +180,9 @@ The implementation and tests may describe the following rejection rules as
 an opaque fallback or stop preview processing; it is not a product claim that
 BlurFollow protects information or that a meeting app receives the fallback.
 
-A change must trigger threat-model and privacy review if it adds networking,
+A change must trigger threat-model and privacy review if it adds developer-operated networking,
 recording, audio, OCR, cloud sync, crash uploads, analytics, accounts, licensing,
-payments, an updater, a helper/XPC service, Accessibility/automation, a private
+new payment products or payment providers, an updater, a helper/XPC service, Accessibility/automation, a private
 API, a new persistence location, or a third-party component.
 
 Release tests must demonstrate:
@@ -224,7 +225,10 @@ Release tests must demonstrate:
   warning/verification path;
 - all sharing modes explain their actual capture boundary; and
 - the exact shipped artifact matches its App Store record, SBOM, source commit,
-  and immutable Xcode Cloud build.
+  and immutable Xcode Cloud build; and
+- StoreKit grants unlimited creation only for a verified matching transaction
+  or verified grandfathered app version, while cancellation, pending,
+  unverified, refund, and revocation paths never remove existing masks.
 
 Security reports follow [../SECURITY.md](../SECURITY.md). Compatibility and
 manual cases are in [COMPATIBILITY.md](COMPATIBILITY.md).

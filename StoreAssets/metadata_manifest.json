@@ -25,6 +25,11 @@
       "required": true,
       "plain_text": true
     },
+    "whats_new.txt": {
+      "max_characters": 4000,
+      "required": true,
+      "plain_text": true
+    },
     "keywords.txt": {
       "max_utf8_bytes": 100,
       "required": true,
