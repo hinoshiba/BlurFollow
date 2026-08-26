@@ -3,12 +3,12 @@ import CoreImage
 import QuartzCore
 
 final class MaskEffectView: NSView {
-    private static let strengthBlurFilterName = "blurFollowStrengthBlur"
+    private static let granularityBlurFilterName = "blurFollowGranularityBlur"
 
     private let visualEffect = NSVisualEffectView()
     private let frostTintView = NSView()
     private let outlineView = NSView()
-    private var strengthBlurFilter: CIFilter?
+    private var granularityBlurFilter: CIFilter?
     private var region: MaskRegion
     private var forceRedact = false
     private var dragStartMouseLocation: CGPoint?
@@ -32,10 +32,11 @@ final class MaskEffectView: NSView {
         visualEffect.wantsLayer = true
         visualEffect.layer?.masksToBounds = true
         if let blurFilter = CIFilter(name: "CIGaussianBlur") {
-            blurFilter.name = Self.strengthBlurFilterName
+            blurFilter.name = Self.granularityBlurFilterName
             blurFilter.setValue(0, forKey: kCIInputRadiusKey)
-            strengthBlurFilter = blurFilter
-            visualEffect.contentFilters = [blurFilter]
+            granularityBlurFilter = blurFilter
+            // Granularity controls the sampled backdrop, not the already-rendered material.
+            visualEffect.backgroundFilters = [blurFilter]
         }
         addSubview(visualEffect)
 
@@ -67,7 +68,11 @@ final class MaskEffectView: NSView {
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-        let parameters = MaskVisualParameters.resolve(strength: region.strength, maskSize: bounds.size)
+        let parameters = MaskVisualParameters.resolve(
+            strength: region.strength,
+            granularity: region.granularity,
+            maskSize: bounds.size
+        )
         let path = NSBezierPath(
             roundedRect: bounds,
             xRadius: effectiveCornerRadius,
@@ -83,6 +88,7 @@ final class MaskEffectView: NSView {
             NSGraphicsContext.saveGraphicsState()
             path.addClip()
             let cell = CGFloat(parameters.mosaicCellSize)
+            let tint = region.tint.components
             let columns = Int(ceil(bounds.width / cell))
             let rows = Int(ceil(bounds.height / cell))
             for row in 0..<rows {
@@ -90,8 +96,18 @@ final class MaskEffectView: NSView {
                     let alternate = (row + column) % 2 == 0
                     let alpha = min(1, parameters.mosaicOpacity + (alternate ? 0.05 : 0))
                     let color = alternate
-                        ? NSColor(calibratedRed: 0.17, green: 0.20, blue: 0.35, alpha: CGFloat(alpha))
-                        : NSColor(calibratedRed: 0.10, green: 0.13, blue: 0.25, alpha: CGFloat(alpha))
+                        ? NSColor(
+                            calibratedRed: CGFloat(min(1, tint.red * 0.85 + 0.04)),
+                            green: CGFloat(min(1, tint.green * 0.85 + 0.04)),
+                            blue: CGFloat(min(1, tint.blue * 0.85 + 0.04)),
+                            alpha: CGFloat(alpha)
+                        )
+                        : NSColor(
+                            calibratedRed: CGFloat(tint.red * 0.65),
+                            green: CGFloat(tint.green * 0.65),
+                            blue: CGFloat(tint.blue * 0.65),
+                            alpha: CGFloat(alpha)
+                        )
                     color.setFill()
                     NSRect(x: CGFloat(column) * cell, y: CGFloat(row) * cell, width: cell + 1, height: cell + 1).fill()
                 }
@@ -108,6 +124,9 @@ final class MaskEffectView: NSView {
         let previousEffectiveStyle = effectiveStyle
         let appearanceChanged = self.region.style != region.style
             || self.region.strength != region.strength
+            || self.region.granularity != region.granularity
+            || self.region.tint != region.tint
+            || self.region.borderEnabled != region.borderEnabled
             || self.region.cornerRadius != region.cornerRadius
             || self.forceRedact != forceRedact
             || renderedSize != bounds.size
@@ -116,7 +135,11 @@ final class MaskEffectView: NSView {
         let effectiveStyleChanged = previousEffectiveStyle != effectiveStyle
         guard appearanceChanged || effectiveStyleChanged else { return false }
 
-        let parameters = MaskVisualParameters.resolve(strength: region.strength, maskSize: bounds.size)
+        let parameters = MaskVisualParameters.resolve(
+            strength: region.strength,
+            granularity: region.granularity,
+            maskSize: bounds.size
+        )
         renderedSize = bounds.size
         let isFrost = effectiveStyle == .frost
         visualEffect.isHidden = !isFrost
@@ -125,19 +148,20 @@ final class MaskEffectView: NSView {
         let targetBlurRadius = CGFloat(parameters.frostAdditionalBlurRadius)
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        if let strengthBlurFilter {
-            strengthBlurFilter.setValue(targetBlurRadius, forKey: kCIInputRadiusKey)
+        if let granularityBlurFilter {
+            granularityBlurFilter.setValue(targetBlurRadius, forKey: kCIInputRadiusKey)
             // Reassigning the public NSView property makes the changed filter input immediately
             // visible without depending on Core Animation's string-based filter key paths.
-            visualEffect.contentFilters = [strengthBlurFilter]
+            visualEffect.backgroundFilters = [granularityBlurFilter]
             renderedFrostBlurRadius = targetBlurRadius
         } else {
             renderedFrostBlurRadius = 0
         }
+        let tint = region.tint.components
         frostTintView.layer?.backgroundColor = NSColor(
-            calibratedRed: 0.16,
-            green: 0.18,
-            blue: 0.38,
+            calibratedRed: CGFloat(tint.red),
+            green: CGFloat(tint.green),
+            blue: CGFloat(tint.blue),
             alpha: CGFloat(parameters.frostTintOpacity)
         ).cgColor
         layer?.cornerRadius = effectiveCornerRadius
@@ -250,11 +274,13 @@ final class MaskEffectView: NSView {
     }
 
     private func updateOutline() {
-        outlineView.isHidden = forceRedact
+        let showsConfiguredBorder = region.style == .redact || region.borderEnabled
+        outlineView.isHidden = forceRedact || (!showsConfiguredBorder && !isEditing)
+        let tint = region.tint.components
         outlineView.layer?.borderColor = NSColor(
-            calibratedRed: 0.43,
-            green: 0.37,
-            blue: 0.96,
+            calibratedRed: CGFloat(min(1, tint.red * 1.4 + 0.18)),
+            green: CGFloat(min(1, tint.green * 1.4 + 0.18)),
+            blue: CGFloat(min(1, tint.blue * 1.4 + 0.18)),
             alpha: isEditing ? 1 : 0.75
         ).cgColor
         outlineView.layer?.borderWidth = isEditing ? 3 : 1

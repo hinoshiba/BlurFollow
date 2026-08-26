@@ -69,6 +69,17 @@ private struct MaskEditorCard: View {
         )
     }
 
+    private var granularityBinding: Binding<Double> {
+        Binding(
+            get: { store.regions.first(where: { $0.id == region.id })?.granularity ?? region.granularity },
+            set: { newValue in
+                guard var current = store.regions.first(where: { $0.id == region.id }) else { return }
+                current.granularity = newValue
+                store.updateLive(current)
+            }
+        )
+    }
+
     private var liveRegion: MaskRegion {
         store.regions.first(where: { $0.id == region.id }) ?? region
     }
@@ -124,26 +135,80 @@ private struct MaskEditorCard: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Strength")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                        Slider(
-                            value: strengthBinding,
-                            in: 0.2...1,
-                            onEditingChanged: { isEditing in
-                                if !isEditing { store.flushPersistence() }
-                            }
-                        )
+                    if liveRegion.style != .redact {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(String(localized: "Strength"))
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            Slider(
+                                value: strengthBinding,
+                                in: 0.2...1,
+                                onEditingChanged: { isEditing in
+                                    if !isEditing { store.flushPersistence() }
+                                }
+                            )
                             .tint(BlurFollowTheme.iris)
-                        Text(String.localizedStringWithFormat(
-                            String(localized: "%lld%%"),
-                            Int64(liveRegion.strength * 100)
-                        ))
+                            Text(String.localizedStringWithFormat(
+                                String(localized: "%lld%%"),
+                                Int64(liveRegion.strength * 100)
+                            ))
                             .font(.caption.monospacedDigit())
                             .foregroundStyle(.secondary)
+                        }
+                        .frame(width: 170)
                     }
-                    .frame(width: 170)
+                }
+
+                if liveRegion.style == .frost || liveRegion.style == .mosaic {
+                    Divider()
+
+                    HStack(alignment: .top, spacing: 22) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Granularity")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            Slider(
+                                value: granularityBinding,
+                                in: 0...1,
+                                onEditingChanged: { isEditing in
+                                    if !isEditing { store.flushPersistence() }
+                                }
+                            )
+                            .tint(BlurFollowTheme.cyan)
+                            HStack {
+                                Text("Fine")
+                                Spacer()
+                                Text(String.localizedStringWithFormat(
+                                    String(localized: "%lld%%"),
+                                    Int64(liveRegion.granularity * 100)
+                                ))
+                                    .monospacedDigit()
+                                Spacer()
+                                Text("Coarse")
+                            }
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Color Tone")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            Picker("Color Tone", selection: binding(\.tint)) {
+                                ForEach(MaskTint.allCases) { tint in
+                                    Text(tint.title).tag(tint)
+                                }
+                            }
+                            .labelsHidden()
+                            .frame(width: 140)
+                        }
+
+                        Toggle("Border", isOn: binding(\.borderEnabled))
+                            .toggleStyle(.switch)
+                            .tint(BlurFollowTheme.mint)
+                            .padding(.top, 19)
+                    }
                 }
 
                 HStack {
@@ -245,8 +310,10 @@ private struct MaskEditorCard: View {
     }
 
     private func reconnectWindow() {
+        let returnTarget = AppWindowReturnTarget()
         reconnectMessage = nil
         picker.pickWindow { result in
+            defer { returnTarget.restore() }
             switch result {
             case .success(let selection):
                 guard var current = store.regions.first(where: { $0.id == region.id }) else { return }

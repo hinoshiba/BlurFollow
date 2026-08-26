@@ -103,7 +103,7 @@ Persisted fields include:
 - mode: display or window
 - normalized rectangle
 - style: frost, mosaic, or redact
-- intensity and corner radius
+- effect strength, granularity, tint, border visibility, and corner radius
 - enabled flag
 - display UUID or WindowAnchor
 
@@ -150,6 +150,8 @@ The former content-certifying label must not be used. positionKnown means only t
 
 Panels are normally click-through, have no shadow, and join all Spaces and full-screen auxiliary windows. Move mode is initiated in the main app and temporarily makes only the selected mask panel draggable.
 
+The initial Window Pin range selector is also a nonactivating panel. It accepts the first drag while the selected source application remains active, so the BlurFollow main window cannot rise over the content being marked. Completing or cancelling the range selection restores the initiating BlurFollow window; a successful creation also opens the Masks editor.
+
 ### Identity continuity and reconnect
 
 For a bound window, continuity requires:
@@ -185,11 +187,13 @@ The UI therefore says “Last-position cover” and “Reconnect and check posit
 
 Normal overlay panels use:
 
-- Frost: NSVisualEffectView material plus a strength-controlled public Core Image content filter and foreground tint
-- Mosaic: a strength-controlled cell grid
+- Frost: NSVisualEffectView material plus independently controlled effect strength, a public Core Image background-filter granularity, foreground tint, and border
+- Mosaic: independently controlled effect strength, cell-size granularity, tint, and border
 - Redact: an opaque rounded rectangle
 
 Frost and Mosaic reduce visual readability but do not erase or transform the underlying source application data. Redact draws an opaque rectangle in BlurFollow's own output path. None of these styles detects incorrect placement.
+
+The desktop overlay and Share Preview use the same saved appearance controls but different renderers and coordinate spaces: AppKit points for the overlay and capture pixels for the preview. Their output is intentionally not claimed to be pixel-identical, especially on Retina displays or downscaled capture. Every sharing path must be checked independently.
 
 ## 6. Share Preview
 

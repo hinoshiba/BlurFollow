@@ -77,6 +77,85 @@ final class MaskStoreTests: XCTestCase {
         XCTAssertFalse(restored.coverLastPositionEnabled)
     }
 
+    func testPersistsAndReloadsAppearanceControls() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let original = MaskStore(storageURL: url)
+        original.add(MaskRegion(
+            name: "Custom appearance",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.1, y: 0.2, width: 0.3, height: 0.1),
+            strength: 0.42,
+            granularity: 0.27,
+            tint: .warm,
+            borderEnabled: false
+        ))
+
+        let restored = try XCTUnwrap(MaskStore(storageURL: url).regions.first)
+        XCTAssertEqual(restored.strength, 0.42, accuracy: 0.000_001)
+        XCTAssertEqual(restored.granularity, 0.27, accuracy: 0.000_001)
+        XCTAssertEqual(restored.tint, .warm)
+        XCTAssertFalse(restored.borderEnabled)
+    }
+
+    func testLegacySnapshotUsesStrengthAndExistingAppearanceAsDefaults() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = MaskStore(storageURL: url)
+        store.add(MaskRegion(
+            name: "Legacy appearance",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.1, y: 0.2, width: 0.3, height: 0.1),
+            strength: 0.37,
+            granularity: 0.91,
+            tint: .warm,
+            borderEnabled: false
+        ))
+
+        var root = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: store.exportData()) as? [String: Any]
+        )
+        var regions = try XCTUnwrap(root["regions"] as? [[String: Any]])
+        regions[0].removeValue(forKey: "granularity")
+        regions[0].removeValue(forKey: "tint")
+        regions[0].removeValue(forKey: "borderEnabled")
+        root["regions"] = regions
+        try JSONSerialization.data(withJSONObject: root, options: [.sortedKeys])
+            .write(to: url, options: .atomic)
+
+        let restoredStore = MaskStore(storageURL: url)
+        let restored = try XCTUnwrap(restoredStore.regions.first)
+        XCTAssertNil(restoredStore.recoveryIssue)
+        XCTAssertEqual(restored.granularity, 0.37, accuracy: 0.000_001)
+        XCTAssertEqual(restored.tint, .cool)
+        XCTAssertTrue(restored.borderEnabled)
+    }
+
+    func testRejectsOutOfRangeGranularity() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)
+        let url = directory.appendingPathComponent("Masks.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = MaskStore(storageURL: url)
+        var region = store.add(MaskRegion(
+            name: "Invalid granularity",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.1, y: 0.2, width: 0.3, height: 0.1)
+        ))
+        region.granularity = 1.01
+        store.update(region)
+
+        XCTAssertThrowsError(try store.exportData())
+        XCTAssertNotNil(store.recoveryIssue)
+    }
+
     func testExportContainsNoCapturedPixels() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("BlurFollowTests-\(UUID().uuidString)", isDirectory: true)

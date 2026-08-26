@@ -4,6 +4,18 @@ import ScreenCaptureKit
 
 @MainActor
 final class ContentPickerServiceTests: XCTestCase {
+    func testReturnTargetActivatesApplicationBeforeOrderingWindowFront() {
+        var events: [String] = []
+        let target = AppWindowReturnTarget(
+            activateApplication: { events.append("activate") },
+            orderWindowFront: { events.append("front") }
+        )
+
+        target.restore()
+
+        XCTAssertEqual(events, ["activate", "front"])
+    }
+
     func testSystemSettingsRecoveryAppearsOnlyAfterDenialInCurrentSession() {
         let permission = ScreenCapturePermission(
             preflightScreenCaptureAccess: { false }

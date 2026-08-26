@@ -98,6 +98,9 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
             let normalizedRect: UnitRect
             let style: MaskStyle
             let strength: Double
+            let granularity: Double
+            let tint: MaskTint
+            let borderEnabled: Bool
             let cornerRadius: Double
             let isEnabled: Bool
 
@@ -106,6 +109,9 @@ final class SharePreviewSession: NSObject, ObservableObject, SCStreamDelegate {
                 normalizedRect = region.normalizedRect
                 style = region.style
                 strength = region.strength
+                granularity = region.granularity
+                tint = region.tint
+                borderEnabled = region.borderEnabled
                 cornerRadius = region.cornerRadius
                 isEnabled = region.isEnabled
             }
@@ -696,7 +702,10 @@ final class SharePreviewFrameProcessor: NSObject, SCStreamOutput, @unchecked Sen
         guard let contentRectInPoints = Self.rect(from: attachments[.contentRect]),
               let scaleFactor = Self.scalar(from: attachments[.scaleFactor]),
               let contentScale = Self.scalar(from: attachments[.contentScale]),
-              contentScale.isFinite, contentScale > 0,
+              let appearanceScale = SharePreviewFrameGeometry.appearanceScale(
+                scaleFactor: scaleFactor,
+                contentScale: contentScale
+              ),
               let contentPixelRect = SharePreviewFrameGeometry.contentPixelRect(
                 contentRectInPoints: contentRectInPoints,
                 scaleFactor: scaleFactor,
@@ -714,7 +723,11 @@ final class SharePreviewFrameProcessor: NSObject, SCStreamOutput, @unchecked Sen
         let composited = isBlocked ? nil : SharePreviewCompositor.applyingValidated(
             regions: enabledRegions,
             to: source,
-            contentRect: contentPixelRect
+            contentRect: contentPixelRect,
+            // contentScale maps original content points into surface points; scaleFactor maps
+            // those points into output pixels. Preserve point-sized appearance settings across
+            // Retina and downscaled capture surfaces.
+            appearanceScale: appearanceScale
         )
         let result = composited ?? SharePreviewCompositor.blocked(source)
         let outputIsBlocked = isBlocked || composited == nil

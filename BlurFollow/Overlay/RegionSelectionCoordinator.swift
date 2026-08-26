@@ -42,7 +42,7 @@ final class RegionSelectionCoordinator: ObservableObject {
     }
 }
 
-private final class SelectionPanel: NSPanel {
+final class SelectionPanel: NSPanel {
     var selectionHandler: ((CGRect?) -> Void)? {
         didSet { canvas.selectionHandler = selectionHandler }
     }
@@ -51,7 +51,7 @@ private final class SelectionPanel: NSPanel {
     init(frame: CGRect) {
         super.init(
             contentRect: frame,
-            styleMask: [.borderless],
+            styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )
@@ -62,6 +62,7 @@ private final class SelectionPanel: NSPanel {
         hasShadow = false
         animationBehavior = .none
         isReleasedWhenClosed = false
+        becomesKeyOnlyIfNeeded = true
         contentView = canvas
         acceptsMouseMovedEvents = true
     }
@@ -69,12 +70,19 @@ private final class SelectionPanel: NSPanel {
     override var canBecomeKey: Bool { true }
 }
 
-private final class SelectionCanvasView: NSView {
+final class SelectionCanvasView: NSView {
     var selectionHandler: ((CGRect?) -> Void)?
     private var startPoint: CGPoint?
     private var currentPoint: CGPoint?
 
     override var acceptsFirstResponder: Bool { true }
+
+    override var needsPanelToBecomeKey: Bool { true }
+
+    // The system picker leaves the selected app active. Accept its first mouse-down so the initial
+    // drag starts selection without activating BlurFollow and raising its main window over the
+    // target content.
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()

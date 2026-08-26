@@ -64,7 +64,9 @@ struct RootView: View {
                 ZStack {
                     BlurFollowTheme.background
                     switch selection ?? .home {
-                    case .home: DashboardView()
+                    case .home: DashboardView {
+                        selection = .masks
+                    }
                     case .masks: MasksView()
                     case .shareGuide: ShareGuideView()
                     case .settings: SettingsView()

@@ -10,6 +10,7 @@ struct DashboardView: View {
 
     @State private var transientMessage: String?
     @State private var isPreparingSharePicker = false
+    let onMaskCreated: () -> Void
 
     var body: some View {
         ScrollView {
@@ -172,29 +173,33 @@ struct DashboardView: View {
     }
 
     private func addWindowPin() {
+        let returnTarget = AppWindowReturnTarget()
+        transientMessage = nil
         picker.pickWindow { result in
-            guard case .success(let selection) = result else {
-                if case .failure(let error) = result, case .cancelled = error { return }
-                if case .failure(let error) = result {
-                    transientMessage = error.localizedDescription
+            switch result {
+            case .success(let selection):
+                let windowFrame = selection.candidate.appKitFrame
+                selector.select(on: [windowFrame]) { rect in
+                    defer { returnTarget.restore() }
+                    guard let rect else { return }
+                    let region = MaskRegion(
+                        name: String.localizedStringWithFormat(
+                            String(localized: "%@ Mask"),
+                            selection.candidate.applicationName
+                        ),
+                        mode: .window,
+                        normalizedRect: UnitRect(rect: rect, in: windowFrame),
+                        windowAnchor: selection.candidate.anchor,
+                        style: .frost
+                    )
+                    tracker.bind(selection.candidate, to: region.id)
+                    store.add(region)
+                    onMaskCreated()
                 }
-                return
-            }
-            let windowFrame = selection.candidate.appKitFrame
-            selector.select(on: [windowFrame]) { rect in
-                guard let rect else { return }
-                let region = MaskRegion(
-                    name: String.localizedStringWithFormat(
-                        String(localized: "%@ Mask"),
-                        selection.candidate.applicationName
-                    ),
-                    mode: .window,
-                    normalizedRect: UnitRect(rect: rect, in: windowFrame),
-                    windowAnchor: selection.candidate.anchor,
-                    style: .frost
-                )
-                tracker.bind(selection.candidate, to: region.id)
-                store.add(region)
+            case .failure(let error):
+                returnTarget.restore()
+                if case .cancelled = error { return }
+                transientMessage = error.localizedDescription
             }
         }
     }

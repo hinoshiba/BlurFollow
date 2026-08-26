@@ -15,6 +15,43 @@ struct ContentPickerRequestToken: Hashable, Sendable {
     }
 }
 
+/// Remembers the BlurFollow window that initiated a system-picker flow so callers can return
+/// focus only after their follow-up work (such as selecting a region) has finished.
+@MainActor
+struct AppWindowReturnTarget {
+    private let activateApplication: () -> Void
+    private let orderWindowFront: () -> Void
+
+    init() {
+        self.init(window: NSApp.keyWindow)
+    }
+
+    init(window: NSWindow?) {
+        activateApplication = {
+            // Returning here is the direct continuation of the user's Window Pin action. Use the
+            // forceful API supported by every deployment target so the app does not remain behind
+            // the window selected in ScreenCaptureKit's picker.
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        orderWindowFront = { [weak window] in
+            window?.makeKeyAndOrderFront(nil)
+        }
+    }
+
+    init(
+        activateApplication: @escaping () -> Void,
+        orderWindowFront: @escaping () -> Void
+    ) {
+        self.activateApplication = activateApplication
+        self.orderWindowFront = orderWindowFront
+    }
+
+    func restore() {
+        activateApplication()
+        orderWindowFront()
+    }
+}
+
 enum ContentPickerError: LocalizedError {
     case cancelled
     case busy

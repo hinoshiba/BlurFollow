@@ -20,9 +20,14 @@ final class SharePreviewCompositorTests: XCTestCase {
         }
 
         let corner = try pixel(at: CGPoint(x: 10, y: 10), in: image)
+        let insideRectCorner = try pixel(at: CGPoint(x: 26, y: 26), in: image)
         let center = try pixel(at: CGPoint(x: 50, y: 50), in: image)
         XCTAssertGreaterThan(corner.red, 240)
         XCTAssertLessThan(corner.green, 10)
+        // Redact always covers the complete saved rectangle, regardless of cornerRadius.
+        XCTAssertLessThan(insideRectCorner.red, 20)
+        XCTAssertLessThan(insideRectCorner.green, 20)
+        XCTAssertLessThan(insideRectCorner.blue, 30)
         XCTAssertLessThan(center.red, 20)
         XCTAssertLessThan(center.green, 20)
         XCTAssertLessThan(center.blue, 30)
@@ -104,6 +109,19 @@ final class SharePreviewCompositorTests: XCTestCase {
     func testFrameGeometryConvertsPointsToPixelsAndRejectsClipping() {
         let extent = CGRect(x: 0, y: 0, width: 200, height: 100)
         XCTAssertEqual(
+            SharePreviewFrameGeometry.appearanceScale(
+                scaleFactor: 2,
+                contentScale: 0.75
+            ),
+            1.5
+        )
+        XCTAssertNil(
+            SharePreviewFrameGeometry.appearanceScale(
+                scaleFactor: 2,
+                contentScale: 0
+            )
+        )
+        XCTAssertEqual(
             SharePreviewFrameGeometry.contentPixelRect(
                 contentRectInPoints: CGRect(x: 10, y: 5, width: 80, height: 40),
                 scaleFactor: 2,
@@ -136,6 +154,160 @@ final class SharePreviewCompositorTests: XCTestCase {
                 contentRect: extent
             )
         )
+    }
+
+    func testMosaicTintChangesRenderedColorTone() throws {
+        let extent = CGRect(x: 0, y: 0, width: 80, height: 80)
+        let source = CIImage(
+            color: CIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+        ).cropped(to: extent)
+        let cool = MaskRegion(
+            name: "cool",
+            mode: .window,
+            normalizedRect: .full,
+            style: .mosaic,
+            strength: 1,
+            granularity: 0.5,
+            tint: .cool,
+            borderEnabled: false,
+            cornerRadius: 0
+        )
+        var warm = cool
+        warm.tint = .warm
+
+        let coolPixel = try pixel(
+            at: CGPoint(x: 40, y: 40),
+            in: try render(SharePreviewCompositor.applying(regions: [cool], to: source), extent: extent)
+        )
+        let warmPixel = try pixel(
+            at: CGPoint(x: 40, y: 40),
+            in: try render(SharePreviewCompositor.applying(regions: [warm], to: source), extent: extent)
+        )
+
+        XCTAssertGreaterThan(Int(coolPixel.blue) - Int(coolPixel.red), 15)
+        XCTAssertGreaterThan(Int(warmPixel.red) - Int(warmPixel.blue), 15)
+    }
+
+    func testConfiguredBorderChangesOnlyMaskEdge() throws {
+        let extent = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let source = CIImage(
+            color: CIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+        ).cropped(to: extent)
+        var withoutBorder = MaskRegion(
+            name: "border",
+            mode: .window,
+            normalizedRect: UnitRect(x: 0.2, y: 0.2, width: 0.6, height: 0.6),
+            style: .frost,
+            strength: 0.7,
+            granularity: 0.5,
+            tint: .warm,
+            borderEnabled: false,
+            cornerRadius: 0
+        )
+        let withoutImage = try render(
+            SharePreviewCompositor.applying(regions: [withoutBorder], to: source),
+            extent: extent
+        )
+        withoutBorder.borderEnabled = true
+        let withImage = try render(
+            SharePreviewCompositor.applying(regions: [withoutBorder], to: source),
+            extent: extent
+        )
+
+        let edgeWithout = try pixel(at: CGPoint(x: 20, y: 50), in: withoutImage)
+        let edgeWith = try pixel(at: CGPoint(x: 20, y: 50), in: withImage)
+        let centerWithout = try pixel(at: CGPoint(x: 50, y: 50), in: withoutImage)
+        let centerWith = try pixel(at: CGPoint(x: 50, y: 50), in: withImage)
+
+        let edgeDifference = abs(Int(edgeWith.red) - Int(edgeWithout.red))
+            + abs(Int(edgeWith.green) - Int(edgeWithout.green))
+            + abs(Int(edgeWith.blue) - Int(edgeWithout.blue))
+        XCTAssertGreaterThan(edgeDifference, 20)
+        XCTAssertLessThanOrEqual(abs(Int(centerWith.red) - Int(centerWithout.red)), 2)
+        XCTAssertLessThanOrEqual(abs(Int(centerWith.green) - Int(centerWithout.green)), 2)
+        XCTAssertLessThanOrEqual(abs(Int(centerWith.blue) - Int(centerWithout.blue)), 2)
+    }
+
+    func testMosaicGranularityChangesPixelationIndependently() throws {
+        let extent = CGRect(x: 0, y: 0, width: 120, height: 120)
+        let source = try XCTUnwrap(CIFilter(
+            name: "CICheckerboardGenerator",
+            parameters: [
+                "inputColor0": CIColor.white,
+                "inputColor1": CIColor.black,
+                "inputWidth": 5,
+                "inputSharpness": 1
+            ]
+        )?.outputImage?.cropped(to: extent))
+        var fine = MaskRegion(
+            name: "fine",
+            mode: .window,
+            normalizedRect: .full,
+            style: .mosaic,
+            strength: 0.8,
+            granularity: 0,
+            tint: .neutral,
+            borderEnabled: false,
+            cornerRadius: 0
+        )
+        let fineImage = try render(
+            SharePreviewCompositor.applying(regions: [fine], to: source),
+            extent: extent
+        )
+        fine.granularity = 1
+        let coarseImage = try render(
+            SharePreviewCompositor.applying(regions: [fine], to: source),
+            extent: extent
+        )
+
+        XCTAssertNotEqual(try imageData(fineImage), try imageData(coarseImage))
+    }
+
+    func testFrostGranularityChangesBlurIndependently() throws {
+        let extent = CGRect(x: 0, y: 0, width: 120, height: 120)
+        let source = try XCTUnwrap(CIFilter(
+            name: "CICheckerboardGenerator",
+            parameters: [
+                "inputColor0": CIColor.white,
+                "inputColor1": CIColor.black,
+                "inputWidth": 4,
+                "inputSharpness": 1
+            ]
+        )?.outputImage?.cropped(to: extent))
+        var fine = MaskRegion(
+            name: "fine frost",
+            mode: .window,
+            normalizedRect: .full,
+            style: .frost,
+            strength: 0.8,
+            granularity: 0,
+            tint: .neutral,
+            borderEnabled: false,
+            cornerRadius: 0
+        )
+        let fineImage = try render(
+            SharePreviewCompositor.applying(regions: [fine], to: source),
+            extent: extent
+        )
+        fine.granularity = 1
+        let coarseImage = try render(
+            SharePreviewCompositor.applying(regions: [fine], to: source),
+            extent: extent
+        )
+
+        XCTAssertNotEqual(try imageData(fineImage), try imageData(coarseImage))
+    }
+
+    private func render(_ image: CIImage, extent: CGRect) throws -> CGImage {
+        try XCTUnwrap(
+            CIContext(options: [.useSoftwareRenderer: true]).createCGImage(image, from: extent)
+        )
+    }
+
+    private func imageData(_ image: CGImage) throws -> Data {
+        let data = try XCTUnwrap(image.dataProvider?.data)
+        let bytes = try XCTUnwrap(CFDataGetBytePtr(data))
+        return Data(bytes: bytes, count: CFDataGetLength(data))
     }
 
     private func pixel(at point: CGPoint, in image: CGImage) throws -> (red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) {

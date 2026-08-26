@@ -54,6 +54,15 @@
 "Mask Name" = "マスク名";
 "Mask Controls" = "マスク操作";
 "Strength" = "強さ";
+"Granularity" = "粒度";
+"Fine" = "細かい";
+"Coarse" = "粗い";
+"Color Tone" = "色味";
+"Border" = "枠線";
+"Neutral" = "ニュートラル";
+"Cool" = "クール";
+"Warm" = "ウォーム";
+"Mint" = "ミント";
 "%lld%%" = "%lld%%";
 "Pinned to this display" = "このディスプレイに固定";
 "Moves and resizes with %@" = "%@の移動とリサイズに追従";

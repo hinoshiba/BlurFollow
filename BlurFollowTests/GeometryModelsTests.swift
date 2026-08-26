@@ -108,6 +108,54 @@ final class GeometryModelsTests: XCTestCase {
             MaskVisualParameters.resolve(strength: 2, maskSize: size).normalizedStrength,
             1
         )
+        XCTAssertEqual(
+            MaskVisualParameters.resolve(
+                strength: 0.5,
+                granularity: .infinity,
+                maskSize: size
+            ).normalizedGranularity,
+            0
+        )
+    }
+
+    func testGranularityChangesFrostBlurAndMosaicCellsWithoutChangingOpacity() {
+        let size = CGSize(width: 360, height: 180)
+        let fine = MaskVisualParameters.resolve(
+            strength: 0.65,
+            granularity: 0.1,
+            maskSize: size
+        )
+        let coarse = MaskVisualParameters.resolve(
+            strength: 0.65,
+            granularity: 0.9,
+            maskSize: size
+        )
+
+        XCTAssertEqual(fine.frostEffectOpacity, coarse.frostEffectOpacity, accuracy: 0.000_001)
+        XCTAssertEqual(fine.frostTintOpacity, coarse.frostTintOpacity, accuracy: 0.000_001)
+        XCTAssertEqual(fine.mosaicOpacity, coarse.mosaicOpacity, accuracy: 0.000_001)
+        XCTAssertLessThan(fine.frostAdditionalBlurRadius, coarse.frostAdditionalBlurRadius)
+        XCTAssertLessThan(fine.mosaicCellSize, coarse.mosaicCellSize)
+        XCTAssertEqual(fine.normalizedGranularity, 0.1, accuracy: 0.000_001)
+        XCTAssertEqual(coarse.normalizedGranularity, 0.9, accuracy: 0.000_001)
+    }
+
+    @MainActor
+    func testSelectionCanvasAcceptsInitialDragWhileApplicationIsInactive() {
+        let canvas = SelectionCanvasView()
+
+        XCTAssertTrue(canvas.acceptsFirstMouse(for: nil))
+        XCTAssertTrue(canvas.needsPanelToBecomeKey)
+    }
+
+    @MainActor
+    func testSelectionPanelDoesNotActivateAppOverSelectedWindow() {
+        let panel = SelectionPanel(frame: CGRect(x: 0, y: 0, width: 400, height: 300))
+        defer { panel.close() }
+
+        XCTAssertTrue(panel.styleMask.contains(.nonactivatingPanel))
+        XCTAssertTrue(panel.becomesKeyOnlyIfNeeded)
+        XCTAssertTrue(panel.canBecomeKey)
     }
 
     @MainActor
@@ -177,13 +225,22 @@ final class GeometryModelsTests: XCTestCase {
         region.name = "Renamed"
         XCTAssertFalse(panel.update(region: region, frame: frame))
 
-        region.strength = 0.35
+        region.granularity = 0.35
         XCTAssertTrue(panel.update(region: region, frame: frame))
         let weakRadius = panel.renderedFrostBlurRadius
 
         region.strength = 1
         XCTAssertTrue(panel.update(region: region, frame: frame))
+        XCTAssertEqual(panel.renderedFrostBlurRadius, weakRadius)
+
+        region.granularity = 1
+        XCTAssertTrue(panel.update(region: region, frame: frame))
         XCTAssertGreaterThan(panel.renderedFrostBlurRadius, weakRadius)
+
+        region.tint = .warm
+        XCTAssertTrue(panel.update(region: region, frame: frame))
+        region.borderEnabled = false
+        XCTAssertTrue(panel.update(region: region, frame: frame))
     }
 }
 

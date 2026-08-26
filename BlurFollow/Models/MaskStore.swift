@@ -103,7 +103,8 @@ final class MaskStore: ObservableObject {
     }
 
     /// Publishes a high-frequency visual edit immediately while coalescing only its disk write.
-    /// Use this for continuous controls such as Strength; discrete mutations keep using `update`.
+    /// Use this for continuous controls such as Strength and granularity; discrete mutations keep
+    /// using `update`.
     func updateLive(_ region: MaskRegion) {
         guard let index = regions.firstIndex(where: { $0.id == region.id }),
               regions[index] != region else { return }
@@ -225,13 +226,17 @@ final class MaskStore: ObservableObject {
 
         for region in snapshot.regions {
             let unit = region.normalizedRect
-            let values = [unit.x, unit.y, unit.width, unit.height, region.strength, region.cornerRadius]
+            let values = [
+                unit.x, unit.y, unit.width, unit.height,
+                region.strength, region.granularity, region.cornerRadius
+            ]
             guard values.allSatisfy(\.isFinite),
                   unit.x >= 0, unit.y >= 0,
                   unit.width >= 0.002, unit.height >= 0.002,
                   unit.x + unit.width <= 1.000_001,
                   unit.y + unit.height <= 1.000_001,
                   (0...1).contains(region.strength),
+                  (0...1).contains(region.granularity),
                   (0...40).contains(region.cornerRadius),
                   region.createdAt.timeIntervalSinceReferenceDate.isFinite else {
                 throw SnapshotError.invalidMask

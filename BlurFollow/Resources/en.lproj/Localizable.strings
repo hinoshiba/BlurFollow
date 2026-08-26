@@ -174,3 +174,12 @@
 "Cancel Move" = "Cancel Move";
 "Move…" = "Move…";
 "Drag the mask itself to move it. Release to save; press Esc to cancel." = "Drag the mask itself to move it. Release to save; press Esc to cancel.";
+"Granularity" = "Granularity";
+"Fine" = "Fine";
+"Coarse" = "Coarse";
+"Color Tone" = "Color Tone";
+"Border" = "Border";
+"Neutral" = "Neutral";
+"Cool" = "Cool";
+"Warm" = "Warm";
+"Mint" = "Mint";
