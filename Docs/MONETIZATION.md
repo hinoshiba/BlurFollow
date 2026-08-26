@@ -19,14 +19,14 @@ mask-count plan limit:
 \* Practical capacity remains finite and depends on the Mac, WindowServer, and
 the size and visual effect of each mask.
 
-- Product ID: `com.hinoshiba.blurfollow.unlimited-masks`
+- Product ID: `com.hinoshiba.blurfollow.unlimited_masks`
 - Type: Non-Consumable
 - Reference name: `BlurFollow Unlimited Masks`
 - Family Sharing: off until the release owner makes a separately reviewed,
   effectively irreversible decision to enable it
 - Store price: configured in App Store Connect and always rendered from
   `Product.displayPrice`; no currency or amount is hardcoded in shipping UI
-- App Store Connect launch-price proposal: approximately ¥500 / US $2.99,
+- App Store Connect launch price: ¥500 / US $4.99,
   subject to the publisher's approval and Apple's current storefront tiers
 
 The five-mask threshold is a product hypothesis, not a measured fact. It leaves

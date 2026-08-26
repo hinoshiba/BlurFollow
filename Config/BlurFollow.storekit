@@ -15,7 +15,7 @@
   ],
   "products" : [
     {
-      "displayPrice" : "2.99",
+      "displayPrice" : "4.99",
       "familyShareable" : false,
       "internalID" : "66013341",
       "localizations" : [
@@ -30,7 +30,7 @@
           "locale" : "ja_JP"
         }
       ],
-      "productID" : "com.hinoshiba.blurfollow.unlimited-masks",
+      "productID" : "com.hinoshiba.blurfollow.unlimited_masks",
       "referenceName" : "BlurFollow Unlimited Masks",
       "type" : "NonConsumable"
     }

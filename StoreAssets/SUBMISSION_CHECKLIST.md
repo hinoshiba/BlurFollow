@@ -19,7 +19,7 @@ from a source-tree assumption.
   and brand gates are closed.
 - [ ] Paid Applications agreement, tax forms, banking, pricing, territories,
   and availability dates are explicitly approved by the seller.
-- [ ] `com.hinoshiba.blurfollow.unlimited-masks` exists as a Non-Consumable,
+- [ ] `com.hinoshiba.blurfollow.unlimited_masks` exists as a Non-Consumable,
   its localized name/description and price are approved, and Family Sharing
   remains off unless separately approved with its irreversible consequence.
 - [ ] The explicit App ID, Xcode target capability, signed App Store archive,

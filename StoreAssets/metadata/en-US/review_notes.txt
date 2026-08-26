@@ -1,7 +1,7 @@
 BlurFollow is a macOS utility that places visual masks on screen and updates a mask as its selected window moves or resizes. It has no login or proprietary account. Five saved masks are free; creating a sixth uses a one-time Non-Consumable.
 
 In-App Purchase
-• Product ID: com.hinoshiba.blurfollow.unlimited-masks
+• Product ID: com.hinoshiba.blurfollow.unlimited_masks
 • Product: BlurFollow Unlimited Masks (one-time, not a subscription)
 • Settings → Support BlurFollow always exposes the localized price, purchase, and Restore Purchases.
 • Existing masks are never deleted or disabled based on purchase state; only new creation is gated.

@@ -3,7 +3,7 @@ import StoreKit
 
 @MainActor
 final class PurchaseManager: ObservableObject {
-    static let productID = "com.hinoshiba.blurfollow.unlimited-masks"
+    static let productID = "com.hinoshiba.blurfollow.unlimited_masks"
 
     enum EntitlementState: Equatable {
         case checking

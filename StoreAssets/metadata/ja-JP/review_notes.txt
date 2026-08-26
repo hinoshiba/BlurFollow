@@ -1,7 +1,7 @@
 BlurFollowは、ウインドウを追う視覚マスクを置くmacOSユーティリティです。ログインや独自アカウントはありません。保存済みマスク5件までは無料で、6件目の作成は買い切りのNon-Consumableで解除します。
 
 アプリ内課金
-・Product ID: com.hinoshiba.blurfollow.unlimited-masks
+・Product ID: com.hinoshiba.blurfollow.unlimited_masks
 ・商品: BlurFollow 無制限マスク（買い切り、サブスクリプションではありません）
 ・Settingsの「BlurFollowを応援」から価格、購入、購入の復元を常に確認できます。
 ・購入状態にかかわらず既存マスクを削除・無効化せず、新規作成だけを制限します。
