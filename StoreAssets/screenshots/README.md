@@ -36,6 +36,16 @@ Do not add generic placeholder images: an accidentally uploaded placeholder can
 reach review. Keep raw captures unchanged and regenerate every final image after
 the shipping UI, copy, locale, or template changes.
 
+The checked-in captures predate Text Follow's four match modes, its strict-safety
+preference, and the independent 10 Display Pin, 5 Window Pin, and 2 Text Follow
+rule allowances. Treat every existing raw and final image as a layout reference
+only. Recapture all five scenes from the exact shipping build in both locales,
+then regenerate every final image. In particular, shot 2 must show Text Follow as
+separate from Window Pin, any visible Text Follow editor must include Exact,
+Prefix, Contains, and Regular Expression, and shot 5 must show all three
+allowances plus the current safety control. The old two-mode and
+single-combined-allowance images are not valid for submission.
+
 Raw-to-final mapping:
 
 | Final file | Raw app capture |

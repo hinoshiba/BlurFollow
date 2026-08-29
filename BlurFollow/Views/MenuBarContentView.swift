@@ -3,6 +3,7 @@ import SwiftUI
 struct MenuBarContentView: View {
     @EnvironmentObject private var store: MaskStore
     @EnvironmentObject private var sharePreview: SharePreviewSession
+    @EnvironmentObject private var textFollow: TextFollowCoordinator
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -14,9 +15,9 @@ struct MenuBarContentView: View {
         Toggle("Show Masks", isOn: $store.masksEnabled)
         Text(activeMaskCountText)
         Divider()
-        Section("Masks") {
+        Section("Manual Masks") {
             if store.regions.isEmpty {
-                Text("No masks yet")
+                Text("No manual masks yet")
             } else {
                 ForEach(store.regions) { region in
                     Toggle(isOn: enabledBinding(for: region.id)) {
@@ -26,12 +27,26 @@ struct MenuBarContentView: View {
                     .accessibilityHint("Turns only this mask on or off.")
                 }
             }
+        }
+        Divider()
+        Section("Text Follow Rules (Beta)") {
+            if store.textRules.isEmpty {
+                Text("No Text Follow rules yet")
+            } else {
+                ForEach(store.textRules) { rule in
+                    Toggle(isOn: textRuleEnabledBinding(for: rule.id)) {
+                        Label(textFollowMenuTitle(for: rule), systemImage: "text.viewfinder")
+                    }
+                    .accessibilityLabel(Text(rule.name))
+                    .accessibilityHint("Turns only this Text Follow rule on or off.")
+                }
+            }
 
-            Button("Manage Masks…") {
+            Button("Manage Masks and Rules…") {
                 openWindow(id: "main")
                 NSApp.activate(ignoringOtherApps: true)
             }
-            .accessibilityHint("Opens the mask management screen.")
+            .accessibilityHint("Opens manual mask and Text Follow management.")
         }
         Divider()
         Button("Open Share Preview") {
@@ -45,17 +60,24 @@ struct MenuBarContentView: View {
     }
 
     private var activeMaskCountText: String {
-        let count = store.regions.filter(\.isEnabled).count
-        let format = count == 1
-            ? String(localized: "%lld active mask")
-            : String(localized: "%lld active masks")
-        return String.localizedStringWithFormat(format, Int64(count))
+        String.localizedStringWithFormat(
+            String(localized: "Manual %lld · Text Follow %lld active"),
+            Int64(store.regions.filter(\.isEnabled).count),
+            Int64(store.textRules.filter(\.isEnabled).count)
+        )
     }
 
     private func enabledBinding(for id: UUID) -> Binding<Bool> {
         Binding(
             get: { store.regions.first(where: { $0.id == id })?.isEnabled ?? false },
             set: { store.setEnabled($0, for: id) }
+        )
+    }
+
+    private func textRuleEnabledBinding(for id: UUID) -> Binding<Bool> {
+        Binding(
+            get: { store.textRules.first(where: { $0.id == id })?.isEnabled ?? false },
+            set: { store.setTextRuleEnabled($0, for: id) }
         )
     }
 
@@ -83,5 +105,18 @@ struct MenuBarContentView: View {
                 : String(localized: "Placed")
         }
         return state.title
+    }
+
+    private func textFollowMenuTitle(for rule: TextFollowRule) -> String {
+        let stateAndCount = String.localizedStringWithFormat(
+            String(localized: "%@ · %@"),
+            textFollow.state(for: rule.id).localizedTitle,
+            textFollowMatchCountText(textFollow.matchedCount(for: rule.id))
+        )
+        return String.localizedStringWithFormat(
+            String(localized: "%@ · %@"),
+            rule.name,
+            stateAndCount
+        )
     }
 }

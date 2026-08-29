@@ -1,32 +1,36 @@
-Blur that follows your window.
+Blur that follows your window—and matching text.
 
 BlurFollow is a visual masking utility for macOS screen-sharing workflows.
 
 FOLLOW A WINDOW
-Place a mask at a proportional position inside a window you select. BlurFollow updates its position and size as the window moves or resizes. Use it for an area you have visually identified, such as a name, email address, customer field, or internal URL.
+Place a mask at a proportional position in a selected window. It updates as the window moves or resizes.
+
+FOLLOW MATCHING TEXT
+Text Follow (Beta) uses on-device Apple Vision in a selected window. Choose Exact, Prefix, Contains, or Regular Expression. Every matching recognized block receives a Mosaic as the screen changes. Contains is case-sensitive and masks the whole Vision block, not just the substring. One pattern matching many blocks is still one saved rule.
+
+Text Follow (Beta) is separate from Window Pin. OCR may miss, misread, split, merge, or lag behind text because of its font, size, contrast, language, motion, scrolling, or layout. It does not identify what is confidential. Recheck every transition.
+
+Strict safety defaults on. Recognition, uncertain metadata, and a completed zero-match result cover the current or last trusted window. Off retains prior desktop masks during uncertainty and can render zero matches, avoiding full-window flashes but reducing resistance to OCR misses.
 
 PIN TO A DISPLAY
 For a notification area or fixed layout, place a Display Pin at a proportional position on one display.
 
 SHARE PREVIEW
-An overlay from another app is normally not included when you share a single browser window or browser tab. BlurFollow processes the window selected with Apple's system picker, composites its matching Window Pins on your Mac, and shows the result in a separate BlurFollow Share Preview window.
+Single-window and tab shares normally exclude another app's overlay. BlurFollow uses Apple's picker and creates a Share Preview with matching Window Pins and completed Text Follow (Beta) results.
 
-For a single-window workflow, choose BlurFollow Share Preview as the sharing target instead of the original window. Inspect every mask inside Share Preview before sharing, then check the meeting application's own preview again.
-
-SHARE GUIDE
-See which workflow fits full-display, single-window, and browser-tab sharing.
+For a single-window workflow, choose BlurFollow Share Preview instead of the original window. If any relevant Text Follow (Beta) rule is unconnected, connecting, scanning, failed, unavailable, or inconsistent, Share Preview immediately clears the old image and shows a full cover regardless of the strict-safety setting. A completed scan with zero matches stays covered when strict safety is on and can render when it is off, but never proves OCR completeness. Text Follow (Beta) OCR and Share Preview both exclude child windows.
 
 THREE VISUAL STYLES
-Choose Frost, Mosaic, or opaque Redact. If window-position metadata becomes unavailable, Last-position cover can cover the latest position available to BlurFollow. That may not be the window's current position, so reconnect and inspect it.
+Display and Window Pins support Frost, Mosaic, or opaque Redact. Text Follow (Beta) uses Mosaic. Desktop Mosaic pixelates the actual backdrop with Core Image and uses an opaque fallback if that filter is unavailable. Last-position cover can cover a Window Pin's latest known position when window metadata becomes unavailable, but that may not be current.
 
-FIVE MASKS FREE
-Save up to five Display and Window Pins at no charge. Creating more uses Unlimited Masks, a one-time In-App Purchase that removes the app's plan limit. It is not a subscription. Existing masks remain available to view, edit, and delete, and verification features including Share Preview remain included regardless of purchase status.
+INDEPENDENT FREE ALLOWANCES
+Create up to 10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules at no charge. These are separate limits. Unlimited Masks is a one-time In-App Purchase that removes all three creation limits; it is not a subscription. Existing masks and rules remain available to view, edit, enable, disable, and delete even if they exceed a free limit.
 
 ON-DEVICE PROCESSING
-BlurFollow does not record audio, save screen frames to files, send frames to the developer, or include analytics or advertising SDKs. Mask settings and limited app/window identity metadata are stored locally. After you share BlurFollow Share Preview through a meeting service, that service handles the resulting video under its own terms.
+Share Preview and Text Follow (Beta) process selected-window frames on the Mac. BlurFollow does not record audio, save screen frames or recognized candidate strings to files, send them to the developer, or include analytics or advertising SDKs. Mask and rule settings, including a Text Follow (Beta) pattern and limited selected-window identity metadata, are stored locally.
 
 COMPATIBILITY
 Requires macOS 14.0 or later. On macOS 15.2 and later, Apple's system picker authorizes each selected window. On macOS 14 through 15.1, identifying the selected window requires broader Screen Recording permission and reopening the app after permission is granted. Display Pin alone does not require Screen Recording permission.
 
 IMPORTANT
-BlurFollow is a visual placement and verification aid, not a security control. It does not automatically detect text or confidential information, and it does not guarantee mask placement, blur unreadability, or inclusion in the shared output. Layout, scrolling, zoom, child windows, capture method, and meeting-app behavior can change what appears. Always inspect both BlurFollow Share Preview and the meeting application's preview before presenting.
+BlurFollow is a visual placement and verification aid, not a security control. It does not guarantee OCR completeness, mask placement, blur or mosaic unreadability, or inclusion in the shared output. Layout, scrolling, zoom, child windows, capture method, and meeting-app behavior can change what appears. Always inspect the actual output before presenting.

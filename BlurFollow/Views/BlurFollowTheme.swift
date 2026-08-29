@@ -76,3 +76,15 @@ struct StatusPill: View {
         }
     }
 }
+
+struct BetaBadge: View {
+    var body: some View {
+        Text("BETA")
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(BlurFollowTheme.ink)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 3)
+            .background(BlurFollowTheme.amber.opacity(0.32), in: Capsule())
+            .accessibilityLabel("Beta feature")
+    }
+}

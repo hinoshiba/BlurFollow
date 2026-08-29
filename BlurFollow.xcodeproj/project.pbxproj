@@ -10,12 +10,15 @@
 		05DAD43B20CD0DE3089B2DD4 /* SharePreviewCompositorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F7A03BCBC8FF40E550466 /* SharePreviewCompositorTests.swift */; };
 		0C4F91D631D26E890279670E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0A81197F621538B12F26DAB0 /* PrivacyInfo.xcprivacy */; };
 		10D4CF6B6A2E1A370547D2B1 /* SharePreviewSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336094A3DB4A5418A61FB964 /* SharePreviewSessionTests.swift */; };
+		1A6734C835ECE2862471260B /* TextFollowRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D962104EAABDFCE07E4A63E /* TextFollowRule.swift */; };
 		312469CCA4F78DA275893B66 /* RegionSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AC5FEC3E7041834B6FB4CB /* RegionSelectionCoordinator.swift */; };
+		3A0A2063336D05A33BCBF494 /* TextFollowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57D7000A8E4BC62A0B49EE1 /* TextFollowCoordinatorTests.swift */; };
 		3B456CC915532766993FDD92 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C3EE6D66D2C6992293C6643F /* Localizable.strings */; };
 		3EC756642F4E8E75AAFF5BCC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A0810DE2909362C90DB093 /* StoreKit.framework */; };
 		3F1927F32A691196AA14F0E6 /* OverlayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB3A15419296178E55630FF /* OverlayCoordinator.swift */; };
 		44E370A153F4A3EBCCD0B19B /* ContentPickerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E7F3786480957A869DAB59 /* ContentPickerService.swift */; };
 		4622B318022CC8C3508A999E /* MaskRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A78F911B1F545AC8C68341D /* MaskRegion.swift */; };
+		48F949D55A4944CE71459443 /* TextFollowOverlayPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A65BA63CA38A6B23120347A /* TextFollowOverlayPanelTests.swift */; };
 		558E1B4F86A3E297EA3E32FD /* BlurFollowTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C925497FEF44F5FEE6FF29 /* BlurFollowTheme.swift */; };
 		5A6C5A9C435098A276202D24 /* GeometryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF35607E4747FE5E25CC138A /* GeometryModels.swift */; };
 		5D6A1038A5DB5D10478FDF37 /* UnlimitedMasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37C17A108B33C38E6658A5 /* UnlimitedMasksView.swift */; };
@@ -25,7 +28,9 @@
 		64A66404E67362BD06481FB4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 707602D6F8917D2AC6C9C401 /* Assets.xcassets */; };
 		64A7258B5ABC52A4A2C99CDD /* MaskEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2DE5C4F913E4AD9928AC21 /* MaskEffectView.swift */; };
 		745C9A32EB11E88B108F2DE6 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A30B45F0E284CA72D1BC4FE /* OnboardingView.swift */; };
+		753E27737CB7B05F71C9B7B2 /* TextFollowOverlayPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C0A254BEA003BAD973F643 /* TextFollowOverlayPanel.swift */; };
 		7D9789A17EFB05700B34BDE8 /* ReviewPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99403CA31F9BFB0FB65FE9F4 /* ReviewPromptCoordinator.swift */; };
+		7F0172089F9A9EE7D8BA87AA /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7454B463F554449267C86979 /* Vision.framework */; };
 		83210F7A585BF2CE918C64D1 /* BlurFollowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B0A599964550DA29372C30 /* BlurFollowApp.swift */; };
 		8482CE8E42CA838C92680E52 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E901A9A1EE2E997D7DB466 /* MenuBarContentView.swift */; };
 		878E87575910A813C306C836 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604B03C045FBCD3561448C58 /* AppDelegate.swift */; };
@@ -44,6 +49,7 @@
 		DC541943E307F93FDF19F271 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3AFC9C523CACF854C07270 /* RootView.swift */; };
 		DEDED0B411EA7B81B5D29E2F /* SharePreviewCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809D136D7E0E6B354C511B50 /* SharePreviewCompositor.swift */; };
 		DF6985A803DB3B80F59E468B /* ContentPickerServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EB3C80B61B7A6B5D053CCC /* ContentPickerServiceTests.swift */; };
+		E2B06029CE4BABE938089654 /* TextFollowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85F0E9E62A45EA850BBACEF /* TextFollowCoordinator.swift */; };
 		EB513951A282BB2F02A1AF45 /* ReviewPromptPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FD197B3EAA6E8C3853BD8A /* ReviewPromptPolicyTests.swift */; };
 		EBB123636372F4AFBB69B4F6 /* MasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D31B4DF2B36B8101EC6259 /* MasksView.swift */; };
 		F723B5043F422C21B892DB9C /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DD726B9090FAA42ED7C2FE /* DashboardView.swift */; };
@@ -75,6 +81,7 @@
 		336094A3DB4A5418A61FB964 /* SharePreviewSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePreviewSessionTests.swift; sourceTree = "<group>"; };
 		3A30B45F0E284CA72D1BC4FE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		3BD6A6895315ED30EA87DBBC /* MaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskStore.swift; sourceTree = "<group>"; };
+		3D962104EAABDFCE07E4A63E /* TextFollowRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFollowRule.swift; sourceTree = "<group>"; };
 		4606AF751766E618EFEB5554 /* WindowTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTracker.swift; sourceTree = "<group>"; };
 		52D31B4DF2B36B8101EC6259 /* MasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasksView.swift; sourceTree = "<group>"; };
 		5AB3A15419296178E55630FF /* OverlayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCoordinator.swift; sourceTree = "<group>"; };
@@ -82,6 +89,7 @@
 		64E7F3786480957A869DAB59 /* ContentPickerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPickerService.swift; sourceTree = "<group>"; };
 		64EB3C80B61B7A6B5D053CCC /* ContentPickerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPickerServiceTests.swift; sourceTree = "<group>"; };
 		707602D6F8917D2AC6C9C401 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7454B463F554449267C86979 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 		809D136D7E0E6B354C511B50 /* SharePreviewCompositor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePreviewCompositor.swift; sourceTree = "<group>"; };
 		818CD18B1FF2576E777A623D /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		8299F54A3DFCFECDD49BF4EA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -91,8 +99,11 @@
 		92609E963E01083B0DC86E18 /* MaskAccessPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAccessPolicyTests.swift; sourceTree = "<group>"; };
 		92ABFD1EF7C1D2A4A4EFDC69 /* GeometryModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryModelsTests.swift; sourceTree = "<group>"; };
 		99403CA31F9BFB0FB65FE9F4 /* ReviewPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPromptCoordinator.swift; sourceTree = "<group>"; };
+		9A65BA63CA38A6B23120347A /* TextFollowOverlayPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFollowOverlayPanelTests.swift; sourceTree = "<group>"; };
 		9D909D796D9C59A483A0A17C /* ScreenCapturePermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCapturePermission.swift; sourceTree = "<group>"; };
 		B30FF0C9AA811B9340140125 /* MaskStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskStoreTests.swift; sourceTree = "<group>"; };
+		B4C0A254BEA003BAD973F643 /* TextFollowOverlayPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFollowOverlayPanel.swift; sourceTree = "<group>"; };
+		B57D7000A8E4BC62A0B49EE1 /* TextFollowCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFollowCoordinatorTests.swift; sourceTree = "<group>"; };
 		B78623F13C7F1B003BA3BD84 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BF558AA95D2C81EF4C73E5A5 /* SharePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePreviewView.swift; sourceTree = "<group>"; };
 		BF7D2165AE895FD8D077F6F4 /* BlurFollow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlurFollow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +112,7 @@
 		D68C9BD9C3400234358316A8 /* WindowCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowCandidate.swift; sourceTree = "<group>"; };
 		DB37C17A108B33C38E6658A5 /* UnlimitedMasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlimitedMasksView.swift; sourceTree = "<group>"; };
 		E6A0810DE2909362C90DB093 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		E85F0E9E62A45EA850BBACEF /* TextFollowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFollowCoordinator.swift; sourceTree = "<group>"; };
 		EACBE82C597AA73CFEB01793 /* ShareGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareGuideView.swift; sourceTree = "<group>"; };
 		EF35607E4747FE5E25CC138A /* GeometryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryModels.swift; sourceTree = "<group>"; };
 		F8929F4DC892A242B995CCA2 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -112,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3EC756642F4E8E75AAFF5BCC /* StoreKit.framework in Frameworks */,
+				7F0172089F9A9EE7D8BA87AA /* Vision.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +181,7 @@
 				05243AE3AE86C53D94FA277F /* MaskOverlayPanel.swift */,
 				5AB3A15419296178E55630FF /* OverlayCoordinator.swift */,
 				09AC5FEC3E7041834B6FB4CB /* RegionSelectionCoordinator.swift */,
+				B4C0A254BEA003BAD973F643 /* TextFollowOverlayPanel.swift */,
 			);
 			path = Overlay;
 			sourceTree = "<group>";
@@ -176,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				E6A0810DE2909362C90DB093 /* StoreKit.framework */,
+				7454B463F554449267C86979 /* Vision.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -187,6 +202,7 @@
 				89036BF18EB8227C4B8F9755 /* MaskAccessPolicy.swift */,
 				0A78F911B1F545AC8C68341D /* MaskRegion.swift */,
 				3BD6A6895315ED30EA87DBBC /* MaskStore.swift */,
+				3D962104EAABDFCE07E4A63E /* TextFollowRule.swift */,
 				D68C9BD9C3400234358316A8 /* WindowCandidate.swift */,
 			);
 			path = Models;
@@ -201,6 +217,7 @@
 				9D909D796D9C59A483A0A17C /* ScreenCapturePermission.swift */,
 				809D136D7E0E6B354C511B50 /* SharePreviewCompositor.swift */,
 				29F0D7E467229F062A2B3AF4 /* SharePreviewSession.swift */,
+				E85F0E9E62A45EA850BBACEF /* TextFollowCoordinator.swift */,
 				4606AF751766E618EFEB5554 /* WindowTracker.swift */,
 			);
 			path = Services;
@@ -233,6 +250,8 @@
 				30FD197B3EAA6E8C3853BD8A /* ReviewPromptPolicyTests.swift */,
 				0C7F7A03BCBC8FF40E550466 /* SharePreviewCompositorTests.swift */,
 				336094A3DB4A5418A61FB964 /* SharePreviewSessionTests.swift */,
+				B57D7000A8E4BC62A0B49EE1 /* TextFollowCoordinatorTests.swift */,
+				9A65BA63CA38A6B23120347A /* TextFollowOverlayPanelTests.swift */,
 			);
 			path = BlurFollowTests;
 			sourceTree = "<group>";
@@ -396,6 +415,8 @@
 				EB513951A282BB2F02A1AF45 /* ReviewPromptPolicyTests.swift in Sources */,
 				05DAD43B20CD0DE3089B2DD4 /* SharePreviewCompositorTests.swift in Sources */,
 				10D4CF6B6A2E1A370547D2B1 /* SharePreviewSessionTests.swift in Sources */,
+				3A0A2063336D05A33BCBF494 /* TextFollowCoordinatorTests.swift in Sources */,
+				48F949D55A4944CE71459443 /* TextFollowOverlayPanelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,6 +449,9 @@
 				DEDED0B411EA7B81B5D29E2F /* SharePreviewCompositor.swift in Sources */,
 				635D7ED5DB7C98B6C430F15B /* SharePreviewSession.swift in Sources */,
 				D1CB2CA896EA39EBF1252989 /* SharePreviewView.swift in Sources */,
+				E2B06029CE4BABE938089654 /* TextFollowCoordinator.swift in Sources */,
+				753E27737CB7B05F71C9B7B2 /* TextFollowOverlayPanel.swift in Sources */,
+				1A6734C835ECE2862471260B /* TextFollowRule.swift in Sources */,
 				5D6A1038A5DB5D10478FDF37 /* UnlimitedMasksView.swift in Sources */,
 				60AC5D3504E9CE61793A2E59 /* WindowCandidate.swift in Sources */,
 				9284F39F163E492015C88E13 /* WindowTracker.swift in Sources */,

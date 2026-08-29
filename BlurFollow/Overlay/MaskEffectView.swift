@@ -4,11 +4,13 @@ import QuartzCore
 
 final class MaskEffectView: NSView {
     private static let granularityBlurFilterName = "blurFollowGranularityBlur"
+    private static let mosaicFilterName = "blurFollowMosaic"
 
     private let visualEffect = NSVisualEffectView()
     private let frostTintView = NSView()
     private let outlineView = NSView()
     private var granularityBlurFilter: CIFilter?
+    private var mosaicFilter: CIFilter?
     private var region: MaskRegion
     private var forceRedact = false
     private var dragStartMouseLocation: CGPoint?
@@ -19,6 +21,8 @@ final class MaskEffectView: NSView {
     private(set) var isDragging = false
     private(set) var isEditing = false
     private(set) var renderedFrostBlurRadius: CGFloat = 0
+    private(set) var renderedMosaicCellSize: CGFloat = 0
+    private(set) var usesBackdropMosaicFilter = false
     var onDragEnded: ((CGRect) -> Void)?
 
     init(region: MaskRegion) {
@@ -30,6 +34,7 @@ final class MaskEffectView: NSView {
         visualEffect.state = .active
         visualEffect.autoresizingMask = [.width, .height]
         visualEffect.wantsLayer = true
+        visualEffect.layerUsesCoreImageFilters = true
         visualEffect.layer?.masksToBounds = true
         if let blurFilter = CIFilter(name: "CIGaussianBlur") {
             blurFilter.name = Self.granularityBlurFilterName
@@ -37,6 +42,11 @@ final class MaskEffectView: NSView {
             granularityBlurFilter = blurFilter
             // Granularity controls the sampled backdrop, not the already-rendered material.
             visualEffect.backgroundFilters = [blurFilter]
+        }
+        if let mosaicFilter = CIFilter(name: "CIPixellate") {
+            mosaicFilter.name = Self.mosaicFilterName
+            mosaicFilter.setValue(8, forKey: kCIInputScaleKey)
+            self.mosaicFilter = mosaicFilter
         }
         addSubview(visualEffect)
 
@@ -85,16 +95,20 @@ final class MaskEffectView: NSView {
             // the material prevents the material from hiding the visible Strength difference.
             break
         case .mosaic:
+            // The visual-effect view applies CIPixellate to the actual backdrop. Keep a very light
+            // cell tint above it so the area remains visible on flat-colour backgrounds. If Core
+            // Image cannot create the public filter, the opaque grid is a fail-closed fallback.
             NSGraphicsContext.saveGraphicsState()
             path.addClip()
             let cell = CGFloat(parameters.mosaicCellSize)
             let tint = region.tint.components
             let columns = Int(ceil(bounds.width / cell))
             let rows = Int(ceil(bounds.height / cell))
+            let hasBackdropPixelation = mosaicFilter != nil
             for row in 0..<rows {
                 for column in 0..<columns {
                     let alternate = (row + column) % 2 == 0
-                    let alpha = min(1, parameters.mosaicOpacity + (alternate ? 0.05 : 0))
+                    let alpha = hasBackdropPixelation ? (alternate ? 0.10 : 0.06) : 1
                     let color = alternate
                         ? NSColor(
                             calibratedRed: CGFloat(min(1, tint.red * 0.85 + 0.04)),
@@ -142,27 +156,49 @@ final class MaskEffectView: NSView {
         )
         renderedSize = bounds.size
         let isFrost = effectiveStyle == .frost
-        visualEffect.isHidden = !isFrost
-        frostTintView.isHidden = !isFrost
-        visualEffect.alphaValue = CGFloat(parameters.frostEffectOpacity)
+        let isMosaic = effectiveStyle == .mosaic
+        visualEffect.isHidden = !isFrost && !isMosaic
+        frostTintView.isHidden = !isFrost && !isMosaic
+        // Mosaic must transform the complete backdrop rather than reveal a readable original
+        // through a partially transparent decorative grid. Strength still controls its colour
+        // treatment, while Granularity controls the sampled pixel-cell size.
+        visualEffect.alphaValue = isMosaic ? 1 : CGFloat(parameters.frostEffectOpacity)
         let targetBlurRadius = CGFloat(parameters.frostAdditionalBlurRadius)
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        if let granularityBlurFilter {
+        if isFrost, let granularityBlurFilter {
             granularityBlurFilter.setValue(targetBlurRadius, forKey: kCIInputRadiusKey)
             // Reassigning the public NSView property makes the changed filter input immediately
             // visible without depending on Core Animation's string-based filter key paths.
             visualEffect.backgroundFilters = [granularityBlurFilter]
             renderedFrostBlurRadius = targetBlurRadius
-        } else {
+            renderedMosaicCellSize = 0
+            usesBackdropMosaicFilter = false
+        } else if isMosaic, let mosaicFilter {
+            mosaicFilter.setValue(parameters.mosaicCellSize, forKey: kCIInputScaleKey)
+            mosaicFilter.setValue(
+                CIVector(x: bounds.midX, y: bounds.midY),
+                forKey: kCIInputCenterKey
+            )
+            visualEffect.backgroundFilters = [mosaicFilter]
             renderedFrostBlurRadius = 0
+            renderedMosaicCellSize = CGFloat(parameters.mosaicCellSize)
+            usesBackdropMosaicFilter = true
+        } else {
+            visualEffect.backgroundFilters = []
+            renderedFrostBlurRadius = 0
+            renderedMosaicCellSize = isMosaic ? CGFloat(parameters.mosaicCellSize) : 0
+            usesBackdropMosaicFilter = false
         }
         let tint = region.tint.components
+        let tintOpacity = isMosaic
+            ? 0.06 + (0.24 * min(max(region.strength, 0), 1))
+            : parameters.frostTintOpacity
         frostTintView.layer?.backgroundColor = NSColor(
             calibratedRed: CGFloat(tint.red),
             green: CGFloat(tint.green),
             blue: CGFloat(tint.blue),
-            alpha: CGFloat(parameters.frostTintOpacity)
+            alpha: CGFloat(tintOpacity)
         ).cgColor
         layer?.cornerRadius = effectiveCornerRadius
         layer?.masksToBounds = true

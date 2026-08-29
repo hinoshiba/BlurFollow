@@ -1,6 +1,6 @@
 # Third-party notices
 
-Last reviewed: 2026-08-26<br>
+Last reviewed: 2026-08-27<br>
 Applies to: BlurFollow 0.2.0 source and the current macOS application target
 
 ## Shipped third-party components
@@ -31,8 +31,8 @@ Node dependency notices remain available at the pinned revision.
 
 ## Apple names
 
-Apple, macOS, Mac, App Store, Xcode, Swift, SwiftUI, AppKit, and
-ScreenCaptureKit may be trademarks of Apple Inc. Their descriptive use does
+Apple, macOS, Mac, App Store, Xcode, Swift, SwiftUI, AppKit, ScreenCaptureKit,
+and Vision may be trademarks of Apple Inc. Their descriptive use does
 not imply sponsorship or endorsement. See [TRADEMARKS.md](TRADEMARKS.md).
 
 ## Maintenance rule

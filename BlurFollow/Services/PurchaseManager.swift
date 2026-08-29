@@ -86,9 +86,10 @@ final class PurchaseManager: ObservableObject {
         transactionUpdatesTask?.cancel()
     }
 
-    func canCreateMask(currentCount: Int) -> Bool {
-        MaskAccessPolicy.canCreateMask(
-            currentCount: currentCount,
+    func canCreateMask(kind: MaskPlanKind, usage: MaskPlanUsage) -> Bool {
+        MaskAccessPolicy.canCreate(
+            kind: kind,
+            usage: usage,
             hasUnlimitedAccess: hasUnlimitedAccess
         )
     }

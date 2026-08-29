@@ -6,6 +6,8 @@ final class MaskOverlayPanel: NSPanel {
 
     var isDragging: Bool { effectView.isDragging }
     var renderedFrostBlurRadius: CGFloat { effectView.renderedFrostBlurRadius }
+    var renderedMosaicCellSize: CGFloat { effectView.renderedMosaicCellSize }
+    var usesBackdropMosaicFilter: Bool { effectView.usesBackdropMosaicFilter }
 
     override var canBecomeKey: Bool { effectView.isEditing }
     override var canBecomeMain: Bool { false }

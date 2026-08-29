@@ -13,7 +13,8 @@ let package = Package(
             path: "BlurFollow",
             exclude: ["Resources"],
             linkerSettings: [
-                .linkedFramework("StoreKit")
+                .linkedFramework("StoreKit"),
+                .linkedFramework("Vision")
             ]
         ),
         .testTarget(

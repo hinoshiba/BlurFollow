@@ -242,6 +242,31 @@ final class GeometryModelsTests: XCTestCase {
         region.borderEnabled = false
         XCTAssertTrue(panel.update(region: region, frame: frame))
     }
+
+    @MainActor
+    func testMosaicOverlayPixelatesBackdropAndUpdatesCellSize() {
+        var region = MaskRegion(
+            name: "Mosaic",
+            mode: .display,
+            normalizedRect: UnitRect(x: 0.1, y: 0.1, width: 0.3, height: 0.2),
+            style: .mosaic,
+            strength: 0.2,
+            granularity: 0.1
+        )
+        let panel = MaskOverlayPanel(region: region)
+        let frame = CGRect(x: 80, y: 120, width: 360, height: 180)
+        defer { panel.close() }
+
+        XCTAssertTrue(panel.update(region: region, frame: frame))
+        XCTAssertTrue(panel.usesBackdropMosaicFilter)
+        let fineCellSize = panel.renderedMosaicCellSize
+        XCTAssertGreaterThan(fineCellSize, 0)
+
+        region.granularity = 0.9
+        XCTAssertTrue(panel.update(region: region, frame: frame))
+        XCTAssertGreaterThan(panel.renderedMosaicCellSize, fineCellSize)
+        XCTAssertTrue(panel.usesBackdropMosaicFilter)
+    }
 }
 
 final class WindowDescriptionBatchTests: XCTestCase {
@@ -283,5 +308,139 @@ final class WindowDescriptionBatchTests: XCTestCase {
         )
 
         XCTAssertTrue(result.isEmpty)
+    }
+
+    func testExactAnchorLookupIgnoresOtherSameTitleCandidatesAndKeepsSmallRecord() throws {
+        let smallExactAnchor: [String: Any] = [
+            kCGWindowNumber as String: NSNumber(value: 41),
+            kCGWindowBounds as String: [
+                "X": 100,
+                "Y": 200,
+                "Width": 40,
+                "Height": 30
+            ],
+            "marker": "exact-small-anchor"
+        ]
+        let otherSameTitleCandidate: [String: Any] = [
+            kCGWindowNumber as String: NSNumber(value: 73),
+            kCGWindowBounds as String: [
+                "X": 300,
+                "Y": 400,
+                "Width": 800,
+                "Height": 600
+            ],
+            "marker": "other-same-title"
+        ]
+
+        let exact = WindowDescriptionBatch.informationByID(
+            from: [otherSameTitleCandidate, smallExactAnchor],
+            requestedWindowIDs: [41]
+        )
+
+        XCTAssertEqual(Set(exact.keys), [41])
+        XCTAssertEqual(try XCTUnwrap(exact[41]?["marker"] as? String), "exact-small-anchor")
+        let bounds = try XCTUnwrap(exact[41]?[kCGWindowBounds as String] as? [String: Int])
+        XCTAssertEqual(bounds["Width"], 40)
+        XCTAssertEqual(bounds["Height"], 30)
+    }
+
+    func testIncompleteAnchorDoesNotRebindToDifferentSameTitleWindow() {
+        let replacement = TrackedWindowFrame(
+            windowID: 73,
+            processID: 1234,
+            appKitFrame: CGRect(x: 10, y: 20, width: 800, height: 600),
+            isOnScreen: true
+        )
+
+        XCTAssertFalse(WindowTrackingExactIdentityPolicy.matches(
+            anchorWindowID: 41,
+            anchorProcessID: 1234,
+            candidate: replacement
+        ))
+    }
+
+    func testIncompleteAnchorAcceptsExactIdentityReplacement() {
+        let replacement = TrackedWindowFrame(
+            windowID: 41,
+            processID: 1234,
+            appKitFrame: CGRect(x: 10, y: 20, width: 800, height: 600),
+            isOnScreen: true
+        )
+
+        XCTAssertTrue(WindowTrackingExactIdentityPolicy.matches(
+            anchorWindowID: 41,
+            anchorProcessID: 1234,
+            candidate: replacement
+        ))
+    }
+
+    func testRejectedContinuousBindingDoesNotResolveIncompleteAnchorWithThirdWindow() {
+        let replacement = TrackedWindowFrame(
+            windowID: 73,
+            processID: 1234,
+            appKitFrame: CGRect(x: 10, y: 20, width: 800, height: 600),
+            isOnScreen: true
+        )
+
+        let continuousBindingWasRejected = true
+        let savedAnchorMetadataWasIncomplete = true
+        XCTAssertTrue(continuousBindingWasRejected)
+        XCTAssertTrue(savedAnchorMetadataWasIncomplete)
+        XCTAssertFalse(WindowTrackingExactIdentityPolicy.matches(
+            anchorWindowID: 41,
+            anchorProcessID: 1234,
+            candidate: replacement
+        ))
+    }
+
+    func testIncompleteAnchorWithoutSavedProcessCannotAcceptReplacement() {
+        let replacement = TrackedWindowFrame(
+            windowID: 41,
+            processID: 1234,
+            appKitFrame: CGRect(x: 10, y: 20, width: 800, height: 600),
+            isOnScreen: true
+        )
+
+        XCTAssertFalse(WindowTrackingExactIdentityPolicy.matches(
+            anchorWindowID: 41,
+            anchorProcessID: nil,
+            candidate: replacement
+        ))
+    }
+
+    func testContinuousIdentityAllowsTitleChangesAndSmallGeometry() {
+        XCTAssertTrue(WindowTrackingInspectionRole.continuousIdentity.allowsSmallGeometry)
+        XCTAssertFalse(
+            WindowTrackingInspectionRole.continuousIdentity.requiresStoredTitleMatch
+        )
+    }
+
+    func testSavedAnchorRequiresTitleButStillAllowsSmallGeometry() {
+        XCTAssertTrue(WindowTrackingInspectionRole.savedAnchor.allowsSmallGeometry)
+        XCTAssertTrue(WindowTrackingInspectionRole.savedAnchor.requiresStoredTitleMatch)
+    }
+
+    func testAutomaticRebindRequiresTitleAndNormalGeometry() {
+        XCTAssertFalse(
+            WindowTrackingInspectionRole.automaticRebindCandidate.allowsSmallGeometry
+        )
+        XCTAssertTrue(
+            WindowTrackingInspectionRole.automaticRebindCandidate.requiresStoredTitleMatch
+        )
+    }
+
+    func testConfirmedDiscontinuityRequiresExplicitRebind() {
+        XCTAssertTrue(WindowTrackingContinuityPolicy.allowsAutomaticResolution(
+            hasConfirmedDiscontinuity: false
+        ))
+        XCTAssertFalse(WindowTrackingContinuityPolicy.allowsAutomaticResolution(
+            hasConfirmedDiscontinuity: true
+        ))
+        XCTAssertTrue(WindowTrackingContinuityPolicy.requiresExplicitRebind(
+            after: .identity
+        ))
+        XCTAssertFalse(WindowTrackingContinuityPolicy.requiresExplicitRebind(
+            after: .savedTitle
+        ))
     }
 }

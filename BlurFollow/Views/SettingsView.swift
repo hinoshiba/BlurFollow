@@ -13,7 +13,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Settings")
                         .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Text("Mask behavior and local data controls.")
+                    Text("Mask behavior, Text Follow, and local data controls.")
                         .foregroundStyle(.secondary)
                 }
 
@@ -60,12 +60,25 @@ struct SettingsView: View {
                             SettingLabel(
                                 icon: "rectangle.inset.filled",
                                 title: String(localized: "Show Masks"),
-                                detail: String(localized: "Display all enabled Display Pins and Window Pins."),
+                                detail: String(localized: "Display all enabled manual masks and Text Follow matches."),
                                 color: BlurFollowTheme.iris
                             )
                         }
                         .toggleStyle(.switch)
                         .tint(BlurFollowTheme.mint)
+                        Divider()
+                        Toggle(isOn: $store.textFollowSafetyCoverEnabled) {
+                            SettingLabel(
+                                icon: "shield.lefthalf.filled",
+                                title: String(localized: "Strict Safety: Protect the Whole Window"),
+                                detail: String(localized: "While Text Follow is recognizing, window metadata is uncertain, or OCR finds no matches, this protects the current or last trusted window. Turn it off to keep only the last masks and avoid full-window flashes. A confirmed missing or off-screen source hides the old desktop cover; Share Preview remains fail-closed during uncertainty."),
+                                color: BlurFollowTheme.amber
+                            )
+                        }
+                        .toggleStyle(.switch)
+                        .tint(BlurFollowTheme.mint)
+                        .accessibilityLabel(String(localized: "Strict Safety: Protect the Whole Window"))
+                        .accessibilityHint(String(localized: "While Text Follow is recognizing, window metadata is uncertain, or OCR finds no matches, this protects the current or last trusted window. Turn it off to keep only the last masks and avoid full-window flashes. A confirmed missing or off-screen source hides the old desktop cover; Share Preview remains fail-closed during uncertainty."))
                     }
                 }
 
@@ -127,12 +140,12 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 14) {
                         Text("Local Data")
                             .font(.headline)
-                        Text("Mask geometry and window identity are stored in Application Support. Screen pixels are never persisted.")
+                        Text("Mask geometry, Text Follow patterns, and window identity are stored in Application Support. Screen pixels and recognized text are never persisted.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         HStack {
-                            Button("Export Mask Settings…") { exportSettings() }
-                            Button("Delete All Masks", role: .destructive) { store.removeAll() }
+                            Button("Export Mask and Rule Settings…") { exportSettings() }
+                            Button("Delete All Masks and Rules", role: .destructive) { store.removeAll() }
                             Spacer()
                             if let exportMessage {
                                 Text(exportMessage).font(.caption).foregroundStyle(.secondary)
@@ -171,9 +184,9 @@ struct SettingsView: View {
 
     private var captureAccessDetail: String {
         if #available(macOS 15.2, *) {
-            return String(localized: "Share Preview uses Apple's per-selection system picker. Frames stay in memory and are never uploaded.")
+            return String(localized: "Text Follow and Share Preview use Apple's per-selection system picker. Frames stay in memory and are never uploaded.")
         }
-        return String(localized: "macOS 14 through 15.1 requires Screen Recording access for window identity. Frames stay local.")
+        return String(localized: "macOS 14 through 15.1 requires Screen Recording access for window identity and on-device text matching. Frames stay local.")
     }
 
     private var versionLabel: String {
@@ -186,15 +199,17 @@ struct SettingsView: View {
         case .checking:
             return String(localized: "Checking your App Store purchase status…")
         case .purchased:
-            return String(localized: "Your one-time purchase removes BlurFollow's mask-count plan limit.")
+            return String(localized: "Your one-time purchase removes BlurFollow's saved-item plan limits.")
         case .grandfathered:
             return String(localized: "As an early user, you keep the unlimited access included with the version you first downloaded.")
         case .sourceBuild:
-            return String(localized: "Source builds include unlimited masks; the official App Store build offers an optional one-time unlock.")
+            return String(localized: "Source builds include unlimited masks and rules; the official App Store build offers an optional one-time unlock.")
         case .free:
             return String.localizedStringWithFormat(
-                String(localized: "%lld masks are included free. Unlocking more also supports continued development."),
-                Int64(MaskAccessPolicy.freeMaskLimit)
+                String(localized: "%lld Display Pins, %lld Window Pins, and %lld Text Follow rules are included free."),
+                Int64(MaskAccessPolicy.freeDisplayMaskLimit),
+                Int64(MaskAccessPolicy.freeWindowMaskLimit),
+                Int64(MaskAccessPolicy.freeTextFollowRuleLimit)
             )
         }
     }
@@ -214,7 +229,7 @@ struct SettingsView: View {
         if #available(macOS 15.2, *) { return String(localized: "Access is requested for each picker selection") }
         return permission.isAuthorized
             ? String(localized: "Broad access granted")
-            : String(localized: "Access is requested when you use a Window Pin or Share Preview")
+            : String(localized: "Access is requested when you use a Window Pin, Text Follow, or Share Preview")
     }
 
     private var captureAccessIcon: String {

@@ -1,4 +1,4 @@
 "CFBundleDisplayName" = "BlurFollow";
 "CFBundleName" = "BlurFollow";
 "NSHumanReadableCopyright" = "Copyright 2026 The BlurFollow Authors";
-"NSScreenCaptureUsageDescription" = "BlurFollow uses screen capture to create an on-device preview of the selected window with masks applied. Frames are never saved or transmitted.";
+"NSScreenCaptureUsageDescription" = "BlurFollow uses screen capture to find matching text in a window you select and to create its on-device preview. Frames are processed on this Mac and never saved or transmitted.";

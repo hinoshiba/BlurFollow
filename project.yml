@@ -35,6 +35,7 @@ targets:
           - Resources/BlurFollow.entitlements
     dependencies:
       - sdk: StoreKit.framework
+      - sdk: Vision.framework
     resources:
       - path: BlurFollow/Resources
         excludes:

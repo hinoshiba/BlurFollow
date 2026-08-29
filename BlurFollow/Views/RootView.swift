@@ -35,6 +35,7 @@ struct RootView: View {
     @EnvironmentObject private var purchases: PurchaseManager
     @EnvironmentObject private var reviewPrompts: ReviewPromptCoordinator
     @EnvironmentObject private var sharePreview: SharePreviewSession
+    @EnvironmentObject private var textFollow: TextFollowCoordinator
     @Environment(\.requestReview) private var requestReview
     @Environment(\.controlActiveState) private var controlActiveState
     @State private var selection: AppSection? = .home
@@ -178,9 +179,9 @@ struct RootView: View {
 
             Divider()
 
-            Section("Masks") {
+            Section("Manual Masks") {
                 if store.regions.isEmpty {
-                    Text("No masks yet")
+                    Text("No manual masks yet")
                 } else {
                     ForEach(store.regions) { region in
                         Toggle(isOn: enabledBinding(for: region.id)) {
@@ -194,12 +195,28 @@ struct RootView: View {
 
             Divider()
 
+            Section("Text Follow Rules (Beta)") {
+                if store.textRules.isEmpty {
+                    Text("No Text Follow rules yet")
+                } else {
+                    ForEach(store.textRules) { rule in
+                        Toggle(isOn: textRuleEnabledBinding(for: rule.id)) {
+                            Label(textFollowToolbarTitle(for: rule), systemImage: "text.viewfinder")
+                        }
+                        .accessibilityLabel(Text(rule.name))
+                        .accessibilityHint("Turns only this Text Follow rule on or off.")
+                    }
+                }
+            }
+
+            Divider()
+
             Button {
                 selection = .masks
             } label: {
-                Label("Manage Masks…", systemImage: "slider.horizontal.3")
+                Label("Manage Masks and Rules…", systemImage: "slider.horizontal.3")
             }
-            .accessibilityHint("Opens the mask management screen.")
+            .accessibilityHint("Opens manual mask and Text Follow management.")
         } label: {
             Label("Mask Controls", systemImage: maskToolbarSystemImage)
         }
@@ -210,13 +227,22 @@ struct RootView: View {
 
     private var maskToolbarSystemImage: String {
         guard store.masksEnabled else { return "eye.slash" }
-        return store.regions.contains(where: \.isEnabled) ? "eye.fill" : "eye"
+        let hasEnabledItem = store.regions.contains(where: \.isEnabled)
+            || store.textRules.contains(where: \.isEnabled)
+        return hasEnabledItem ? "eye.fill" : "eye"
     }
 
     private func enabledBinding(for id: UUID) -> Binding<Bool> {
         Binding(
             get: { store.regions.first(where: { $0.id == id })?.isEnabled ?? false },
             set: { store.setEnabled($0, for: id) }
+        )
+    }
+
+    private func textRuleEnabledBinding(for id: UUID) -> Binding<Bool> {
+        Binding(
+            get: { store.textRules.first(where: { $0.id == id })?.isEnabled ?? false },
+            set: { store.setTextRuleEnabled($0, for: id) }
         )
     }
 
@@ -228,22 +254,43 @@ struct RootView: View {
         )
     }
 
+    private func textFollowToolbarTitle(for rule: TextFollowRule) -> String {
+        let stateAndCount = String.localizedStringWithFormat(
+            String(localized: "%@ · %@"),
+            textFollow.state(for: rule.id).localizedTitle,
+            textFollowMatchCountText(textFollow.matchedCount(for: rule.id))
+        )
+        return String.localizedStringWithFormat(
+            String(localized: "%@ · %@"),
+            rule.name,
+            stateAndCount
+        )
+    }
+
     private var maskFooterTitle: String {
         guard store.masksEnabled else { return String(localized: "Masks paused") }
         guard store.recoveryIssue == nil else { return String(localized: "Review masks") }
-        let enabled = store.regions.filter(\.isEnabled)
-        guard !enabled.isEmpty else { return String(localized: "No masks") }
-        return enabled.allSatisfy({ store.trackingStates[$0.id] == .positionKnown })
-            ? String(localized: "Positions found")
+        let enabledMasks = store.regions.filter(\.isEnabled)
+        let enabledRules = store.textRules.filter(\.isEnabled)
+        guard !enabledMasks.isEmpty || !enabledRules.isEmpty else {
+            return String(localized: "No masks or rules")
+        }
+        let masksReady = enabledMasks.allSatisfy { store.trackingStates[$0.id] == .positionKnown }
+        let rulesReady = enabledRules.allSatisfy {
+            let state = textFollow.state(for: $0.id)
+            return state == .following || state == .noMatches
+        }
+        return masksReady && rulesReady
+            ? String(localized: "Masks and text scan active")
             : String(localized: "Check placement")
     }
 
     private var activeMaskCountText: String {
-        let count = store.regions.filter(\.isEnabled).count
-        let format = count == 1
-            ? String(localized: "%lld active mask")
-            : String(localized: "%lld active masks")
-        return String.localizedStringWithFormat(format, Int64(count))
+        String.localizedStringWithFormat(
+            String(localized: "Manual %lld · Text Follow %lld active"),
+            Int64(store.regions.filter(\.isEnabled).count),
+            Int64(store.textRules.filter(\.isEnabled).count)
+        )
     }
 
     private func scheduleReviewRequestIfAppropriate() {

@@ -1,4 +1,4 @@
 "CFBundleDisplayName" = "BlurFollow";
 "CFBundleName" = "BlurFollow";
 "NSHumanReadableCopyright" = "Copyright 2026 The BlurFollow Authors";
-"NSScreenCaptureUsageDescription" = "選択したウインドウへマスクを合成した確認用プレビューを、このMac内で作るために使います。映像は保存・送信しません。";
+"NSScreenCaptureUsageDescription" = "選択したウインドウ内で一致する文字を見つけ、確認用プレビューを作るために使います。映像はこのMac内だけで処理し、保存・送信しません。";

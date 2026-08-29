@@ -3,6 +3,7 @@ import SwiftUI
 enum UnlimitedMasksTrigger: String, Identifiable {
     case displayPin
     case windowPin
+    case textFollowRule
     case settings
 
     var id: String { rawValue }
@@ -99,7 +100,7 @@ struct UnlimitedMasksView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(accessTitle)
                     .font(.headline)
-                Text("BlurFollow does not impose a mask-count plan limit. Practical capacity depends on your Mac.")
+                Text("BlurFollow does not impose a saved-item plan limit. Practical capacity depends on your Mac.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -111,9 +112,10 @@ struct UnlimitedMasksView: View {
 
     private var benefitCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Create more than 5 masks", systemImage: "infinity")
+            Label("Create beyond the free limits", systemImage: "infinity")
+            Label("10 Display Pins · 5 Window Pins · 2 Text Follow rules", systemImage: "rectangle.3.group")
             Label("One-time purchase — no subscription", systemImage: "checkmark.circle")
-            Label("Keep every existing mask available", systemImage: "rectangle.stack")
+            Label("Keep every existing mask and rule available", systemImage: "rectangle.stack")
             Label("Support continued BlurFollow development", systemImage: "heart")
         }
         .font(.subheadline.weight(.medium))
@@ -166,19 +168,29 @@ struct UnlimitedMasksView: View {
 
     private var title: String {
         if purchases.hasUnlimitedAccess { return String(localized: "Unlimited Masks") }
-        return trigger == .settings
-            ? String(localized: "Support BlurFollow")
-            : String(localized: "Add More Masks")
+        switch trigger {
+        case .settings:
+            return String(localized: "Support BlurFollow")
+        case .textFollowRule:
+            return String(localized: "Add More Text Follow Rules (Beta)")
+        case .displayPin, .windowPin:
+            return String(localized: "Add More Masks")
+        }
     }
 
     private var detail: String {
         if purchases.hasUnlimitedAccess {
-            return String(localized: "You can create as many masks as your Mac can comfortably handle.")
+            return String(localized: "You can create as many masks and rules as your Mac can comfortably handle.")
         }
         if trigger == .settings {
-            return String(localized: "Five masks are included free. A one-time purchase removes the plan limit and supports continued development.")
+            return String.localizedStringWithFormat(
+                String(localized: "%lld Display Pins, %lld Window Pins, and %lld Text Follow rules are included free. A one-time purchase removes the plan limits."),
+                Int64(MaskAccessPolicy.freeDisplayMaskLimit),
+                Int64(MaskAccessPolicy.freeWindowMaskLimit),
+                Int64(MaskAccessPolicy.freeTextFollowRuleLimit)
+            )
         }
-        return String(localized: "Your five masks stay active. A one-time purchase lets you create the next one and removes the plan limit.")
+        return String(localized: "Your existing masks and rules stay active. A one-time purchase lets you create the next item and removes the plan limits.")
     }
 
     private var accessTitle: String {

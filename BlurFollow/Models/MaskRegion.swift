@@ -20,6 +20,13 @@ enum PinMode: String, Codable, CaseIterable, Identifiable, Sendable {
         case .window: return "macwindow.badge.plus"
         }
     }
+
+    var planKind: MaskPlanKind {
+        switch self {
+        case .display: return .displayMask
+        case .window: return .windowMask
+        }
+    }
 }
 
 enum MaskStyle: String, Codable, CaseIterable, Identifiable, Sendable {
@@ -132,6 +139,33 @@ struct WindowAnchor: Codable, Hashable, Sendable {
     /// A process identifier is session-scoped. It prevents a recycled window ID from silently
     /// binding to another process; title and application identity are used after an app relaunch.
     var processID: Int32? = nil
+}
+
+enum WindowApplicationIdentityComparison: Equatable, Sendable {
+    case same
+    case different
+    /// Neither side exposes the same kind of non-empty application identifier.
+    case uncertain
+}
+
+/// Compares application identity without treating a legacy application-name anchor as unrelated
+/// merely because the current picker source also has a bundle identifier. Bundle IDs win only
+/// when both sides provide them; otherwise application names are the shared fallback evidence.
+enum WindowApplicationIdentityMatcher {
+    static func compare(
+        bundleIdentifier lhsBundleIdentifier: String,
+        applicationName lhsApplicationName: String,
+        toBundleIdentifier rhsBundleIdentifier: String,
+        applicationName rhsApplicationName: String
+    ) -> WindowApplicationIdentityComparison {
+        if !lhsBundleIdentifier.isEmpty, !rhsBundleIdentifier.isEmpty {
+            return lhsBundleIdentifier == rhsBundleIdentifier ? .same : .different
+        }
+        if !lhsApplicationName.isEmpty, !rhsApplicationName.isEmpty {
+            return lhsApplicationName == rhsApplicationName ? .same : .different
+        }
+        return .uncertain
+    }
 }
 
 struct MaskRegion: Codable, Identifiable, Hashable, Sendable {

@@ -5,12 +5,18 @@ import Combine
 @MainActor
 final class MaskStore: ObservableObject {
     @Published private(set) var regions: [MaskRegion] {
-        didSet { persistRegionChangeIfNeeded() }
+        didSet { persistCollectionChangeIfNeeded() }
+    }
+    @Published private(set) var textRules: [TextFollowRule] {
+        didSet { persistCollectionChangeIfNeeded() }
     }
     @Published var masksEnabled: Bool {
         didSet { persistIfNeeded() }
     }
     @Published var coverLastPositionEnabled: Bool {
+        didSet { persistIfNeeded() }
+    }
+    @Published var textFollowSafetyCoverEnabled: Bool {
         didSet { persistIfNeeded() }
     }
     @Published var hasCompletedOnboarding: Bool {
@@ -24,16 +30,60 @@ final class MaskStore: ObservableObject {
     private var canPersist = false
     private var preserveExistingBackup = false
     private var eraseBackupOnNextPersist = false
-    private var isApplyingLiveRegionUpdate = false
+    private var isApplyingLiveCollectionUpdate = false
+    private var isPerformingBatchMutation = false
     private var hasPendingPersistence = false
     private var pendingPersistenceTask: Task<Void, Never>?
     private var terminationCancellable: AnyCancellable?
 
     private struct Snapshot: Codable {
         var regions: [MaskRegion]
+        var textRules: [TextFollowRule]
         var masksEnabled: Bool
         var coverLastPositionEnabled: Bool
+        var textFollowSafetyCoverEnabled: Bool
         var hasCompletedOnboarding: Bool
+
+        private enum CodingKeys: String, CodingKey {
+            case regions
+            case textRules
+            case masksEnabled
+            case coverLastPositionEnabled
+            case textFollowSafetyCoverEnabled
+            case hasCompletedOnboarding
+        }
+
+        init(
+            regions: [MaskRegion],
+            textRules: [TextFollowRule],
+            masksEnabled: Bool,
+            coverLastPositionEnabled: Bool,
+            textFollowSafetyCoverEnabled: Bool,
+            hasCompletedOnboarding: Bool
+        ) {
+            self.regions = regions
+            self.textRules = textRules
+            self.masksEnabled = masksEnabled
+            self.coverLastPositionEnabled = coverLastPositionEnabled
+            self.textFollowSafetyCoverEnabled = textFollowSafetyCoverEnabled
+            self.hasCompletedOnboarding = hasCompletedOnboarding
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            regions = try container.decode([MaskRegion].self, forKey: .regions)
+            // Snapshots written before text following existed have no textRules key.
+            textRules = try container.decodeIfPresent([TextFollowRule].self, forKey: .textRules) ?? []
+            masksEnabled = try container.decode(Bool.self, forKey: .masksEnabled)
+            coverLastPositionEnabled = try container.decode(Bool.self, forKey: .coverLastPositionEnabled)
+            // Safety-first behavior is the migration default for snapshots created before this
+            // preference existed.
+            textFollowSafetyCoverEnabled = try container.decodeIfPresent(
+                Bool.self,
+                forKey: .textFollowSafetyCoverEnabled
+            ) ?? true
+            hasCompletedOnboarding = try container.decode(Bool.self, forKey: .hasCompletedOnboarding)
+        }
     }
 
     private enum SnapshotError: LocalizedError {
@@ -54,24 +104,30 @@ final class MaskStore: ObservableObject {
             do {
                 let snapshot = try Self.loadSnapshot(from: resolvedURL)
                 regions = snapshot.regions
+                textRules = snapshot.textRules
                 masksEnabled = snapshot.masksEnabled
                 coverLastPositionEnabled = snapshot.coverLastPositionEnabled
+                textFollowSafetyCoverEnabled = snapshot.textFollowSafetyCoverEnabled
                 hasCompletedOnboarding = snapshot.hasCompletedOnboarding
                 recoveryIssue = nil
             } catch {
                 do {
                     let backup = try Self.loadSnapshot(from: backupURL)
                     regions = backup.regions
+                    textRules = backup.textRules
                     masksEnabled = backup.masksEnabled
                     coverLastPositionEnabled = backup.coverLastPositionEnabled
+                    textFollowSafetyCoverEnabled = backup.textFollowSafetyCoverEnabled
                     hasCompletedOnboarding = backup.hasCompletedOnboarding
                     recoveryIssue = String(localized: "Saved masks were damaged. BlurFollow restored the last validated backup; review every mask before sharing.")
                     preserveExistingBackup = true
                 } catch {
                     // Corruption must never look like a successful first launch with zero masks.
                     regions = []
+                    textRules = []
                     masksEnabled = false
                     coverLastPositionEnabled = true
+                    textFollowSafetyCoverEnabled = true
                     hasCompletedOnboarding = true
                     recoveryIssue = String(localized: "Saved masks could not be recovered. Masks are paused; recreate and check them before sharing.")
                     preserveExistingBackup = true
@@ -79,8 +135,10 @@ final class MaskStore: ObservableObject {
             }
         } else {
             regions = []
+            textRules = []
             masksEnabled = true
             coverLastPositionEnabled = true
+            textFollowSafetyCoverEnabled = true
             hasCompletedOnboarding = ProcessInfo.processInfo.environment["BLURFOLLOW_UI_TEST"] == "1"
             recoveryIssue = nil
         }
@@ -93,17 +151,57 @@ final class MaskStore: ObservableObject {
 
     @discardableResult
     func add(_ region: MaskRegion, hasUnlimitedAccess: Bool) -> MaskRegion? {
-        guard MaskAccessPolicy.canCreateMask(
-            currentCount: regions.count,
+        guard MaskAccessPolicy.canCreate(
+            kind: region.mode.planKind,
+            usage: planUsage,
             hasUnlimitedAccess: hasUnlimitedAccess
         ) else { return nil }
         regions.append(region)
         return region
     }
 
+    var planUsage: MaskPlanUsage {
+        MaskPlanUsage(
+            displayMaskCount: regions.lazy.filter { $0.mode == .display }.count,
+            windowMaskCount: regions.lazy.filter { $0.mode == .window }.count,
+            textFollowRuleCount: textRules.count
+        )
+    }
+
+    @discardableResult
+    func addTextRule(
+        _ rule: TextFollowRule,
+        hasUnlimitedAccess: Bool
+    ) -> TextFollowRule? {
+        guard (try? Self.validate(rule)) != nil,
+              MaskAccessPolicy.canCreate(
+                  kind: .textFollowRule,
+                  usage: planUsage,
+                  hasUnlimitedAccess: hasUnlimitedAccess
+              ) else { return nil }
+        textRules.append(rule)
+        return rule
+    }
+
     func update(_ region: MaskRegion) {
         guard let index = regions.firstIndex(where: { $0.id == region.id }) else { return }
         regions[index] = region
+    }
+
+    func updateTextRule(_ rule: TextFollowRule) {
+        guard (try? Self.validate(rule)) != nil,
+              let index = textRules.firstIndex(where: { $0.id == rule.id }) else { return }
+        textRules[index] = rule
+    }
+
+    func updateTextRuleLive(_ rule: TextFollowRule) {
+        guard (try? Self.validate(rule)) != nil,
+              let index = textRules.firstIndex(where: { $0.id == rule.id }),
+              textRules[index] != rule else { return }
+        isApplyingLiveCollectionUpdate = true
+        textRules[index] = rule
+        isApplyingLiveCollectionUpdate = false
+        schedulePersistence()
     }
 
     /// Publishes a high-frequency visual edit immediately while coalescing only its disk write.
@@ -112,9 +210,9 @@ final class MaskStore: ObservableObject {
     func updateLive(_ region: MaskRegion) {
         guard let index = regions.firstIndex(where: { $0.id == region.id }),
               regions[index] != region else { return }
-        isApplyingLiveRegionUpdate = true
+        isApplyingLiveCollectionUpdate = true
         regions[index] = region
-        isApplyingLiveRegionUpdate = false
+        isApplyingLiveCollectionUpdate = false
         schedulePersistence()
     }
 
@@ -132,16 +230,32 @@ final class MaskStore: ObservableObject {
         update(region)
     }
 
+    func setTextRuleEnabled(_ isEnabled: Bool, for id: UUID) {
+        guard var rule = textRules.first(where: { $0.id == id }),
+              rule.isEnabled != isEnabled else { return }
+        rule.isEnabled = isEnabled
+        updateTextRule(rule)
+    }
+
     func remove(id: UUID) {
         regions.removeAll { $0.id == id }
+        trackingStates[id] = nil
+    }
+
+    func removeTextRule(id: UUID) {
+        textRules.removeAll { $0.id == id }
         trackingStates[id] = nil
     }
 
     func removeAll() {
         eraseBackupOnNextPersist = true
         recoveryIssue = nil
+        isPerformingBatchMutation = true
         regions.removeAll()
+        textRules.removeAll()
+        isPerformingBatchMutation = false
         trackingStates.removeAll()
+        persistIfNeeded()
     }
 
     func setTrackingState(_ state: TrackingState, for id: UUID) {
@@ -154,8 +268,8 @@ final class MaskStore: ObservableObject {
         persistIfNeeded()
     }
 
-    private func persistRegionChangeIfNeeded() {
-        guard !isApplyingLiveRegionUpdate else { return }
+    private func persistCollectionChangeIfNeeded() {
+        guard !isApplyingLiveCollectionUpdate, !isPerformingBatchMutation else { return }
         persistIfNeeded()
     }
 
@@ -172,8 +286,10 @@ final class MaskStore: ObservableObject {
     func exportData() throws -> Data {
         let snapshot = Snapshot(
             regions: regions,
+            textRules: textRules,
             masksEnabled: masksEnabled,
             coverLastPositionEnabled: coverLastPositionEnabled,
+            textFollowSafetyCoverEnabled: textFollowSafetyCoverEnabled,
             hasCompletedOnboarding: hasCompletedOnboarding
         )
         try Self.validate(snapshot)
@@ -224,7 +340,8 @@ final class MaskStore: ObservableObject {
     }
 
     private static func validate(_ snapshot: Snapshot) throws {
-        guard Set(snapshot.regions.map(\.id)).count == snapshot.regions.count else {
+        let identifiers = snapshot.regions.map(\.id) + snapshot.textRules.map(\.id)
+        guard Set(identifiers).count == identifiers.count else {
             throw SnapshotError.invalidMask
         }
 
@@ -248,24 +365,51 @@ final class MaskStore: ObservableObject {
 
             if region.mode == .window {
                 guard let anchor = region.windowAnchor else { throw SnapshotError.invalidMask }
-                let frame = anchor.initialFrame
-                let rect = frame.cgRect
-                let frameValues = [
-                    rect.minX, rect.minY, rect.maxX, rect.maxY,
-                    rect.width, rect.height
-                ]
-                guard anchor.windowID != 0,
-                      !anchor.bundleIdentifier.isEmpty || !anchor.applicationName.isEmpty,
-                      frameValues.allSatisfy(\.isFinite),
-                      frame.width >= 80,
-                      frame.height >= 60,
-                      frame.width <= 100_000,
-                      frame.height <= 100_000,
-                      abs(frame.x) <= 1_000_000,
-                      abs(frame.y) <= 1_000_000 else {
-                    throw SnapshotError.invalidMask
-                }
+                try validate(anchor)
             }
+        }
+
+        for rule in snapshot.textRules {
+            try validate(rule)
+        }
+    }
+
+    private static func validate(_ rule: TextFollowRule) throws {
+        let values = [
+            rule.strength,
+            rule.granularity,
+            rule.cornerRadius,
+            rule.padding
+        ]
+        guard values.allSatisfy(\.isFinite),
+              (0...1).contains(rule.strength),
+              (0...1).contains(rule.granularity),
+              (0...40).contains(rule.cornerRadius),
+              (0...TextFollowRule.maximumPadding).contains(rule.padding),
+              rule.createdAt.timeIntervalSinceReferenceDate.isFinite,
+              (try? TextPatternMatcher(rule: rule)) != nil else {
+            throw SnapshotError.invalidMask
+        }
+        try validate(rule.windowAnchor)
+    }
+
+    private static func validate(_ anchor: WindowAnchor) throws {
+        let frame = anchor.initialFrame
+        let rect = frame.cgRect
+        let frameValues = [
+            rect.minX, rect.minY, rect.maxX, rect.maxY,
+            rect.width, rect.height
+        ]
+        guard anchor.windowID != 0,
+              !anchor.bundleIdentifier.isEmpty || !anchor.applicationName.isEmpty,
+              frameValues.allSatisfy(\.isFinite),
+              frame.width >= 80,
+              frame.height >= 60,
+              frame.width <= 100_000,
+              frame.height <= 100_000,
+              abs(frame.x) <= 1_000_000,
+              abs(frame.y) <= 1_000_000 else {
+            throw SnapshotError.invalidMask
         }
     }
 

@@ -5,6 +5,7 @@ struct ShareGuideView: View {
     @EnvironmentObject private var permission: ScreenCapturePermission
     @EnvironmentObject private var picker: ContentPickerService
     @EnvironmentObject private var sharePreview: SharePreviewSession
+    @EnvironmentObject private var textFollow: TextFollowCoordinator
     @Environment(\.openWindow) private var openWindow
     @State private var pickerMessage: String?
     @State private var isPreparingPicker = false
@@ -159,6 +160,13 @@ struct ShareGuideView: View {
     }
 
     private var enabledMasks: [MaskRegion] { store.regions.filter(\.isEnabled) }
+    private var enabledTextRules: [TextFollowRule] { store.textRules.filter(\.isEnabled) }
+    private var textRulesNeedingAttention: Int {
+        enabledTextRules.filter {
+            let state = textFollow.state(for: $0.id)
+            return state != .following && state != .noMatches
+        }.count
+    }
     private var unavailableCount: Int {
         enabledMasks.filter { store.trackingStates[$0.id] == .unavailable }.count
     }
@@ -169,8 +177,10 @@ struct ShareGuideView: View {
         enabledMasks.filter { store.trackingStates[$0.id] == nil }.count
     }
     private var positionsLocated: Bool {
-        store.recoveryIssue == nil && store.masksEnabled && !enabledMasks.isEmpty
+        store.recoveryIssue == nil && store.masksEnabled
+            && (!enabledMasks.isEmpty || !enabledTextRules.isEmpty)
             && unavailableCount == 0 && reconnectingCount == 0 && unverifiedCount == 0
+            && textRulesNeedingAttention == 0
     }
 
     private var placementIcon: String { positionsLocated ? "scope" : "questionmark.circle" }
@@ -179,7 +189,15 @@ struct ShareGuideView: View {
     private var placementDetail: String {
         if store.recoveryIssue != nil { return String(localized: "Review saved masks and their positions before presenting.") }
         if !store.masksEnabled { return String(localized: "Masks are paused.") }
-        if enabledMasks.isEmpty { return String(localized: "Add at least one mask, then check where it appears.") }
+        if enabledMasks.isEmpty && enabledTextRules.isEmpty {
+            return String(localized: "Add at least one manual mask or Text Follow rule, then inspect the result.")
+        }
+        if textRulesNeedingAttention > 0 {
+            let format = textRulesNeedingAttention == 1
+                ? String(localized: "%lld Text Follow rule needs reconnection or a completed scan.")
+                : String(localized: "%lld Text Follow rules need reconnection or a completed scan.")
+            return String.localizedStringWithFormat(format, Int64(textRulesNeedingAttention))
+        }
         if unavailableCount > 0 {
             let format = unavailableCount == 1
                 ? String(localized: "%lld mask position is unavailable. Select its window again and check the result.")
@@ -207,7 +225,7 @@ struct ShareGuideView: View {
                 Int64(unverifiedCount)
             )
         }
-        return String(localized: "All enabled mask positions are currently found. Check the visible result and your meeting preview.")
+        return String(localized: "All enabled manual mask positions and Text Follow scans are active. Inspect the visible result and meeting preview.")
     }
 }
 

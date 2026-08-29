@@ -36,13 +36,17 @@
     },
     {
       "filename": "02-display-window-modes.png",
-      "ja_headline": "画面に固定。窓に追従。",
-      "en_headline": "Pin to a display. Follow a window.",
+      "ja_headline": "画面、窓、文字。3つの選び方。",
+      "en_headline": "Display, window, or matching text.",
       "raw_filename": "02-modes.jpg",
-      "scene": "The shipping onboarding comparison of Display Pin and Window Pin.",
+      "scene": "The current shipping Home or feature screen showing Display Pin, Window Pin, and Text Follow (Beta) as three separate creation modes.",
       "assertions": [
+        "Recapture this scene after Text Follow (Beta) ships; the prior two-mode onboarding image is obsolete and must not be reused.",
         "Use the current product terminology.",
-        "Keep the two coordinate modes visually distinct."
+        "Keep Display Pin, Window Pin, and Text Follow (Beta) visually distinct.",
+        "Keep the localized Beta badge next to Text Follow visible and legible; do not label BlurFollow, Window Pin, or the release itself as beta.",
+        "If match modes are visible, show Exact, Prefix, Contains, and Regular Expression; do not reuse three-mode copy.",
+        "Do not imply that Text Follow (Beta) and Window Pin are the same feature."
       ]
     },
     {
@@ -54,7 +58,9 @@
       "assertions": [
         "Keep full-display, single-window, and browser-tab instructions legible.",
         "Show that the user checks the preview; do not imply automatic certification.",
-        "Do not present a technical status as a content verdict."
+        "Do not present a technical status as a content verdict.",
+        "Show that Share Preview composes matching Window Pins and completed Text Follow (Beta) results for its selected source.",
+        "Do not present a completed zero-match scan as proof that OCR found everything; with strict safety on it must be covered."
       ]
     },
     {
@@ -65,17 +71,22 @@
       "scene": "The shipping Share Guide with full-display, single-window, and browser-tab guidance visible.",
       "assertions": [
         "State that another app's overlay is normally excluded from single-window and browser-tab capture.",
-        "Point single-window users to Share Preview."
+        "Point single-window users to Share Preview for Window Pins and completed Text Follow (Beta) matches.",
+        "State that any relevant Text Follow (Beta) rule which is unconnected, scanning, failed, unavailable, or inconsistent clears the old preview and selects a full cover.",
+        "State that Text Follow (Beta) OCR and Share Preview both exclude child windows."
       ]
     },
     {
       "filename": "05-local-controls.png",
-      "ja_headline": "5件まで無料。追加は買い切り。",
-      "en_headline": "Five masks free. One-time unlock.",
+      "ja_headline": "10・5・2の独立枠。追加は買い切り。",
+      "en_headline": "Independent 10 · 5 · 2 free limits.",
       "raw_filename": "04-settings.jpg",
-      "scene": "The shipping Settings screen showing five free masks, the one-time unlock entry, support links, permission state, local export/deletion, version, and license summary.",
+      "scene": "The current shipping Settings or plan screen showing the independent free allowances (10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules), the one-time unlock entry, support links, permission state, local export/deletion, version, and license summary.",
       "assertions": [
-        "Show the five-mask free allowance and one-time unlock without a fixed price.",
+        "Recapture after the independent allowances and Text Follow (Beta) UI ship; the prior single-combined-allowance Settings capture is obsolete.",
+        "Show all three independent free allowances and the one-time unlock without a fixed price.",
+        "State that one saved Text Follow (Beta) rule counts once even when it matches multiple blocks.",
+        "Show the current strict-safety control and do not imply that turning it off preserves the same leak resistance.",
         "Keep the support, local-data, permission, and version sections legible.",
         "Do not imply that local processing controls what a meeting app does after sharing."
       ]
@@ -83,6 +94,9 @@
   ],
   "global_requirements": [
     "Capture the shipping UI and icon from the same build submitted to review.",
+    "The existing pre-Text-Follow raw and final screenshots are references only: recapture and regenerate every scene from the current shipping build before submission.",
+    "Every scene or caption that names or depicts the OCR feature must visibly use Text Follow (Beta) in English or Text Follow（ベータ） in Japanese; the Beta label must not apply to the app or distribution as a whole.",
+    "At least one current scene must visibly demonstrate Text Follow (Beta) results composed inside Share Preview; old copy claiming Window-Pin-only composition is invalid.",
     "Use no real customer name, email, token, internal URL, or meeting participant.",
     "Keep macOS menu-bar details and notifications free of personal data.",
     "Use each locale's headline; do not place both languages in one image.",

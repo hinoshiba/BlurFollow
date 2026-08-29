@@ -1,5 +1,9 @@
-Five saved masks remain free. Unlimited Masks is a new optional one-time purchase for creating additional masks.
+New Text Follow (Beta) rules use on-device Apple Vision recognition to place Mosaic overlays over every block matching Exact, Prefix, Contains, or Regular Expression as a selected window changes. Contains is case-sensitive and masks the whole recognized block, not only the substring. One saved rule counts once even when the same pattern matches several blocks. OCR can miss, misread, or lag, so inspect every transition.
 
-Existing users whose original App Store download was version 0.1.1 or earlier keep unlimited mask creation. Existing masks and verification features such as Share Preview are never removed or restricted based on purchase state.
+Text Follow (Beta) remains separate from Window Pin, but Share Preview now composites every completed match from connected, enabled rules for its selected source alongside matching Window Pins. Strict safety is on by default and covers the whole window while recognition or metadata is uncertain and after OCR returns zero matches. Turning it off avoids full-window flashes but lowers resistance to OCR misses. Unready Share Preview states still clear and fully cover the old preview. OCR and preview both exclude child windows.
 
-Settings now includes purchase status, Restore Purchases, support, and a direct App Store rating link. The neutral system rating request is independent of purchase and can occur only after repeated Share Preview checks, once preview capture has stopped and the main window is active again.
+Desktop Mosaic now pixelates the actual backdrop with Core Image and uses an opaque fallback if the filter is unavailable.
+
+The free creation allowances are now independent: 10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules. Unlimited Masks remains an optional one-time purchase that removes all three limits. Existing masks and rules are never removed or disabled by plan state, and eligible 0.1.1 users retain unlimited creation.
+
+Selected-window frames and recognized candidate strings remain transient on the Mac and are not saved or sent to the developer. Saved patterns and limited window identity metadata remain local.

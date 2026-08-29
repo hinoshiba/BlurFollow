@@ -6,6 +6,7 @@ struct BlurFollowApp: App {
     @StateObject private var store: MaskStore
     @StateObject private var tracker: WindowTracker
     @StateObject private var overlay: OverlayCoordinator
+    @StateObject private var textFollow: TextFollowCoordinator
     @StateObject private var selector: RegionSelectionCoordinator
     @StateObject private var picker: ContentPickerService
     @StateObject private var permission: ScreenCapturePermission
@@ -16,10 +17,12 @@ struct BlurFollowApp: App {
     init() {
         let store = MaskStore()
         let tracker = WindowTracker()
+        let textFollow = TextFollowCoordinator(store: store, tracker: tracker)
         let permission = ScreenCapturePermission()
         _store = StateObject(wrappedValue: store)
         _tracker = StateObject(wrappedValue: tracker)
         _overlay = StateObject(wrappedValue: OverlayCoordinator(store: store, tracker: tracker))
+        _textFollow = StateObject(wrappedValue: textFollow)
         _selector = StateObject(wrappedValue: RegionSelectionCoordinator())
         _permission = StateObject(wrappedValue: permission)
         _picker = StateObject(wrappedValue: ContentPickerService(
@@ -30,6 +33,7 @@ struct BlurFollowApp: App {
         _sharePreview = StateObject(wrappedValue: SharePreviewSession(
             store: store,
             tracker: tracker,
+            textFollow: textFollow,
             onAccessDenied: { permission.recordDenial() }
         ))
         _purchases = StateObject(wrappedValue: PurchaseManager())
@@ -42,6 +46,7 @@ struct BlurFollowApp: App {
                 .environmentObject(store)
                 .environmentObject(tracker)
                 .environmentObject(overlay)
+                .environmentObject(textFollow)
                 .environmentObject(selector)
                 .environmentObject(picker)
                 .environmentObject(permission)
@@ -52,6 +57,7 @@ struct BlurFollowApp: App {
                 .frame(minWidth: 920, minHeight: 620)
                 .onAppear {
                     overlay.start()
+                    textFollow.start()
                     permission.refresh()
                 }
         }
@@ -74,6 +80,7 @@ struct BlurFollowApp: App {
             MenuBarContentView()
                 .environmentObject(store)
                 .environmentObject(sharePreview)
+                .environmentObject(textFollow)
         } label: {
             Label("BlurFollow", systemImage: store.masksEnabled ? "rectangle.inset.filled.and.person.filled" : "rectangle.dashed")
         }

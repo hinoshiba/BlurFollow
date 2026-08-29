@@ -1,1 +1,1 @@
-Blur that follows your window. Five masks are free. Try window-following masks and Share Preview, then remove the plan limit with one purchase only if you need more.
+Mask a display or window, or use Exact, Prefix, Contains, or Regex Text Follow (Beta). Free: 10 Display, 5 Window, and 2 text rules; one purchase removes limits.

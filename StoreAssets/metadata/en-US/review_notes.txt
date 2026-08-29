@@ -1,30 +1,30 @@
-BlurFollow is a macOS utility that places visual masks on screen and updates a mask as its selected window moves or resizes. It has no login or proprietary account. Five saved masks are free; creating a sixth uses a one-time Non-Consumable.
+BlurFollow is a macOS visual masking utility with no login or proprietary account. Free creation allowances are independent: 10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules. Only new creation is gated; existing items are never removed or disabled.
+
+“Beta” labels only the maturity of this optional, non-expiring OCR feature. BlurFollow and its distribution are complete, not beta, demo, trial, or time-limited software.
 
 In-App Purchase
 • Product ID: com.hinoshiba.blurfollow.unlimited_masks
 • Product: BlurFollow Unlimited Masks (one-time, not a subscription)
-• Settings → Support BlurFollow always exposes the localized price, purchase, and Restore Purchases.
-• Existing masks are never deleted or disabled based on purchase state; only new creation is gated.
+• Settings → Support BlurFollow exposes StoreKit's localized price, purchase, and Restore Purchases.
 
-Review flow
-1. Launch the app and complete onboarding.
-2. From Home, choose Display Pin and drag on the selection overlay. Display Pin requires no Screen Recording permission.
-3. Choose Window Pin, then select a non-sensitive test window in Apple's system picker. Move and resize the source and verify that the mask updates from its proportional coordinates.
-4. In Masks, adjust Strength for Frost or Mosaic. Choose Move…, drag the mask itself, and release to save; start Move… again and press Esc to cancel. From the menu-bar list, switch one mask off and on while leaving Show Masks enabled.
-5. Create five Display Pins in total, then choose Display Pin a sixth time. Before range selection, verify Add More Masks shows StoreKit's localized price, Not Now, and Restore Purchases. Complete the purchase with the review account; the original Display Pin selection resumes and permits the sixth mask.
-6. Open Share Guide and create Share Preview. Select the same test window in the system picker.
-7. Inspect the matching Window Pin in BlurFollow Share Preview and select “I checked every mask.” Changing the source or a mask may briefly clear or cover the preview while the current composite is prepared, and resets that acknowledgement.
-8. Stop or close Share Preview and verify that its frame is cleared and capture stops.
+Core and Text Follow (Beta) review flow
+1. Complete onboarding. Create a Display Pin by dragging on the selection overlay; this mode needs no Screen Recording permission.
+2. Create a Window Pin, select a non-sensitive test window in Apple's picker, and confirm the mask follows window movement and resizing.
+3. Show “BlurFollow Test 123” in two blocks. Create Prefix “BlurFollow Test,” select that window, and verify both Mosaics update while counting as one rule. Also test Exact, Contains, and Regular Expression. Contains “Test 123” is case-sensitive and must mask the whole Vision block, not just the substring. Regex example: `BlurFollow Test [0-9]+`.
+4. Text Follow (Beta) uses on-device Vision OCR. Fonts, size, contrast, language, motion, scrolling, and layout can cause misses, false matches, splitting, merging, or delay. It is separate from Window Pin and does not identify confidential content.
+5. Open Share Preview for the same window and verify Window Pins plus completed Text Follow (Beta) matches. With “Strict Safety: Protect the Whole Window” on, changing/removing matches must cover recognition, uncertainty, and completed zero matches. Turn it off: prior desktop masks remain during uncertainty and a coherent zero-match preview may render, avoiding full-window flash but reducing OCR-miss resistance. Unready/failed Preview states still clear and fully cover. Reconnect after relaunch. OCR/preview exclude child windows; zero never proves completeness.
+6. Desktop Mosaic pixelates the actual backdrop with Core Image; if that filter is unavailable, the region becomes opaque rather than leaving readable source visible.
 
-Permissions
-• macOS 15.2 or later: Apple's system picker authorizes each selected window.
-• macOS 14 through 15.1: broader Screen Recording permission is required to identify the selected window. After granting it, quit and reopen BlurFollow. If permission is denied, BlurFollow stops instead of guessing a window.
-• The app does not request Accessibility, Full Disk Access, camera, or microphone access.
+Independent gate and purchase flow
+1. Before purchasing, save 10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules. Enabled and disabled items both count; simultaneous matches do not add rule count.
+2. Request an 11th Display Pin: the offer appears before range selection. Cancel it.
+3. Request a 6th Window Pin: the offer appears before Apple's picker. Cancel it.
+4. Request a 3rd Text Follow (Beta) rule: the offer appears before the rule creator. Complete the purchase with the review account; the creator resumes. Enter a valid rule and choose its window in Apple's picker. The other categories' usage does not change a category's gate.
+5. Quit/relaunch, verify unlimited creation, then use Settings → Support BlurFollow → Restore Purchases. StoreKit cancellation, pending, or failure does not grant access.
 
-Data handling
-Share Preview processes the selected window frames on device. It does not capture audio, write a screen recording, send frames to the developer, or include analytics or advertising SDKs. Mask settings and limited selected-window identity metadata are stored locally.
+Permissions and data handling
+• macOS 15.2+: Apple's picker authorizes each selected window. macOS 14–15.1: broader Screen Recording permission and an app reopen are required. Denial stops window-dependent features rather than guessing.
+• Share Preview and Text Follow (Beta) process selected-window frames on device, video only. Frames and recognized candidate strings are not written to files or sent to the developer. Saved patterns, mask/rule settings, and limited window identity metadata are stored locally. There are no analytics or advertising SDKs.
+• No Accessibility, Full Disk Access, camera, or microphone permission is requested.
 
-Display caveat
-“Preview active” reports that a current composited frame is displayed; it does not certify the content. Evaluation requires visual inspection in both BlurFollow Share Preview and the receiving preview of the sharing application. Single-window and browser-tab sharing normally exclude another app's overlay, so the reviewer should share BlurFollow Share Preview rather than the original source in that workflow.
-
-Any non-sensitive test window can be used. No special account or server configuration is required.
+Any fabricated test window can be used. Always visually inspect both BlurFollow's output and the receiving application's preview; status does not certify content.

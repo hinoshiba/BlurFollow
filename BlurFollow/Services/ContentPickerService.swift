@@ -133,7 +133,10 @@ final class ContentPickerService: NSObject, ObservableObject, SCContentSharingPi
         configuration.excludedBundleIDs = [Bundle.main.bundleIdentifier].compactMap { $0 }
         configuration.allowsChangingSelectedContent = false
         picker.defaultConfiguration = configuration
-        picker.maximumStreamCount = 1
+        // Text Follow can keep more than one explicitly selected window stream active alongside
+        // Share Preview. Leaving this unset avoids imposing a second, unrelated stream-count cap;
+        // ContentPickerService still serializes picker presentation with `isPicking`.
+        picker.maximumStreamCount = nil
         picker.add(self)
         picker.isActive = true
     }

@@ -18,7 +18,7 @@ struct SharePreviewView: View {
                 BlurFollowTheme.carbon
                 if sharePreview.hasFrame, sharePreview.isRunning {
                     SharePreviewFrameSurface(presenter: sharePreview.framePresenter)
-                        .accessibilityLabel("Window mask preview")
+                        .accessibilityLabel("Masked share preview")
                     if sharePreview.frameIsCovered {
                         coveredOverlay
                     }
@@ -57,13 +57,17 @@ struct SharePreviewView: View {
                     .lineLimit(1)
             }
             Spacer()
-            if sharePreview.isRunning && sharePreview.appliedMaskCount == 0 {
-                Label("Preview covered · Add a Window Pin", systemImage: "exclamationmark.triangle.fill")
+            if sharePreview.isRunning && sharePreview.dynamicRuleNeedsAttention {
+                Label("Preview covered · Check Text Follow", systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(BlurFollowTheme.amber)
+            } else if sharePreview.isRunning && !sharePreview.hasRenderableConfiguration {
+                Label("Preview covered · Add a mask or Text Follow rule", systemImage: "exclamationmark.triangle.fill")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(BlurFollowTheme.amber)
             } else if sharePreview.hasRenderablePreview {
                 Label(
-                    appliedMaskCountText,
+                    previewResultCountText,
                     systemImage: "rectangle.dashed"
                 )
                     .font(.caption.weight(.semibold))
@@ -88,9 +92,11 @@ struct SharePreviewView: View {
             Image(systemName: "eye.slash.fill")
                 .font(.system(size: 38))
             Text(
-                sharePreview.appliedMaskCount == 0
-                    ? String(localized: "Add a Window Pin to this source")
-                    : String(localized: "Preview covered — check the source and masks")
+                sharePreview.dynamicRuleNeedsAttention
+                    ? String(localized: "Reconnect Text Follow or wait for its scan to complete")
+                    : (!sharePreview.hasRenderableConfiguration
+                        ? String(localized: "Add a Window Pin or Text Follow rule to this source")
+                        : String(localized: "Preview covered — check the source, masks, and Text Follow"))
             )
                 .font(.headline)
         }
@@ -126,8 +132,8 @@ struct SharePreviewView: View {
             Spacer()
             Button(
                 previewWasChecked
-                    ? String(localized: "Positions checked")
-                    : String(localized: "I checked every mask position")
+                    ? String(localized: "Preview checked")
+                    : String(localized: "I checked the masks and text matches")
             ) {
                 guard !previewWasChecked else { return }
                 reviewedRevision = sharePreview.reviewRevision
@@ -199,12 +205,21 @@ struct SharePreviewView: View {
         return String(localized: "No source is being shared")
     }
 
-    private var appliedMaskCountText: String {
+    private var previewResultCountText: String {
         let count = sharePreview.appliedMaskCount
+        if count == 0, sharePreview.relevantTextFollowRuleCount > 0 {
+            return String(localized: "Text scan active · no current matches")
+        }
         let format = count == 1
             ? String(localized: "%lld mask")
             : String(localized: "%lld masks")
-        return String.localizedStringWithFormat(format, Int64(count))
+        let maskCount = String.localizedStringWithFormat(format, Int64(count))
+        guard sharePreview.relevantTextFollowRuleCount > 0 else { return maskCount }
+        return String.localizedStringWithFormat(
+            String(localized: "%@ · %lld Text Follow rules"),
+            maskCount,
+            Int64(sharePreview.relevantTextFollowRuleCount)
+        )
     }
 
     private var previewWasChecked: Bool {
@@ -212,8 +227,8 @@ struct SharePreviewView: View {
     }
 
     private var previewTitle: String {
-        if previewWasChecked { return String(localized: "Mask positions checked") }
-        if sharePreview.hasRenderablePreview { return String(localized: "Preview active — check every mask") }
+        if previewWasChecked { return String(localized: "Preview checked") }
+        if sharePreview.hasRenderablePreview { return String(localized: "Preview active — check masks and text matches") }
         if previewIsUpdating { return String(localized: "Updating preview") }
         return sharePreview.isRunning
             ? String(localized: "Preview covered")
@@ -222,7 +237,7 @@ struct SharePreviewView: View {
 
     private var previewInstruction: String {
         if previewWasChecked { return String(localized: "CHECK MEETING PREVIEW") }
-        if sharePreview.hasRenderablePreview { return String(localized: "CHECK MASK POSITIONS") }
+        if sharePreview.hasRenderablePreview { return String(localized: "CHECK MASKS AND TEXT") }
         if previewIsUpdating { return String(localized: "UPDATING PREVIEW") }
         return String(localized: "PREVIEW PAUSED")
     }

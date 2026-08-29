@@ -1,6 +1,6 @@
 # Dependency and license policy
 
-Last audited: 2026-08-26<br>
+Last audited: 2026-08-27<br>
 Baseline: BlurFollow 0.2.0, macOS deployment target 14.0
 
 This document records what the current app uses and the gate for accepting new
@@ -16,7 +16,7 @@ distribution compatible. It is not legal advice.
 | --- | --- | --- | --- |
 | Direct Apple application frameworks | AppKit, SwiftUI, Foundation, Combine, StoreKit | No | Resolved from macOS at runtime. StoreKit handles optional App Store product, purchase, verified entitlement, review prompt, and restore flows. |
 | Apple graphics and media frameworks | CoreGraphics, CoreImage, CoreMedia, CoreVideo | No | Share Preview processes video frames in memory; audio capture is disabled. |
-| Apple capture framework | ScreenCaptureKit | No | Used with Apple's system content picker and Screen Recording consent. |
+| Apple capture and recognition frameworks | ScreenCaptureKit, Vision | No | Used with Apple's system content picker and Screen Recording consent. Vision recognizes matching text for Text Follow entirely on the Mac; captured pixels and recognized results are not sent to a service. |
 | Apple system UI assets | SF Symbols referenced by `systemName` | No | Rendered by the OS in the app UI. Apple's applicable SDK/SF Symbols terms govern use; do not repurpose a restricted symbol as product branding or export it as an independently distributed asset. |
 | Swift runtime and system libraries | Swift runtime libraries, `libSystem`, `libobjc` | No in the audited build | Resolved from `/usr/lib` and `/usr/lib/swift` on macOS. Recheck every archive. |
 | Test-only framework | XCTest | No | Used only by `BlurFollowTests`. |
@@ -130,6 +130,7 @@ gate in `Docs/RELEASE.md` before accepting payment or submitting to Apple.
 - [Apple: Distributing software on macOS](https://developer.apple.com/macos/distribution/)
 - [Apple: App Sandbox](https://developer.apple.com/documentation/security/app-sandbox)
 - [Apple: ScreenCaptureKit](https://developer.apple.com/documentation/screencapturekit)
+- [Apple: Vision](https://developer.apple.com/documentation/vision)
 - [Apple: SF Symbols](https://developer.apple.com/sf-symbols/)
 
 References help reviewers locate current authoritative material; they do not

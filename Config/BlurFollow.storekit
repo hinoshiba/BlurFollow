@@ -20,12 +20,12 @@
       "internalID" : "66013341",
       "localizations" : [
         {
-          "description" : "Create unlimited masks with one purchase.",
+          "description" : "Remove the Display Pin, Window Pin, and Text Follow creation limits with one purchase.",
           "displayName" : "BlurFollow Unlimited Masks",
           "locale" : "en_US"
         },
         {
-          "description" : "6件目以降のマスクを買い切りで解放します。",
+          "description" : "Display Pin、Window Pin、文字追従の作成上限を買い切りで解除します。",
           "displayName" : "BlurFollow 無制限マスク",
           "locale" : "ja_JP"
         }

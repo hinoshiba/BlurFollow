@@ -1,10 +1,14 @@
 # BlurFollow privacy statement
 
-Last updated: 2026-08-26<br>
+Last updated: 2026-08-29<br>
 Applies to: the open-source BlurFollow 0.2.0 macOS code and an unmodified build
 
 BlurFollow places visual effects over screen regions, can follow a saved region
-as its source window moves, and can create a locally processed Share Preview.
+as its source window moves, can find user-configured text patterns in a selected
+window, and can create a locally processed Share Preview.
+The text-pattern feature is named **Text Follow (Beta)**. “Beta” describes
+product maturity only; it does not weaken or change any capture, storage,
+transmission, retention, deletion, safety, or user-control commitment below.
 It is a convenience and verification aid, not a confidentiality service. This
 statement describes the current code. A distributor that adds networking,
 accounts, alternative payment providers,
@@ -19,16 +23,22 @@ its own accurate policy before distribution.
   one-time Unlimited Masks product, purchase verification, restoration, and the
   system rating prompt. BlurFollow operates no commerce server and does not
   receive Apple Account credentials or payment-card details.
-- Share Preview uses Apple's ScreenCaptureKit system picker and only begins after
-  the user deliberately chooses a window and macOS authorizes capture. On
+- Text Follow and Share Preview use Apple's ScreenCaptureKit system picker and
+  only begin after the user deliberately chooses a window and macOS authorizes
+  capture. On
   macOS 14 through 15.1, this build first requires the broader Screen Recording
   permission so it can identify the chosen window without guessing; macOS 15.2
   and later use the picker's selected-window identity directly.
 - The app does not intentionally save captured frames, record a video, capture
   audio, or transmit captured frames or window metadata to a BlurFollow server.
-- Screen pixels are processed on the Mac. A current preview frame exists
-  transiently in process, graphics, and operating-system memory and is cleared
-  from the app's preview state when capture stops or fails.
+- Screen pixels are processed on the Mac. Text Follow uses Apple's on-device
+  Vision framework to recognize text blocks and compares them with the saved
+  rule. Captured frames and recognized strings exist only transiently in
+  process, graphics, and operating-system memory and are cleared from app state
+  when their capture stops or fails.
+- Share Preview composites matching Window Pins and completed Text Follow
+  detections for its selected source. Text Follow OCR and Share Preview exclude
+  child windows so both operate on the same selected-window content boundary.
 - Mask definitions and limited window-identifying metadata are stored locally
   so masks can be restored.
 - Review-prompt eligibility counters and dates stay in local preferences and
@@ -36,17 +46,51 @@ its own accurate policy before distribution.
 
 ## Screen content
 
-For Share Preview, ScreenCaptureKit delivers frames from the window selected in
-Apple's system content picker. BlurFollow applies the configured visual effects
-in memory and displays the resulting frame in its Share Preview window. Audio
-capture is disabled. `Preview active` means only that the app is displaying a
-current processed frame under its validation rules; it does not certify that a
-meeting app is receiving that window or that obscured content is unreadable.
+For Text Follow, ScreenCaptureKit delivers frames from a window deliberately
+selected in Apple's system content picker. Apple's Vision framework recognizes
+text on the Mac. BlurFollow compares each recognized block with the configured
+case-sensitive exact, prefix, contains, or regular-expression rule and keeps
+only the temporary geometry needed to place Mosaic overlays. Contains searches
+inside a recognized string, but BlurFollow covers the entire Vision-recognized
+block rather than retaining or masking only the matched substring. One rule can
+cover every matching block visible in a frame. Recognized strings and captured pixels are
+not written to the mask configuration, a file, analytics, a network service, or
+a training pipeline. OCR can miss, misread, or temporarily lag content; a
+visible status or match count is not a confidentiality guarantee.
 
-The application contains no code path intended to encode or write those frames
-to a file, send them over a network, use them for analytics, or use them to
-train a model. The last preview image is removed from application state when
-capture stops. “Not saved” does not mean a forensic guarantee that pixels can
+For Share Preview, ScreenCaptureKit delivers frames from the window selected in
+Apple's system content picker. BlurFollow applies matching Window Pins plus the
+temporary Mosaic geometry from every connected, enabled Text Follow rule for
+that same source after its latest scan completes. The preview clears its prior
+frame immediately and displays a full opaque cover while any relevant rule is
+unconnected, reconnecting, connecting, scanning, failed, source-unavailable, or
+internally inconsistent. With the default strict Text Follow safety preference,
+a completed scan with zero matches also keeps the preview fully covered because
+zero is not evidence that the source contains no matching or sensitive text.
+When that preference is disabled, a coherent completed zero-match scan can
+display the current frame; this avoids a full-frame flash but reduces resistance
+to OCR false negatives. Audio capture is disabled.
+`Preview active` means only that the app is displaying a current processed frame
+under these validation rules; it does not certify that OCR was complete, that a
+meeting app is receiving that window, or that obscured content is unreadable.
+
+Both Text Follow OCR and Share Preview configure the selected source without
+child windows, so their recognition and compositing coordinates describe the
+same boundary. A menu, sheet, popover, notification, or other separately captured
+child window can therefore be absent from both outputs even when it is visible
+near the source on the desktop.
+
+For the desktop overlay path, Mosaic uses the public Core Image `CIPixellate`
+filter to transform the actual backdrop. If that filter cannot be created, the
+overlay draws an opaque fallback instead of intentionally leaving readable
+source pixels visible. This rendering behavior does not make Mosaic an
+irreversible redaction method.
+
+The application contains no code path intended to encode or write captured
+frames or OCR output to a file, send them over a network, use them for analytics,
+or use them to train a model. The last preview image and current Text Follow
+detections are removed from application state when their capture stops. “Not
+saved” does not mean a forensic guarantee that pixels or recognized text can
 never appear in operating-system swap, graphics buffers, crash diagnostics,
 screenshots, backups, or another process with screen-capture access; those
 systems are outside the app's complete control.
@@ -67,8 +111,12 @@ BlurFollow stores a JSON configuration containing:
 - mask name, normalized rectangle, effect, strength, corner radius, enabled
   state, creation date, and display identifier;
 - for a Window Pin, the source window ID, source process ID, application name,
-  bundle identifier, window title, and initial window bounds; and
-- global enable, Last-position cover, and onboarding settings.
+  bundle identifier, window title, and initial window bounds;
+- for a Text Follow rule, its user-chosen name, exact/prefix/contains/regular-expression
+  pattern, Mosaic appearance and padding, enabled state, creation date, and the
+  same limited source-window identity metadata; and
+- global enable, Last-position cover, strict Text Follow safety-cover, and
+  onboarding settings.
 
 Separately, local UserDefaults contain the first-use date, successful Share
 Preview check count, and last rating-request version/date. These values only
@@ -91,9 +139,9 @@ container, normally under:
 ```
 
 The exact container can vary with bundle identifier and distribution. Window
-titles and user-chosen mask names can themselves be sensitive. The file is not
-encrypted by BlurFollow; normal macOS account permissions and any FileVault
-protection apply.
+titles, user-chosen mask names, and Text Follow patterns can themselves be
+sensitive. The file is not encrypted by BlurFollow; normal macOS account
+permissions and any FileVault protection apply.
 
 BlurFollow may maintain a last-known-valid recovery copy beside that file as
 `Masks.json.backup`. It contains the same categories of configuration and
@@ -109,9 +157,10 @@ backed up by other software.
 
 ## Permissions and system metadata
 
-Display overlays do not require BlurFollow to ingest screen frames. Share Preview
-requires a deliberate selection in Apple's `SCContentSharingPicker`. Permission
-behavior in the current implementation is version-specific:
+Display and Window Pin overlays do not require BlurFollow to ingest screen
+frames. Text Follow and Share Preview require a deliberate selection in Apple's
+`SCContentSharingPicker`. Permission behavior in the current implementation is
+version-specific:
 
 - On macOS 14 through 15.1, BlurFollow calls the public Screen Recording preflight
   and request APIs before showing the picker. This broader, persistent TCC grant
@@ -132,10 +181,12 @@ Users of macOS 14 through 15.1 should revoke it in System Settings when they no
 longer need BlurFollow. Permission behavior remains tied to the signed code
 identity and must be tested for each distribution channel and OS release.
 
-To follow windows, BlurFollow reads WindowServer metadata made available through
-public Apple APIs, including window identifiers, owner process/application,
-title, position, size, layer, and on-screen state. It does not request macOS
-Accessibility permission and does not read keystrokes or clipboard contents.
+To follow windows and place recognized text geometry, BlurFollow reads
+WindowServer metadata made available through public Apple APIs, including
+window identifiers, owner process/application, title, position, size, layer,
+and on-screen state. Text recognition uses Vision rather than macOS
+Accessibility. BlurFollow does not request Accessibility permission and does
+not read keystrokes or clipboard contents.
 
 BlurFollow uses Apple's system content-sharing picker rather than a custom picker.
 The picker and permission controls are provided by macOS and are subject to
@@ -179,8 +230,8 @@ before release if code, SDKs, or Apple's requirements change.
 
 ## Retention, deletion, and choices
 
-- Stop Share Preview to end the capture stream and clear the current preview from
-  application state.
+- Stop Share Preview or disable/delete a Text Follow rule to end its active use
+  and clear the current preview or detected geometry from application state.
 - Disable or delete individual masks in the app. “Delete All Masks” writes an
   empty region list to the primary settings file, retains global settings, and
   deletes BlurFollow's `Masks.json.backup` recovery copy.
@@ -205,9 +256,15 @@ server-side profile for the project to access, export, or delete.
 
 BlurFollow is intended to make visual-effect placement easier to follow and to
 give the user a processed preview to check before sharing. It does not guarantee
-confidentiality, capture inclusion, mask placement, or unreadability. Blur and
-mosaic may leave information inferable, tracking can fail, another app can
-capture the unmodified source, and a participant can record shared output.
+confidentiality, capture inclusion, mask placement, OCR accuracy, or
+unreadability. Blur and mosaic may leave information inferable, recognition or
+tracking can fail or lag, another app can capture the unmodified source, and a
+participant can record shared output.
+Share Preview's fail-closed cover prevents a known incomplete Text Follow state
+from being presented as active. The default strict safety preference also covers
+a completed zero-match result; disabling it permits that result to render and
+reduces resistance to OCR false negatives. Neither behavior proves that Vision
+recognized every intended string.
 Use opaque Redact rather than blur/mosaic when the intent is to visually replace
 configured pixels, remove secrets from the source whenever possible, enable
 Last-position cover for tracking loss, and verify the receiver-side

@@ -89,7 +89,10 @@ Choose a semantic marketing version and update it consistently in:
 - `StoreAssets/metadata/common/version.txt` and any version-specific listing
   copy;
 - privacy, security, compatibility, architecture, dependency, notice, and
-  threat-model documents when behavior or inventory changed; and
+  threat-model documents when behavior or inventory changed;
+- the `Text Follow (Beta)` / `文字追従（ベータ）` label across app UI, README,
+  privacy, technical documentation, Store metadata, website, and screenshots,
+  plus the intended distribution route against current App Review rules;
 - the Non-Consumable product state, localized product metadata/price, In-App
   Purchase review screenshot, Sandbox evidence, and purchase/restore/refund
   matrix described in `MONETIZATION.md`; and
@@ -132,12 +135,22 @@ xcodebuild \
 ```
 
 Complete the manual matrix in `Docs/COMPATIBILITY.md` against the candidate:
-permission allow/deny/revoke/reopen flows, Display Pin and Window Pin,
-Reconnect, Share Guide, Share Preview and stop/error paths, multiple
-displays/Spaces/full-screen/mixed DPI, supported sharing products,
-accessibility, localization, and a sustained performance run. Use synthetic
-content and record the exact commit, app hash, hardware, OS/app versions,
-results, and exceptions.
+permission allow/deny/revoke/reopen flows, Display Pin, Window Pin, and Text
+Follow (Beta), Reconnect, Share Guide, Share Preview, and stop/error paths. For
+Share Preview, verify completed Text Follow matches are composed with Window Pins,
+completed zero-match scans select full cover with strict safety enabled and
+remain renderable with it disabled without being treated as proof,
+every unready/failed/inconsistent relevant rule clears and fully covers the old
+frame, and OCR/preview both exclude child windows. Verify live-backdrop Mosaic
+and its opaque filter-unavailable fallback, multiple displays/Spaces/full-screen/
+mixed DPI, supported sharing products, accessibility, localization, and a
+sustained performance run. Use synthetic content and record the exact commit,
+app hash, hardware, OS/app versions, results, and exceptions.
+
+The Beta label is not a test waiver: run every safety, privacy, compatibility,
+and performance gate, and verify that two Text Follow rules remain free while
+the existing Unlimited Masks purchase removes the same three independent
+creation limits.
 
 ## 4. Start the cloud build
 
