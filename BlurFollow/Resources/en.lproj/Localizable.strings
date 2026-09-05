@@ -50,6 +50,7 @@
 "CHECK MEETING PREVIEW" = "CHECK MEETING PREVIEW";
 "Cancel" = "Cancel";
 "Cancel Move" = "Cancel Move";
+"Cancels Move and restores the mask's starting position." = "Cancels Move and restores the mask's starting position.";
 "Capture Access" = "Capture Access";
 "Change Source" = "Change Source";
 "Check mask positions" = "Check mask positions";
@@ -143,8 +144,10 @@
 "Mint" = "Mint";
 "More than one window matched the selection. Bring the target window forward and try again." = "More than one window matched the selection. Bring the target window forward and try again.";
 "Mosaic" = "Mosaic";
+"Move mode" = "Move mode";
 "Moves and resizes with %@" = "Moves and resizes with %@";
 "Move…" = "Move…";
+"Moving %@" = "Moving %@";
 "Neutral" = "Neutral";
 "No Manual Masks" = "No Manual Masks";
 "No Text Follow Rules" = "No Text Follow Rules";
@@ -158,6 +161,7 @@
 "No source selected" = "No source selected";
 "Not Now" = "Not Now";
 "Off" = "Off";
+"On" = "On";
 "On this Mac · No audio · No saved frames" = "On this Mac · No audio · No saved frames";
 "One App or Window" = "One App or Window";
 "One saved rule uses one free slot, even when it matches multiple blocks." = "One saved rule uses one free slot, even when it matches multiple blocks.";
@@ -218,6 +222,7 @@
 "Share Preview" = "Share Preview";
 "Share Preview stopped" = "Share Preview stopped";
 "Show Masks" = "Show Masks";
+"Show This Mask" = "Show This Mask";
 "Single window or app: open Share Preview" = "Single window or app: open Share Preview";
 "Softens the selected area. Check readability before sharing." = "Softens the selected area. Check readability before sharing.";
 "Source builds include unlimited masks and rules; the official App Store build offers an optional one-time unlock." = "Source builds include unlimited masks and rules; the official App Store build offers an optional one-time unlock.";
@@ -256,7 +261,8 @@
 "The selected window could not be identified." = "The selected window could not be identified.";
 "The system window picker could not complete the request." = "The system window picker could not complete the request.";
 "The text pattern is not valid." = "The text pattern is not valid.";
-"Turn masks on or off individually." = "Turn masks on or off individually.";
+"Turn masks on or off individually, or move a manual mask." = "Turn masks on or off individually, or move a manual mask.";
+"Turn this mask on or off, or move it." = "Turn this mask on or off, or move it.";
 "Turns only this Text Follow rule on or off." = "Turns only this Text Follow rule on or off.";
 "Turns only this mask on or off." = "Turns only this mask on or off.";
 "UPDATING PREVIEW" = "UPDATING PREVIEW";

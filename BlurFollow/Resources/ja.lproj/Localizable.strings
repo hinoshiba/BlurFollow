@@ -50,6 +50,7 @@
 "CHECK MEETING PREVIEW" = "会議アプリ側も確認";
 "Cancel" = "キャンセル";
 "Cancel Move" = "移動をキャンセル";
+"Cancels Move and restores the mask's starting position." = "移動をキャンセルし、マスクを開始位置へ戻します。";
 "Capture Access" = "画面キャプチャへのアクセス";
 "Change Source" = "対象を変更";
 "Check mask positions" = "マスク位置を確認";
@@ -143,8 +144,10 @@
 "Mint" = "ミント";
 "More than one window matched the selection. Bring the target window forward and try again." = "複数のウインドウが候補になりました。対象を手前に表示して、もう一度選んでください。";
 "Mosaic" = "モザイク";
+"Move mode" = "移動モード";
 "Moves and resizes with %@" = "%@の移動とリサイズに追従";
 "Move…" = "移動…";
+"Moving %@" = "%@を移動中";
 "Neutral" = "ニュートラル";
 "No Manual Masks" = "手動マスクはありません";
 "No Text Follow Rules" = "文字追従ルールはありません";
@@ -158,6 +161,7 @@
 "No source selected" = "対象が選択されていません";
 "Not Now" = "今はしない";
 "Off" = "オフ";
+"On" = "オン";
 "On this Mac · No audio · No saved frames" = "このMac内で処理・音声なし・フレーム保存なし";
 "One App or Window" = "単一アプリ／ウインドウ";
 "One saved rule uses one free slot, even when it matches multiple blocks." = "複数のブロックに一致しても、保存ルールが使う無料枠は1つです。";
@@ -218,6 +222,7 @@
 "Share Preview" = "共有プレビュー";
 "Share Preview stopped" = "共有プレビューは停止中";
 "Show Masks" = "マスクを表示";
+"Show This Mask" = "このマスクを表示";
 "Single window or app: open Share Preview" = "単一窓／アプリ：共有プレビューを開く";
 "Softens the selected area. Check readability before sharing." = "選択範囲をぼかします。共有前に文字が読めないか確認してください。";
 "Source builds include unlimited masks and rules; the official App Store build offers an optional one-time unlock." = "ソースビルドではマスクとルールを無制限に利用できます。公式App Store版では、任意の1回限りの購入で上限を解除できます。";
@@ -256,7 +261,8 @@
 "The selected window could not be identified." = "選択したウインドウを識別できませんでした。";
 "The system window picker could not complete the request." = "システムのウインドウ選択を完了できませんでした。";
 "The text pattern is not valid." = "文字パターンが無効です。";
-"Turn masks on or off individually." = "マスクを個別にオン／オフします。";
+"Turn masks on or off individually, or move a manual mask." = "マスクを個別にオン／オフしたり、手動マスクを移動したりします。";
+"Turn this mask on or off, or move it." = "このマスクをオン／オフ、または移動します。";
 "Turns only this Text Follow rule on or off." = "この文字追従ルールだけをオンまたはオフにします。";
 "Turns only this mask on or off." = "このマスクだけをオンまたはオフにします。";
 "UPDATING PREVIEW" = "プレビュー更新中";

@@ -30,6 +30,7 @@ private enum AppSection: String, CaseIterable, Identifiable {
 
 struct RootView: View {
     @EnvironmentObject private var store: MaskStore
+    @EnvironmentObject private var overlay: OverlayCoordinator
     @EnvironmentObject private var selector: RegionSelectionCoordinator
     @EnvironmentObject private var picker: ContentPickerService
     @EnvironmentObject private var purchases: PurchaseManager
@@ -125,6 +126,9 @@ struct RootView: View {
         .onChange(of: store.hasCompletedOnboarding) { _, _ in
             scheduleReviewRequestIfAppropriate()
         }
+        .onChange(of: selection) { _, _ in
+            overlay.endEditing()
+        }
         .onDisappear {
             reviewRequestTask?.cancel()
             reviewRequestTask = nil
@@ -184,11 +188,41 @@ struct RootView: View {
                     Text("No manual masks yet")
                 } else {
                     ForEach(store.regions) { region in
-                        Toggle(isOn: enabledBinding(for: region.id)) {
-                            Label(maskToolbarTitle(for: region), systemImage: region.mode.systemImage)
+                        Menu {
+                            Toggle(isOn: enabledBinding(for: region.id)) {
+                                Label(
+                                    "Show This Mask",
+                                    systemImage: region.isEnabled ? "eye" : "eye.slash"
+                                )
+                            }
+                            .accessibilityLabel("Show This Mask")
+                            .accessibilityHint("Turns only this mask on or off.")
+
+                            Button {
+                                if isMoving(region) {
+                                    overlay.endEditing()
+                                } else {
+                                    overlay.beginEditing(regionID: region.id)
+                                }
+                            } label: {
+                                Label(
+                                    isMoving(region)
+                                        ? String(localized: "Cancel Move")
+                                        : String(localized: "Move…"),
+                                    systemImage: "arrow.up.and.down.and.arrow.left.and.right"
+                                )
+                            }
+                            .disabled(!isMoving(region) && !canMove(region))
+                            .accessibilityHint(moveAccessibilityHint(for: region))
+                        } label: {
+                            Label(
+                                maskToolbarTitle(for: region),
+                                systemImage: maskToolbarSystemImage(for: region)
+                            )
                         }
                         .accessibilityLabel(Text(region.name))
-                        .accessibilityHint("Turns only this mask on or off.")
+                        .accessibilityValue(maskToolbarAccessibilityValue(for: region))
+                        .accessibilityHint("Turn this mask on or off, or move it.")
                     }
                 }
             }
@@ -220,12 +254,16 @@ struct RootView: View {
         } label: {
             Label("Mask Controls", systemImage: maskToolbarSystemImage)
         }
-        .help("Turn masks on or off individually.")
+        .help(maskToolbarHelp)
         .accessibilityLabel("Mask Controls")
-        .accessibilityHint("Turn masks on or off individually.")
+        .accessibilityValue(maskToolbarAccessibilityValue)
+        .accessibilityHint(maskToolbarHelp)
     }
 
     private var maskToolbarSystemImage: String {
+        if overlay.editingRegionID != nil {
+            return "arrow.up.and.down.and.arrow.left.and.right"
+        }
         guard store.masksEnabled else { return "eye.slash" }
         let hasEnabledItem = store.regions.contains(where: \.isEnabled)
             || store.textRules.contains(where: \.isEnabled)
@@ -252,6 +290,61 @@ struct RootView: View {
             region.name,
             region.mode.title
         )
+    }
+
+    private func isMoving(_ region: MaskRegion) -> Bool {
+        overlay.editingRegionID == region.id
+    }
+
+    private func canMove(_ region: MaskRegion) -> Bool {
+        store.masksEnabled
+            && region.isEnabled
+            && store.trackingStates[region.id] == .positionKnown
+    }
+
+    private func maskToolbarSystemImage(for region: MaskRegion) -> String {
+        if isMoving(region) {
+            return "arrow.up.and.down.and.arrow.left.and.right"
+        }
+        return region.isEnabled ? region.mode.systemImage : "eye.slash"
+    }
+
+    private func maskToolbarAccessibilityValue(for region: MaskRegion) -> String {
+        if isMoving(region) {
+            return String(localized: "Move mode")
+        }
+        return region.isEnabled ? String(localized: "On") : String(localized: "Off")
+    }
+
+    private func moveAccessibilityHint(for region: MaskRegion) -> String {
+        isMoving(region)
+            ? String(localized: "Cancels Move and restores the mask's starting position.")
+            : String(localized: "Drag the mask itself to move it. Release to save; press Esc to cancel.")
+    }
+
+    private var maskToolbarAccessibilityValue: String {
+        guard
+            let editingRegionID = overlay.editingRegionID,
+            let region = store.regions.first(where: { $0.id == editingRegionID })
+        else {
+            if !store.masksEnabled {
+                return String(localized: "Masks paused")
+            }
+            if store.recoveryIssue != nil {
+                return String(localized: "Review masks")
+            }
+            return activeMaskCountText
+        }
+        return String.localizedStringWithFormat(
+            String(localized: "Moving %@"),
+            region.name
+        )
+    }
+
+    private var maskToolbarHelp: String {
+        overlay.editingRegionID == nil
+            ? String(localized: "Turn masks on or off individually, or move a manual mask.")
+            : String(localized: "Drag the mask itself to move it. Release to save; press Esc to cancel.")
     }
 
     private func textFollowToolbarTitle(for rule: TextFollowRule) -> String {
