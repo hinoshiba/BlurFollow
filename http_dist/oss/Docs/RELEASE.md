@@ -1,6 +1,10 @@
 # Local Xcode App Store release
 
-Official Mac App Store binaries are archived in local Xcode on the maintainer's authorized Mac and uploaded with Organizer. PR CI uses no Apple account or distribution credentials. `./build.sh` produces an ad-hoc development app in `dist/`; it is not a release artifact. Tags identify reviewed source and do not trigger builds or uploads.
+Official Mac App Store binaries are archived in local Xcode on the maintainer's authorized Mac and uploaded with Organizer. PR CI uses no Apple account or distribution credentials. `./build.sh` produces an ad-hoc development app in `dist/`; it is not a release artifact. After the migration check below, tags identify reviewed source and do not trigger builds or uploads.
+
+## One-time migration check
+
+Before creating another release tag, check whether an old Xcode Cloud release workflow exists in Xcode or App Store Connect. If it does, deactivate it and confirm its automatic branch/tag starts and distribution actions are disabled. Removing repository hooks does not change these server-side settings. Preserve existing build history and artifacts; this repository change does not confirm the remote workflow has been stopped.
 
 ## Prepare the source
 
