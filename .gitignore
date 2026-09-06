@@ -32,3 +32,22 @@ Secrets.xcconfig
 *.dSYM/
 *.xcresult
 *.profdata
+
+# Local tool output and credentials
+*.xcresult/
+*.dSYM/
+*.profraw
+*.profdata
+*.log
+__pycache__/
+.venv/
+node_modules/
+*.keychain
+*.keychain-db
+*.pkcs12
+*.cer
+*.crt
+*.der
+*.csr
+*.certSigningRequest
+ExportOptions*.plist

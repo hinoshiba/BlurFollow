@@ -87,7 +87,7 @@ git commit -s
 This appends a line of the form:
 
 ```text
-Signed-off-by: Your Name <you@example.com>
+Signed-off-by: Your Name <your public commit email>
 ```
 
 Use a name and email address that identify the contributor and that you are
@@ -119,7 +119,13 @@ agreement from the maintainers.
 
 Approval is not guaranteed. Maintainers may request a smaller change, threat
 analysis, design revision, or independent legal/security review. Only release
-managers may push release tags, administer Xcode Cloud, submit, publish, or
+managers may push release tags, manage local release builds, submit, publish, or
 claim an artifact is official.
 Contributors must not use the BlurFollow marks to imply endorsement; see
 [TRADEMARKS.md](TRADEMARKS.md).
+
+## Submitting changes
+
+Start from an updated `main` (`git checkout main && git pull --ff-only`) and create a focused branch. After making changes, run the relevant checks, review the diff, then `git commit` and `git push` your branch before opening a pull request with the shared template. Use an email address you intend to publish in commit metadata. Maintainer-authored commits use `support@hinoshiba.com`.
+
+The website is a single Japanese/English page with an in-place language switch. Keep section anchors and old URL redirects working; verify narrow, tablet, and desktop widths when changing its layout.

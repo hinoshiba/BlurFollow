@@ -669,8 +669,8 @@ Before distribution:
 - validate Privacy Manifest and data statement
 - run the full permission and sharing matrix
 - review LICENSE, NOTICE, third-party notices, trademark policy, and brand provenance
-- push an immutable semantic-version tag and preserve the Xcode Cloud record
-- complete Xcode Cloud and App Store Connect validation
+- push an immutable semantic-version tag and preserve the local Xcode archive record
+- complete local Xcode and App Store Connect validation
 
 Passing unit tests and local app-bundle checks is not evidence that every meeting workflow renders as expected.
 

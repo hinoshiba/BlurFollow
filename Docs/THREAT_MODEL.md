@@ -47,7 +47,7 @@ limitations.
   IDs, and bounds;
 - the user's decision about which window and which BlurFollow output to share;
 - privacy permission and entitlement state;
-- Xcode Cloud/App Store credentials, source tags, binaries, store records,
+- local Xcode/App Store credentials, source tags, binaries, store records,
   SBOMs, and the BlurFollow brand; and
 - user trust in mask placement and status indicators.
 
@@ -220,7 +220,7 @@ writes empty saved-definition lists and removes the recovery copy. It never
 intentionally stores a captured frame or recognized string. A user-initiated
 export copies configuration, including Text Follow patterns, to a chosen file.
 
-Official source, GitHub CI, Xcode Cloud signing, App Store Connect, and the
+Official source, GitHub CI, local Xcode signing, App Store Connect, and the
 user's store receipt form a separate software-supply-chain boundary.
 
 ## Actors and assumptions
@@ -257,7 +257,7 @@ identity defeats important assumptions.
 | Recipient records or redistributes output | None beyond masking the pixels BlurFollow displays. | Meeting services and participants control received output. Follow their policy and minimize disclosure. |
 | Configuration is corrupted or tampered with | Snapshot schema and geometry are validated; a damaged primary can restore a validated backup, `Preview active` remains unavailable pending review, and unrecoverable data stops preview processing. Frame metadata and mask geometry are revalidated before output. | Recovery may restore an older configuration; local same-user malware can alter files or memory. The user must review recovery state. Invalid geometry must invoke the opaque fallback rather than intentionally display raw pixels. |
 | Crafted window causes denial of service or resource exhaustion | Capture dimensions (Text Follow at most 3840 × 2160), rate, and queue depth are bounded; Text Follow keeps only current work and the newest pending frame and shares recognition per source where possible. Configuration and first-frame watchdogs retire a stuck resized stream through bounded recovery. | A 4K BGRA surface and Vision working memory remain substantial; OCR, GPU, or WindowServer pressure and extreme display transitions can drop frames. Stop sharing if recognition or preview stalls. |
-| Official binary is replaced | Xcode Cloud/App Store signing, hardened runtime, SBOM, signed tags, immutable build records, and store receipts. | Users must obtain it from the App Store and verify the publisher; source-control, cloud-signing, or publisher-account compromise remains high impact. |
+| Official binary is replaced | local Xcode/App Store signing, hardened runtime, SBOM, signed tags, immutable build records, and store receipts. | Users must obtain it from the App Store and verify the publisher; source-control, local-signing, or publisher-account compromise remains high impact. |
 | Fork impersonates the official product | Apache code/brand separation and trademark policy. | Trademark controls do not technically prevent impersonation; users must verify publisher and signature. |
 | Local plan state is forged or a purchase is refunded | Unlimited access comes only from StoreKit-verified current entitlement, a verified pre-0.2.0 AppTransaction, or the explicit source-build condition. No mutable local Boolean grants paid access. | A modified local/source build can bypass plan logic by design; this is not a security boundary. Existing masks and rules remain available after entitlement loss. |
 
@@ -356,7 +356,7 @@ Release tests must demonstrate:
   warning/verification path;
 - all sharing modes explain their actual capture boundary;
 - the exact shipped artifact matches its App Store record, SBOM, source commit,
-  and immutable Xcode Cloud build; and
+  and recorded local Xcode archive; and
 - StoreKit grants unlimited creation only for a verified matching transaction
   or verified grandfathered app version, while cancellation, pending,
   unverified, refund, and revocation paths never remove existing masks or rules.

@@ -216,7 +216,7 @@ struct SettingsView: View {
 
     private var supportURL: URL {
         let language = Locale.current.language.languageCode?.identifier ?? "en"
-        let path = language == "ja" ? "support/" : "en/support/"
+        let path = language == "ja" ? "#support" : "?lang=en#en-support"
         return URL(string: "https://blurfollow.hinoshiba.com/\(path)")!
     }
 

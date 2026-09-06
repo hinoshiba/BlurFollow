@@ -11,7 +11,7 @@ import sys
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
 
 STORE_ROOT = Path(__file__).resolve().parents[1]
@@ -90,8 +90,8 @@ def validate_url(value: str) -> str | None:
         return "must be an absolute HTTPS URL"
     if parsed.username or parsed.password:
         return "must not contain URL credentials"
-    if parsed.query or parsed.fragment:
-        return "must not contain a query or fragment"
+    if parsed.query and parse_qs(parsed.query) not in ({"lang": ["en"]}, {"lang": ["ja"]}):
+        return "only a lang=en or lang=ja query is allowed"
     return None
 
 
@@ -315,6 +315,11 @@ def validate() -> int:
                             f"{label}: public page is missing at "
                             f"{public_path.relative_to(REPOSITORY_ROOT)}"
                         )
+                    elif urlparse(value).fragment:
+                        page_parser = SiteHTMLParser()
+                        page_parser.feed(read_text(public_path))
+                        if urlparse(value).fragment not in page_parser.ids:
+                            errors.append(f"{label}: section anchor is missing")
 
             if rules.get("comma_separated"):
                 keywords = [item.strip() for item in value.split(",")]

@@ -26,9 +26,6 @@ Display and Window Pins support Frost, Mosaic, or opaque Redact. Text Follow (Be
 INDEPENDENT FREE ALLOWANCES
 Create up to 10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules at no charge. These are separate limits. Unlimited Masks is a one-time In-App Purchase that removes all three creation limits; it is not a subscription. Existing masks and rules remain available to view, edit, enable, disable, and delete even if they exceed a free limit.
 
-ON-DEVICE PROCESSING
-Share Preview and Text Follow (Beta) process selected-window frames on the Mac. BlurFollow does not record audio, save screen frames or recognized candidate strings to files, send them to the developer, or include analytics or advertising SDKs. Mask and rule settings, including a Text Follow (Beta) pattern and limited selected-window identity metadata, are stored locally.
-
 COMPATIBILITY
 Requires macOS 14.0 or later. On macOS 15.2 and later, Apple's system picker authorizes each selected window. On macOS 14 through 15.1, identifying the selected window requires broader Screen Recording permission and reopening the app after permission is granted. Display Pin alone does not require Screen Recording permission.
 

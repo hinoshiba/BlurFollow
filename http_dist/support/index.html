@@ -1,17 +1,2 @@
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>サポートへ移動 — BlurFollow</title>
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://blurfollow.hinoshiba.com/">
-  <meta http-equiv="refresh" content="0; url=/#support">
-  <script>
-    const routes = { start: "start", sharing: "sharing", permissions: "permissions", faq: "faq", contact: "contact" };
-    const anchor = routes[location.hash.slice(1)] || "support";
-    location.replace("/#" + anchor);
-  </script>
-</head>
-<body><p><a href="/#support">統合されたサポートへ移動します。</a></p></body>
-</html>
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/#support"><link rel="canonical" href="https://blurfollow.hinoshiba.com/"><title>BlurFollow</title></head><body><p><a href="/#support">BlurFollow</a></p><script>const target = new URL("/#support", location.origin); if (location.hash) target.hash = location.hash; location.replace(target);</script></body></html>

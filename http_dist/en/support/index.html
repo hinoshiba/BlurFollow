@@ -1,17 +1,2 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Moving to support — BlurFollow</title>
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://blurfollow.hinoshiba.com/en/">
-  <meta http-equiv="refresh" content="0; url=/en/#support">
-  <script>
-    const routes = { start: "start", sharing: "sharing", permissions: "permissions", faq: "faq", contact: "contact" };
-    const anchor = routes[location.hash.slice(1)] || "support";
-    location.replace("/en/#" + anchor);
-  </script>
-</head>
-<body><p><a href="/en/#support">Continue to the consolidated support section.</a></p></body>
-</html>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/?lang=en#en-support"><link rel="canonical" href="https://blurfollow.hinoshiba.com/"><title>BlurFollow</title></head><body><p><a href="/?lang=en#en-support">BlurFollow</a></p><script>const target = new URL("/?lang=en#en-support", location.origin); if (location.hash) target.hash = "en-" + location.hash.slice(1).replace(/^en-/, ""); location.replace(target);</script></body></html>

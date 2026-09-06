@@ -5,5 +5,3 @@ Text Follow (Beta) remains separate from Window Pin, but Share Preview now compo
 Desktop Mosaic now pixelates the actual backdrop with Core Image and uses an opaque fallback if the filter is unavailable.
 
 The free creation allowances are now independent: 10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules. Unlimited Masks remains an optional one-time purchase that removes all three limits. Existing masks and rules are never removed or disabled by plan state, and eligible 0.1.1 users retain unlimited creation.
-
-Selected-window frames and recognized candidate strings remain transient on the Mac and are not saved or sent to the developer. Saved patterns and limited window identity metadata remain local.
