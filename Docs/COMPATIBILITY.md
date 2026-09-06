@@ -12,7 +12,7 @@ exact signed artifact and current versions of macOS and sharing products.
 | Area | Current contract |
 | --- | --- |
 | macOS | 14.0 or later (`Package.swift`, Xcode settings, and development build agree). |
-| CPU | Development builds target the current host architecture; the Xcode Cloud App Store archive targets `arm64` + `x86_64`. |
+| CPU | Development builds target the current host architecture; the local Xcode App Store archive targets `arm64` + `x86_64`. |
 | UI | Native AppKit/SwiftUI; no browser engine or third-party UI runtime. |
 | Capture | ScreenCaptureKit with Apple's single-window content picker. macOS 14–15.1 first requires broad Screen Recording permission for exact identity resolution without guessing; macOS 15.2+ uses the picker's selected-window identity without proactively requesting that broader grant. |
 | Overlay tracking | Public `CGWindowList` metadata; no Accessibility permission or private window API. |
@@ -97,7 +97,7 @@ At minimum test:
 - the current macOS release on Apple silicon;
 - the current macOS release on an Intel Mac when Intel support is advertised;
   and
-- the Xcode Cloud/TestFlight App Store candidate from a clean standard user
+- the local Xcode/TestFlight App Store candidate from a clean standard user
   account.
 
 ### StoreKit and plan boundary

@@ -235,7 +235,14 @@ final class GeometryModelsTests: XCTestCase {
 
         region.granularity = 1
         XCTAssertTrue(panel.update(region: region, frame: frame))
-        XCTAssertGreaterThan(panel.renderedFrostBlurRadius, weakRadius)
+        if NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency {
+            // Hosted runners may enable this accessibility preference. The app deliberately
+            // uses an opaque cover instead of a Frost filter in that environment.
+            XCTAssertEqual(weakRadius, 0)
+            XCTAssertEqual(panel.renderedFrostBlurRadius, 0)
+        } else {
+            XCTAssertGreaterThan(panel.renderedFrostBlurRadius, weakRadius)
+        }
 
         region.tint = .warm
         XCTAssertTrue(panel.update(region: region, frame: frame))

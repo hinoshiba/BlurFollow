@@ -1,223 +1,536 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-itunes-app" content="app-id=6801985073">
-  <title>BlurFollow — ウインドウ追従と文字追従（ベータ）のモザイク for Mac</title>
-  <meta name="description" content="画面・ウインドウへ置くマスクと、文字追従（ベータ）で一致する文字列ブロックを端末内OCRから追うモザイク。機能、使い方、制約、プライバシーを確認できます。">
-  <link rel="canonical" href="https://blurfollow.hinoshiba.com/">
-  <link rel="alternate" hreflang="ja" href="https://blurfollow.hinoshiba.com/">
-  <link rel="alternate" hreflang="en" href="https://blurfollow.hinoshiba.com/en/">
-  <link rel="alternate" hreflang="x-default" href="https://blurfollow.hinoshiba.com/">
-  <link rel="icon" href="/assets/favicon.png" type="image/png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/assets/site.css">
-  <meta name="theme-color" content="#101116">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="BlurFollow — ウインドウ追従と文字追従（ベータ）のモザイク。">
-  <meta property="og:description" content="画面やウインドウへマスクを置き、文字追従（ベータ）で一致する認識ブロックを覆い、共有前に確認するmacOSアプリ。">
-  <meta property="og:url" content="https://blurfollow.hinoshiba.com/">
-  <meta property="og:image" content="https://blurfollow.hinoshiba.com/assets/blurfollow-icon.png">
-  <meta property="og:locale" content="ja_JP">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="app-id=6801985073" name="apple-itunes-app"/>
+<title>BlurFollow — ウインドウ追従と文字追従（ベータ）のモザイク for Mac</title>
+<meta content="画面・ウインドウへ置くマスクと、文字追従（ベータ）で一致する文字列ブロックを端末内OCRから追うモザイク。機能、使い方、制約、プライバシーを確認できます。" name="description"/>
+<link href="https://blurfollow.hinoshiba.com/" rel="canonical"/>
+<link href="https://blurfollow.hinoshiba.com/" hreflang="ja" rel="alternate"/>
+<link href="https://blurfollow.hinoshiba.com/?lang=en" hreflang="en" rel="alternate"/>
+<link href="https://blurfollow.hinoshiba.com/" hreflang="x-default" rel="alternate"/>
+<link href="/assets/favicon.png" rel="icon" type="image/png"/>
+<link href="/site.webmanifest" rel="manifest"/>
+<link href="/assets/site.css" rel="stylesheet"/>
+<meta content="#101116" name="theme-color"/>
+<meta content="website" property="og:type"/>
+<meta content="BlurFollow — ウインドウ追従と文字追従（ベータ）のモザイク。" property="og:title"/>
+<meta content="画面やウインドウへマスクを置き、文字追従（ベータ）で一致する認識ブロックを覆い、共有前に確認するmacOSアプリ。" property="og:description"/>
+<meta content="https://blurfollow.hinoshiba.com/" property="og:url"/>
+<meta content="https://blurfollow.hinoshiba.com/assets/blurfollow-icon.png" property="og:image"/>
+<meta content="ja_JP" property="og:locale"/>
 </head>
 <body>
-  <a class="skip-link" href="#main">本文へ移動</a>
-  <header class="site-header">
-    <div class="container nav-row">
-      <a class="brand" href="#top" aria-label="BlurFollow ページ先頭">
-        <img src="/assets/blurfollow-icon.png" alt="" width="38" height="38">
-        <span>BlurFollow</span>
-      </a>
-      <nav class="site-nav" aria-label="メインナビゲーション">
-        <a href="#features">機能</a>
-        <a href="#examples">画面例</a>
-        <a href="#guide">使い方</a>
-        <a href="#privacy">プライバシー</a>
-        <a href="#support">サポート</a>
-        <a href="#open-source">OSS</a>
-        <a class="language-link" href="/en/" lang="en" hreflang="en">English</a>
-      </nav>
-    </div>
-  </header>
+<div data-page-language="ja" lang="ja" data-page-title="BlurFollow — ウインドウ追従と文字追従（ベータ）のモザイク for Mac">
+<a class="skip-link" href="#main">本文へ移動</a>
+<header class="site-header">
+<div class="container nav-row">
+<a aria-label="BlurFollow ページ先頭" class="brand" href="#top">
+<img alt="" height="38" src="/assets/blurfollow-icon.png" width="38"/>
+<span>BlurFollow</span>
+</a>
+<nav aria-label="メインナビゲーション" class="site-nav">
+<a href="#features">機能</a>
+<a href="#examples">画面例</a>
+<a href="#guide">使い方</a>
+<a href="#privacy">プライバシー</a>
+<a href="#support">サポート</a>
+<a href="#open-source">OSS</a>
+<button class="language-link" data-language-switch="en" lang="en" type="button">English</button>
+<a href="#contact">購入</a></nav>
+</div>
+</header>
+<main id="main">
+<section class="hero" id="top">
+<div class="container hero-grid">
+<div>
+<p class="eyebrow">Window-following blur for Mac</p>
+<h1>ぼかしが、<br/>ウインドウについてくる。</h1>
+<p class="lede">画面へ固定するマスク、選んだ窓の移動・リサイズに合わせるマスク、文字追従（ベータ）で指定文字列に一致したすべての認識ブロックを覆うモザイク。共有前に実際の出力を確認できます。</p>
+<div class="hero-actions">
+<a class="button" href="https://apps.apple.com/jp/app/blurfollow/id6801985073">Mac App Storeで見る</a>
+<a class="button secondary" href="#examples">画面で確認する</a>
+</div>
+<p class="compat">macOS 14.0以降 · 無料枠: Display 10 / Window 5 / Text Follow 2ルール · 上限解除は買い切り · Apache-2.0</p>
+</div>
+<div aria-label="同じ割合位置のマスクが移動後のウインドウにも合わせて表示される図" class="product-visual" role="img">
+<div aria-hidden="true" class="mock-window back">
+<div class="mock-bar"></div>
+<div class="mock-lines"><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-line"></div></div>
+<div class="mask-block"></div>
+</div>
+<div aria-hidden="true" class="mock-window front">
+<div class="mock-bar"></div>
+<div class="mock-lines"><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-line"></div></div>
+<div class="mask-block"></div>
+</div>
+<div aria-hidden="true" class="motion-path">↘</div>
+</div>
+</div>
+</section>
+<section class="section" id="features">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Features</p>
+<h2>固定する。窓を追う。文字を追う。</h2>
+<p class="section-intro">位置を指定するDisplay／Window Pinと、端末内OCRで一致文字列を探す別機能のText Followを使い分けます。</p>
+</div>
+<div class="feature-grid">
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">D</div><h3>Display Pin</h3><p>通知領域や固定レイアウトへ。ひとつのディスプレイ内の割合位置へマスクを置きます。</p></article>
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">W</div><h3>Window Pin</h3><p>選んだ窓の移動とリサイズへ。窓内の割合座標からマスク位置と大きさを更新します。</p></article>
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">T</div><h3>文字追従（ベータ）</h3><p>完全一致、前方一致、部分一致（Contains）、正規表現をApple Visionで端末内照合。一致したすべての認識ブロックへMosaicを表示します。</p></article>
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">P</div><h3>Share Preview</h3><p>選んだ窓へ対応するWindow Pinと、接続済みText Followルールの完了済み一致をMac内で合成して確認できます。</p></article>
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">G</div><h3>Share Guide</h3><p>ディスプレイ全体、単一ウインドウ、ブラウザタブで異なる共有方法を画面内で案内します。</p></article>
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">3</div><h3>3つの表示スタイル</h3><p>Frost、Mosaic、Redact。デスクトップMosaicは実際の背面をpixelateし、filterが使えなければ不透明表示へ切り替えます。</p></article>
+<article class="feature-card"><div aria-hidden="true" class="feature-icon">L</div><h3>Last-position cover</h3><p>追跡できないとき、最後に把握した位置を不透明に覆う選択肢。現在位置とは限りません。</p></article>
+</div>
+</div>
+</section>
+<section class="section section-tint" id="examples">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Product tour</p>
+<h2>画面を追って、使い方をつかむ。</h2>
+<p class="section-intro">追従の考え方から、共有方式の選択、共有前の確認、ローカル設定までを実際の案内画面でたどれます。</p>
+</div>
+<div class="screenshot-grid">
+<figure class="screenshot-card featured">
+<img alt="ウインドウの移動とリサイズにマスクが追従する仕組みを案内するBlurFollowの初回画面" fetchpriority="high" height="900" src="/assets/screenshots/ja-JP/01-window-following.png" width="1440"/>
+<figcaption><strong>「ぼかしが、ウインドウについてくる。」</strong>選んだ窓の移動とリサイズに、割合位置のマスクが追従する考え方を案内します。</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="Display Pin、Window Pin、Text Followを別機能として示すBlurFollow画面" height="900" loading="lazy" src="/assets/screenshots/ja-JP/02-display-window-modes.png" width="1440"/>
+<figcaption><strong>「画面、窓、文字。3つの選び方。」</strong>Display Pin、Window Pin、Text Followの違いを見比べられます。</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="3種類の共有方式を案内するBlurFollowのShare Guide画面" height="900" loading="lazy" src="/assets/screenshots/ja-JP/04-share-guide.png" width="1440"/>
+<figcaption><strong>「共有方式に合わせて選ぶ。」</strong>Share Guideがディスプレイ全体、単一窓、ブラウザタブの違いを案内します。</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="共有前の確認手順を案内するBlurFollowの初回画面" height="900" loading="lazy" src="/assets/screenshots/ja-JP/03-share-preview-check.png" width="1440"/>
+<figcaption><strong>「共有前に、すべてのマスクを確認。」</strong>Share Preview内のWindow Pinと完了済みText Follow結果を、会議アプリ側でも再確認します。</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="Display Pin 10件、Window Pin 5件、Text Follow 2ルールの独立無料枠と買い切り解除を示すBlurFollow画面" height="900" loading="lazy" src="/assets/screenshots/ja-JP/05-local-controls.png" width="1440"/>
+<figcaption><strong>「10・5・2の独立枠。追加は買い切り。」</strong>1ルールが何か所へ一致してもText Followは1件。買い切りで3つの上限を解除できます。</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section class="section dark" id="how-it-works">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Before sharing</p>
+<h2>共有ボタンまで、3回見る。</h2>
+<p class="section-intro">BlurFollowは確認を置き換えません。配置、合成結果、会議アプリの受信側プレビューを順に目視します。</p>
+</div>
+<div class="boundary-grid boundary-grid-three">
+<article class="boundary-card"><p><strong>01 · 方法を選ぶ</strong></p><p>固定領域にはDisplay／Window Pin、一致文字列にはText Followを選びます。</p></article>
+<article class="boundary-card"><p><strong>02 · 実出力を見る</strong></p><p>デスクトップのすべての一致ブロックと、単一窓Share Preview内のWindow Pin＋完了済みText Followを確認します。</p></article>
+<article class="boundary-card"><p><strong>03 · 共有先でも見る</strong></p><p>会議アプリで正しい対象を選び、そのアプリ自身のプレビューをもう一度確認します。</p></article>
+</div>
+</div>
+</section>
+<section class="section" id="guide">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Guide</p>
+<h2>基本操作と共有方法。</h2>
+<p class="section-intro">選ぶ、置く、認識結果を確かめる。Share PreviewはWindow Pinと同じ選択窓の完了済みText Follow結果を独自に合成します。</p>
+</div>
+<div class="guide-grid" id="start">
+<article class="guide-card"><h3>画面へ固定する</h3><ol><li>ホームで「Display Pin」を選びます。</li><li>対象ディスプレイ上で、マスクを置きたい領域をドラッグします。</li><li>MasksでFrost、Mosaic、Redactを選びます。FrostまたはMosaicのStrengthを調整し、位置と見え方を実画面で確認します。Redactは不透明のままです。</li></ol></article>
+<article class="guide-card"><h3>ウインドウへ追従させる</h3><ol><li>ホームで「Window Pin」を選びます。</li><li>Appleのシステムピッカーから対象窓を選びます。</li><li>窓内で領域をドラッグし、窓を移動・リサイズしてマスク位置を確認します。</li><li>窓が再作成された、タイトルが変わった、または「Select again／選び直す」になった場合はMasksの「Reconnect…」で選び直します。</li></ol></article>
+<article class="guide-card"><h3>文字追従（ベータ）を使う</h3><ol><li>ホームで「Text Follow」を選びます。</li><li>ルール名、完全一致／前方一致／部分一致（Contains）／正規表現、パターンを入力し、Appleのピッカーで対象窓を選びます。Containsは大文字・小文字を区別します。</li><li>一致したすべての認識文字列ブロックにMosaicが表示されることを確認します。Containsも一致部分だけでなくVisionが返したブロック全体を覆い、同じパターンが複数ブロックへ一致しても無料枠は1ルール分です。</li><li>既定の厳格安全モードは認識中、不確実、OCR 0一致でも窓全体を覆います。オフは直前マスクを保って全面フラッシュを避けますが、漏れ耐性が下がります。</li><li>画面遷移、スクロール、文字サイズや配色の変更後に、見逃し、誤認、遅れ、余分な一致がないか毎回確認します。</li></ol></article>
+<article class="guide-card"><h3>既存マスクを調整する</h3><ol><li>Masksで表示スタイル、Strength、On/Offを調整します。</li><li>「Move…」を押し、画面上のマスク本体をドラッグします。離すと保存され、保存前のEscで取り消せます。</li><li>メニューバーから各マスクを切り替えます。「Show Masks」は通常マスクの全体スイッチです。Share PreviewはOnのWindow Pinと、選択窓に関連する接続済み・有効なText Followルールを使うため、別に確認します。</li></ol></article>
+</div>
+<div class="content-block" id="sharing">
+<h3>共有方法を選ぶ</h3>
+<div class="info-grid">
+<article class="info-card"><h4>ディスプレイ全体</h4><p>Text Followを含むデスクトップ上のマスクを目視したあと、会議アプリでディスプレイ全体を選び、そのアプリ自身のプレビューを確認します。通知、別のSpace、フルスクリーン切り替えにも注意してください。</p></article>
+<article class="info-card"><h4>単一ウインドウ</h4><p>別アプリのオーバーレイは単一窓キャプチャに通常含まれません。Share Previewは、対応するWindow Pinと選択窓の完了済みText Follow一致を独自にフレームへ合成します。元窓ではなくBlurFollow Share Previewを共有し、受信側でも確認します。</p></article>
+<article class="info-card"><h4>ブラウザタブ</h4><p>タブ共有もデスクトップオーバーレイを含みません。ブラウザ窓からShare Previewを作ると、Window Pinと接続済みText Followの完了済み一致を合成できます。OCRとpreviewは別のchild windowを除外するため、表示境界を確認してください。</p></article>
+</div>
+</div>
+<div class="content-block prose prose-wide" id="permissions">
+<h3>画面収録権限</h3>
+<ul><li><strong>Display Pin:</strong> 画面収録権限は不要です。</li><li><strong>macOS 15.2以降:</strong> Appleのシステムピッカーで選択した窓ごとにWindow Pin、Text Follow、Share Previewを許可します。</li><li><strong>macOS 14〜15.1:</strong> 選択窓を推測せず識別するため、画面収録の広い許可が必要です。許可後はBlurFollowを終了して開き直します。</li></ul>
+<p>許可を拒否した場合、Window Pin、Text Follow、Share Previewは窓を推測せず停止します。システム設定の「プライバシーとセキュリティ」→「画面収録」で確認・取り消しできます。BlurFollowはアクセシビリティ、フルディスクアクセス、カメラ、マイクの権限を要求しません。</p>
+</div>
+<div class="notice content-block" id="limitations"><h3>BlurFollowは視覚的補助です</h3><p>Text Followは利用者が指定したパターンをOCR結果から探しますが、何が機密かを判断せず、すべての文字を認識する保証もありません。マスク位置、ぼかしやモザイクの読みにくさ、共有出力への反映を保証しません。「Following」「Placed」「Recognizing」「Preview active」は技術状態であり、内容の安全を認定する表示ではありません。元データから秘密情報を除き、画面遷移や編集の後は実際の共有出力を再確認してください。</p></div>
+</div>
+</section>
+<section class="section section-tint" id="privacy"><div class="container"><div class="section-heading"><p class="eyebrow">Privacy policy</p><h2>プライバシー</h2><p>更新日：2026年9月6日</p></div><div class="policy-copy"><article><h3>画面と保存データ</h3><p>Text FollowとShare Previewは、選択した窓の映像をMacで処理します。フレーム・認識文字列をファイルに保存せず、開発者へ送信しません。音声は取得しません。マスク・パターン・窓タイトルなどの識別情報と設定、復旧用コピー、評価案内の設定は端末に保存します。</p></article><article><h3>削除と権限</h3><p>Masksから個別または全マスクを削除できます。保存設定・復旧用コピーをすべて消す場合は、アプリを終了してアプリコンテナ内のBlurFollow設定フォルダを削除してください。手動で書き出した設定やバックアップも別途削除します。画面収録の許可はmacOSのシステム設定で管理できます。</p></article><article><h3>Apple・共有先・連絡先</h3><p>購入・復元・評価の案内にはAppleのサービスを使用します。会議アプリなどでShare Previewを共有した場合は、そのサービスのポリシーが適用されます。製品・プライバシーのお問い合わせは <a href="mailto:support@hinoshiba.com">support@hinoshiba.com</a> へ。メールで提供されたアドレス・本文・添付はメール事業者を通じて受領し、対応または法令上必要な期間だけ保持します。同じ窓口へ削除を依頼できます。</p><p>このサイトはGitHub Pagesで配信され、アクセス情報は<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHubのプライバシーステートメント</a>に従います。</p></article></div></div></section>
+<section class="section" id="support">
+<div class="container">
+<div class="section-heading"><p class="eyebrow">Support</p><h2>よくある質問とお問い合わせ。</h2><p class="section-intro">共有方式、追従状態、保存データを確認しても解決しない場合は、機密情報を除いた再現手順をお知らせください。</p></div>
+<div class="faq-list prose-wide" id="faq">
+<details><summary>Chromeの窓やタブを共有すると、デスクトップ上のマスクが映りません。</summary><div class="faq-answer"><p>単一窓やタブのキャプチャは、別アプリのデスクトップオーバーレイを通常含みません。Share Previewでブラウザ窓、対応するWindow Pin、同じ選択元へ関連する接続済みText Followルールの完了済み一致を合成し、会議アプリではBlurFollow Share Previewを共有対象に選んでください。</p></div></details>
+<details><summary>Window Pinが窓についてきません。</summary><div class="faq-answer"><p>対象窓が閉じた、非表示になった、別の窓として再作成された、または同じ候補を特定できない可能性があります。Masksで状態を確認し、「Reconnect…」からAppleのピッカーで対象窓を選び直してください。割合座標は残りますが、内容レイアウトが変わっていないか目視します。</p></div></details>
+<details><summary>Text Followが文字を見逃す、または余分な場所を覆います。</summary><div class="faq-answer"><p>Vision OCRはフォント、サイズ、コントラスト、言語、動き、スクロール、レイアウトによって見逃し、誤認、分割・結合、遅延が起こりえます。完全一致、前方一致、部分一致（Contains）、正規表現のパターンを見直し、画面遷移ごとにすべての一致を目視してください。Containsは大文字・小文字を区別し、一致部分だけでなく認識ブロック全体を覆います。ひとつの保存パターンは、一致ブロック数にかかわらず無料枠を1ルールだけ使います。</p></div></details>
+<details><summary>Text Followが単一窓やタブ共有に映りません。</summary><div class="faq-answer"><p>デスクトップ上のText Followパネルは、単一窓・タブキャプチャに通常含まれません。Share Previewはパネル自体を取り込むのではなく、同じ選択元へ関連する接続済み・有効なルールの完了済み位置を独自にWindow Pinと合成します。OCRとpreviewはいずれも別のchild windowを除外します。ディスプレイ全体またはBlurFollow Share Previewの実際の受信側出力を確認してください。</p></div></details>
+<details><summary>Last-position coverとは何ですか。</summary><div class="faq-answer"><p>窓位置を取得できなくなったとき、BlurFollowが最後に利用できた位置を不透明に覆う表示です。移動後の現在位置とは限らず、再接続や共有先確認の代わりにはなりません。</p></div></details>
+<details><summary>Share Previewが「Preview paused」または覆われた表示になります。</summary><div class="faq-answer"><p>窓やフレームを検証できない、設定の復旧確認が必要、キャプチャが停止した、または関連する有効なText Followルールが未接続・再接続待ち・接続中・認識中・失敗・選択元を利用不可・状態不整合の場合、設定にかかわらず古い映像を直ちに消して全面を不透明に覆います。既定の厳格安全モードは完了scanが0一致でも全面coverします。オフなら0一致を表示でき、全面フラッシュを避けられますが漏れ耐性は下がります。画面の理由表示に従い、ルールやWindow Pinの再接続、設定確認、対象窓の再選択を行ってください。0一致は見逃しがないことの証明ではありません。</p></div></details>
+<details><summary>ぼかしとモザイクは情報を読めなくしますか。</summary><div class="faq-answer"><p>読みにくく見せますが、元情報の推測や復元が不可能になるとは限りません。可能なら元データから秘密情報を除き、不透明なRedactも検討してください。詳しくは<a href="#limitations">視覚的補助としての制約</a>をご覧ください。</p></div></details>
 
-  <main id="main">
-    <section class="hero" id="top">
-      <div class="container hero-grid">
-        <div>
-          <p class="eyebrow">Window-following blur for Mac</p>
-          <h1>ぼかしが、<br>ウインドウについてくる。</h1>
-          <p class="lede">画面へ固定するマスク、選んだ窓の移動・リサイズに合わせるマスク、文字追従（ベータ）で指定文字列に一致したすべての認識ブロックを覆うモザイク。共有前に実際の出力を確認できます。</p>
-          <div class="hero-actions">
-            <a class="button" href="https://apps.apple.com/jp/app/blurfollow/id6801985073">Mac App Storeで見る</a>
-            <a class="button secondary" href="#examples">画面で確認する</a>
-          </div>
-          <p class="compat">macOS 14.0以降 · 無料枠: Display 10 / Window 5 / Text Follow 2ルール · 上限解除は買い切り · Local-first · Apache-2.0</p>
-        </div>
-        <div class="product-visual" role="img" aria-label="同じ割合位置のマスクが移動後のウインドウにも合わせて表示される図">
-          <div class="mock-window back" aria-hidden="true">
-            <div class="mock-bar"></div>
-            <div class="mock-lines"><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-line"></div></div>
-            <div class="mask-block"></div>
-          </div>
-          <div class="mock-window front" aria-hidden="true">
-            <div class="mock-bar"></div>
-            <div class="mock-lines"><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-line"></div></div>
-            <div class="mask-block"></div>
-          </div>
-          <div class="motion-path" aria-hidden="true">↘</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="features">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Features</p>
-          <h2>固定する。窓を追う。文字を追う。</h2>
-          <p class="section-intro">位置を指定するDisplay／Window Pinと、端末内OCRで一致文字列を探す別機能のText Followを使い分けます。</p>
-        </div>
-        <div class="feature-grid">
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">D</div><h3>Display Pin</h3><p>通知領域や固定レイアウトへ。ひとつのディスプレイ内の割合位置へマスクを置きます。</p></article>
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">W</div><h3>Window Pin</h3><p>選んだ窓の移動とリサイズへ。窓内の割合座標からマスク位置と大きさを更新します。</p></article>
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">T</div><h3>文字追従（ベータ）</h3><p>完全一致、前方一致、部分一致（Contains）、正規表現をApple Visionで端末内照合。一致したすべての認識ブロックへMosaicを表示します。</p></article>
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">P</div><h3>Share Preview</h3><p>選んだ窓へ対応するWindow Pinと、接続済みText Followルールの完了済み一致をMac内で合成して確認できます。</p></article>
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">G</div><h3>Share Guide</h3><p>ディスプレイ全体、単一ウインドウ、ブラウザタブで異なる共有方法を画面内で案内します。</p></article>
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">3</div><h3>3つの表示スタイル</h3><p>Frost、Mosaic、Redact。デスクトップMosaicは実際の背面をpixelateし、filterが使えなければ不透明表示へ切り替えます。</p></article>
-          <article class="feature-card"><div class="feature-icon" aria-hidden="true">L</div><h3>Last-position cover</h3><p>追跡できないとき、最後に把握した位置を不透明に覆う選択肢。現在位置とは限りません。</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-tint" id="examples">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Product tour</p>
-          <h2>画面を追って、使い方をつかむ。</h2>
-          <p class="section-intro">追従の考え方から、共有方式の選択、共有前の確認、ローカル設定までを実際の案内画面でたどれます。</p>
-        </div>
-        <div class="screenshot-grid">
-          <figure class="screenshot-card featured">
-            <img src="/assets/screenshots/ja-JP/01-window-following.png" width="1440" height="900" alt="ウインドウの移動とリサイズにマスクが追従する仕組みを案内するBlurFollowの初回画面" fetchpriority="high">
-            <figcaption><strong>「ぼかしが、ウインドウについてくる。」</strong>選んだ窓の移動とリサイズに、割合位置のマスクが追従する考え方を案内します。</figcaption>
-          </figure>
-          <figure class="screenshot-card">
-            <img src="/assets/screenshots/ja-JP/02-display-window-modes.png" width="1440" height="900" loading="lazy" alt="Display Pin、Window Pin、Text Followを別機能として示すBlurFollow画面">
-            <figcaption><strong>「画面、窓、文字。3つの選び方。」</strong>Display Pin、Window Pin、Text Followの違いを見比べられます。</figcaption>
-          </figure>
-          <figure class="screenshot-card">
-            <img src="/assets/screenshots/ja-JP/04-share-guide.png" width="1440" height="900" loading="lazy" alt="3種類の共有方式を案内するBlurFollowのShare Guide画面">
-            <figcaption><strong>「共有方式に合わせて選ぶ。」</strong>Share Guideがディスプレイ全体、単一窓、ブラウザタブの違いを案内します。</figcaption>
-          </figure>
-          <figure class="screenshot-card">
-            <img src="/assets/screenshots/ja-JP/03-share-preview-check.png" width="1440" height="900" loading="lazy" alt="共有前の確認手順を案内するBlurFollowの初回画面">
-            <figcaption><strong>「共有前に、すべてのマスクを確認。」</strong>Share Preview内のWindow Pinと完了済みText Follow結果を、会議アプリ側でも再確認します。</figcaption>
-          </figure>
-          <figure class="screenshot-card">
-            <img src="/assets/screenshots/ja-JP/05-local-controls.png" width="1440" height="900" loading="lazy" alt="Display Pin 10件、Window Pin 5件、Text Follow 2ルールの独立無料枠と買い切り解除を示すBlurFollow画面">
-            <figcaption><strong>「10・5・2の独立枠。追加は買い切り。」</strong>1ルールが何か所へ一致してもText Followは1件。買い切りで3つの上限を解除できます。</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section dark" id="how-it-works">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Before sharing</p>
-          <h2>共有ボタンまで、3回見る。</h2>
-          <p class="section-intro">BlurFollowは確認を置き換えません。配置、合成結果、会議アプリの受信側プレビューを順に目視します。</p>
-        </div>
-        <div class="boundary-grid boundary-grid-three">
-          <article class="boundary-card"><p><strong>01 · 方法を選ぶ</strong></p><p>固定領域にはDisplay／Window Pin、一致文字列にはText Followを選びます。</p></article>
-          <article class="boundary-card"><p><strong>02 · 実出力を見る</strong></p><p>デスクトップのすべての一致ブロックと、単一窓Share Preview内のWindow Pin＋完了済みText Followを確認します。</p></article>
-          <article class="boundary-card"><p><strong>03 · 共有先でも見る</strong></p><p>会議アプリで正しい対象を選び、そのアプリ自身のプレビューをもう一度確認します。</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="guide">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Guide</p>
-          <h2>基本操作と共有方法。</h2>
-          <p class="section-intro">選ぶ、置く、認識結果を確かめる。Share PreviewはWindow Pinと同じ選択窓の完了済みText Follow結果を独自に合成します。</p>
-        </div>
-        <div class="guide-grid" id="start">
-          <article class="guide-card"><h3>画面へ固定する</h3><ol><li>ホームで「Display Pin」を選びます。</li><li>対象ディスプレイ上で、マスクを置きたい領域をドラッグします。</li><li>MasksでFrost、Mosaic、Redactを選びます。FrostまたはMosaicのStrengthを調整し、位置と見え方を実画面で確認します。Redactは不透明のままです。</li></ol></article>
-          <article class="guide-card"><h3>ウインドウへ追従させる</h3><ol><li>ホームで「Window Pin」を選びます。</li><li>Appleのシステムピッカーから対象窓を選びます。</li><li>窓内で領域をドラッグし、窓を移動・リサイズしてマスク位置を確認します。</li><li>窓が再作成された、タイトルが変わった、または「Select again／選び直す」になった場合はMasksの「Reconnect…」で選び直します。</li></ol></article>
-          <article class="guide-card"><h3>文字追従（ベータ）を使う</h3><ol><li>ホームで「Text Follow」を選びます。</li><li>ルール名、完全一致／前方一致／部分一致（Contains）／正規表現、パターンを入力し、Appleのピッカーで対象窓を選びます。Containsは大文字・小文字を区別します。</li><li>一致したすべての認識文字列ブロックにMosaicが表示されることを確認します。Containsも一致部分だけでなくVisionが返したブロック全体を覆い、同じパターンが複数ブロックへ一致しても無料枠は1ルール分です。</li><li>既定の厳格安全モードは認識中、不確実、OCR 0一致でも窓全体を覆います。オフは直前マスクを保って全面フラッシュを避けますが、漏れ耐性が下がります。</li><li>画面遷移、スクロール、文字サイズや配色の変更後に、見逃し、誤認、遅れ、余分な一致がないか毎回確認します。</li></ol></article>
-          <article class="guide-card"><h3>既存マスクを調整する</h3><ol><li>Masksで表示スタイル、Strength、On/Offを調整します。</li><li>「Move…」を押し、画面上のマスク本体をドラッグします。離すと保存され、保存前のEscで取り消せます。</li><li>メニューバーから各マスクを切り替えます。「Show Masks」は通常マスクの全体スイッチです。Share PreviewはOnのWindow Pinと、選択窓に関連する接続済み・有効なText Followルールを使うため、別に確認します。</li></ol></article>
-        </div>
-        <div class="content-block" id="sharing">
-          <h3>共有方法を選ぶ</h3>
-          <div class="info-grid">
-            <article class="info-card"><h4>ディスプレイ全体</h4><p>Text Followを含むデスクトップ上のマスクを目視したあと、会議アプリでディスプレイ全体を選び、そのアプリ自身のプレビューを確認します。通知、別のSpace、フルスクリーン切り替えにも注意してください。</p></article>
-            <article class="info-card"><h4>単一ウインドウ</h4><p>別アプリのオーバーレイは単一窓キャプチャに通常含まれません。Share Previewは、対応するWindow Pinと選択窓の完了済みText Follow一致を独自にフレームへ合成します。元窓ではなくBlurFollow Share Previewを共有し、受信側でも確認します。</p></article>
-            <article class="info-card"><h4>ブラウザタブ</h4><p>タブ共有もデスクトップオーバーレイを含みません。ブラウザ窓からShare Previewを作ると、Window Pinと接続済みText Followの完了済み一致を合成できます。OCRとpreviewは別のchild windowを除外するため、表示境界を確認してください。</p></article>
-          </div>
-        </div>
-        <div class="content-block prose prose-wide" id="permissions">
-          <h3>画面収録権限</h3>
-          <ul><li><strong>Display Pin:</strong> 画面収録権限は不要です。</li><li><strong>macOS 15.2以降:</strong> Appleのシステムピッカーで選択した窓ごとにWindow Pin、Text Follow、Share Previewを許可します。</li><li><strong>macOS 14〜15.1:</strong> 選択窓を推測せず識別するため、画面収録の広い許可が必要です。許可後はBlurFollowを終了して開き直します。</li></ul>
-          <p>許可を拒否した場合、Window Pin、Text Follow、Share Previewは窓を推測せず停止します。システム設定の「プライバシーとセキュリティ」→「画面収録」で確認・取り消しできます。BlurFollowはアクセシビリティ、フルディスクアクセス、カメラ、マイクの権限を要求しません。</p>
-        </div>
-        <div class="notice content-block" id="limitations"><h3>BlurFollowは視覚的補助です</h3><p>Text Followは利用者が指定したパターンをOCR結果から探しますが、何が機密かを判断せず、すべての文字を認識する保証もありません。マスク位置、ぼかしやモザイクの読みにくさ、共有出力への反映を保証しません。「Following」「Placed」「Recognizing」「Preview active」は技術状態であり、内容の安全を認定する表示ではありません。元データから秘密情報を除き、画面遷移や編集の後は実際の共有出力を再確認してください。</p></div>
-      </div>
-    </section>
-
-    <section class="section section-tint" id="privacy">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Privacy policy</p><h2>プライバシー</h2><p class="section-intro">BlurFollowが画面、OCR結果、設定をどのように扱うかを、機能ごとに説明します。「ベータ」は機能の成熟度を示す表示であり、ここに記載するデータの取扱いは変わりません。</p><p class="meta-line">最終更新: <time datetime="2026-08-29">2026年8月29日</time> · 対象: BlurFollow 0.2.0 macOSアプリ</p>
-        </div>
-        <article class="prose prose-wide">
-          <section id="privacy-summary"><h3>概要</h3><ul><li>アカウント、広告、分析、トラッキング、第三者ランタイムSDKはありません。</li><li>選択窓の画面フレームはShare PreviewとText FollowのためにMac上で一時処理し、録画ファイルへ保存せず、BlurFollowの開発者へ送信しません。</li><li>Text Followの認識候補文字列は照合中だけ使い、設定、backup、export、ログへ保存しません。</li><li>音声、カメラ、キーボード入力、クリップボードを取得しません。</li><li>マスク／ルール設定と、選択した窓を再び識別するための限定的なメタデータをMac内へ保存します。</li><li>公式App Store版の任意の買い切り商品、購入確認、復元、標準評価画面はAppleのStoreKitが処理します。BlurFollow独自の課金サーバーはありません。</li></ul><p>必要なmacOS権限と拒否時の動作は、上の<a href="#permissions">画面収録権限</a>にまとめています。</p></section>
-          <section id="screen"><h3>画面フレームと文字認識</h3><p>Share PreviewとText Followでは、Appleのシステムピッカーで利用者が選んだウインドウをScreenCaptureKitが提供します。Text FollowはフレームをApple Visionで端末内認識し、保存済みの完全一致、前方一致、部分一致（Contains）、正規表現ルールと照合します。Containsは大文字・小文字を区別し、どのモードも一致した部分だけでなくVisionの認識ブロック全体を覆います。一致した全ブロックの一時的な位置はデスクトップMosaicへ渡され、同じ選択元へ関連する接続済み・有効なルールのscanが完了していれば、Share Previewもその一致をWindow Pinと一緒にメモリ上で合成します。既定の厳格安全モードでは認識中、不確実、完了scanが0一致の場合も窓全体を覆います。オフなら0一致を表示できますが、OCRの見逃しへの耐性が下がり、0一致はOCRの完全性を証明しません。関連ルールが未接続、再接続待ち、接続中、認識中、失敗、選択元を利用不可、または状態不整合なら、設定にかかわらずShare Previewは直ちに古い映像を消して全面を不透明に覆います。OCRとShare Previewはどちらも選択した親窓だけを対象とし、別のchild windowは除外します。音声取得は無効です。</p><p>フレームや認識候補文字列を動画、画像、設定、ログとして保存する処理、ネットワークへ送る処理、分析や学習へ使う処理はありません。停止、無効化、エラー時には現在のプレビューや検出位置を解除します。デスクトップMosaicは利用可能な場合にCIPixellateで実際の背面をpixelateし、filterが使えない場合は不透明表示へ切り替えます。ただし、OCRの見逃しや誤認、macOSのスワップ、GPUバッファ、クラッシュ診断、利用者自身のスクリーンショット、バックアップ、画面収録権限を持つ別プロセスまで完全に制御するものではありません。</p><p>BlurFollowの表示を会議・配信・録画アプリへ共有した後は、そのアプリと受信者の規約とポリシーが適用されます。BlurFollowは会議の参加者、録画、再配布を管理しません。</p></section>
-          <section id="local"><h3>ローカル設定</h3><p>マスク名、割合座標、表示スタイル、強度、角丸、使用状態、作成日、ディスプレイ識別子をJSON設定として保存します。Window Pinでは窓ID、プロセスID、アプリ名、bundle ID、窓タイトル、保存時の窓位置と大きさも含みます。Text Followではルール名、完全一致／前方一致／部分一致（Contains）／正規表現の種類、利用者が入力したパターン、選択窓の識別情報、Mosaicの見え方、On／Off、作成日を保存します。認識候補文字列やフレームは保存しません。</p><p>Mac App Storeのsandbox版では、通常はアプリコンテナ内の <code>Library/Application Support/BlurFollow/Masks.json</code> に保存します。最後に検証できた設定を同じ場所の <code>Masks.json.backup</code> に保持する場合があります。窓タイトル、名前、Text Followのパターン自体に個人情報が含まれうるため、文字列にもご注意ください。</p><p>標準の評価画面を繰り返し表示しないため、初回利用日、Share Previewの確認回数、最後に依頼した版と日時を端末内の設定へ保存します。分析や購入資格の判定には使わず、開発者へ送信しません。</p><p>「Export Mask Settings」は同じ種類の設定を利用者が選んだ場所へ書き出します。Text Followの保存パターンも含まれます。書き出し後のコピーには、保存先、同期、バックアップを提供する別ソフトウェアの取り扱いが適用されます。</p></section>
-          <section id="network"><h3>外部送信、StoreKit、App Privacy</h3><p>監査対象の0.2.0アプリには、開発者が運用するネットワーク接続先、アカウント、分析、課金サーバーがなく、開発者による個人データ収集、広告目的の共有、アプリ横断トラッキングを行いません。AppleのApp Privacy上、現在の未改変ビルドについて想定する回答は「このアプリからデータを収集しない」です。</p><p>公式App Store版では、商品と価格の取得、署名済み購入・AppTransactionの検証、購入、明示的な復元、標準評価画面のため、StoreKitがAppleのApp Storeサービスへ接続する場合があります。Apple Accountの認証と決済はAppleが処理します。BlurFollowは画面フレーム、窓情報、マスク、利用解析をこの購入処理へ渡しません。</p><p>App Store、コード署名サービス、macOS、会議アプリは、それぞれの提供者として別に情報を扱う場合があります。BlurFollowの開発者が運用するサービスへの送信とは異なります。</p></section>
-          <section id="choices"><h3>保持、削除、利用者の選択</h3><ul><li>Share PreviewまたはText Followを停止すると該当キャプチャを終了し、現在のプレビューや検出位置をアプリの状態から解除します。</li><li>個別のマスクやText Followルールを無効化・削除できます。「Delete All Masks and Rules」は両方の一覧を空にし、回復用backupを削除します。</li><li>すべての保存設定を消す場合はBlurFollowを終了し、sandboxコンテナ内の <code>Masks.json</code> と <code>Masks.json.backup</code> およびアプリ設定を削除します。</li><li>書き出した設定、クラウド同期、バックアップ内のコピーは別に削除してください。アンインストールだけではApplication Supportやsandboxコンテナが残る場合があります。</li><li>App Storeの購入記録はAppleが管理します。「購入を復元」は同期を要求する操作で、購入記録を削除しません。</li></ul><p>BlurFollowのアカウントや開発者サーバーの保存領域はないため、サーバー上の利用者プロフィールはありません。</p></section>
-          <section id="privacy-changes"><h3>変更</h3><p>開発者運用のネットワーク、アカウント、分析、新しい決済手段、クラウド同期などデータの扱いを変える機能を追加した場合、このポリシーとApp Privacy回答を配布前に更新します。プライバシーに関する連絡先は下の<a href="#contact">お問い合わせ</a>をご覧ください。</p></section>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="support">
-      <div class="container">
-        <div class="section-heading"><p class="eyebrow">Support</p><h2>よくある質問とお問い合わせ。</h2><p class="section-intro">共有方式、追従状態、保存データを確認しても解決しない場合は、機密情報を除いた再現手順をお知らせください。</p></div>
-        <div class="faq-list prose-wide" id="faq">
-          <details><summary>Chromeの窓やタブを共有すると、デスクトップ上のマスクが映りません。</summary><div class="faq-answer"><p>単一窓やタブのキャプチャは、別アプリのデスクトップオーバーレイを通常含みません。Share Previewでブラウザ窓、対応するWindow Pin、同じ選択元へ関連する接続済みText Followルールの完了済み一致を合成し、会議アプリではBlurFollow Share Previewを共有対象に選んでください。</p></div></details>
-          <details><summary>Window Pinが窓についてきません。</summary><div class="faq-answer"><p>対象窓が閉じた、非表示になった、別の窓として再作成された、または同じ候補を特定できない可能性があります。Masksで状態を確認し、「Reconnect…」からAppleのピッカーで対象窓を選び直してください。割合座標は残りますが、内容レイアウトが変わっていないか目視します。</p></div></details>
-          <details><summary>Text Followが文字を見逃す、または余分な場所を覆います。</summary><div class="faq-answer"><p>Vision OCRはフォント、サイズ、コントラスト、言語、動き、スクロール、レイアウトによって見逃し、誤認、分割・結合、遅延が起こりえます。完全一致、前方一致、部分一致（Contains）、正規表現のパターンを見直し、画面遷移ごとにすべての一致を目視してください。Containsは大文字・小文字を区別し、一致部分だけでなく認識ブロック全体を覆います。ひとつの保存パターンは、一致ブロック数にかかわらず無料枠を1ルールだけ使います。</p></div></details>
-          <details><summary>Text Followが単一窓やタブ共有に映りません。</summary><div class="faq-answer"><p>デスクトップ上のText Followパネルは、単一窓・タブキャプチャに通常含まれません。Share Previewはパネル自体を取り込むのではなく、同じ選択元へ関連する接続済み・有効なルールの完了済み位置を独自にWindow Pinと合成します。OCRとpreviewはいずれも別のchild windowを除外します。ディスプレイ全体またはBlurFollow Share Previewの実際の受信側出力を確認してください。</p></div></details>
-          <details><summary>Last-position coverとは何ですか。</summary><div class="faq-answer"><p>窓位置を取得できなくなったとき、BlurFollowが最後に利用できた位置を不透明に覆う表示です。移動後の現在位置とは限らず、再接続や共有先確認の代わりにはなりません。</p></div></details>
-          <details><summary>Share Previewが「Preview paused」または覆われた表示になります。</summary><div class="faq-answer"><p>窓やフレームを検証できない、設定の復旧確認が必要、キャプチャが停止した、または関連する有効なText Followルールが未接続・再接続待ち・接続中・認識中・失敗・選択元を利用不可・状態不整合の場合、設定にかかわらず古い映像を直ちに消して全面を不透明に覆います。既定の厳格安全モードは完了scanが0一致でも全面coverします。オフなら0一致を表示でき、全面フラッシュを避けられますが漏れ耐性は下がります。画面の理由表示に従い、ルールやWindow Pinの再接続、設定確認、対象窓の再選択を行ってください。0一致は見逃しがないことの証明ではありません。</p></div></details>
-          <details><summary>ぼかしとモザイクは情報を読めなくしますか。</summary><div class="faq-answer"><p>読みにくく見せますが、元情報の推測や復元が不可能になるとは限りません。可能なら元データから秘密情報を除き、不透明なRedactも検討してください。詳しくは<a href="#limitations">視覚的補助としての制約</a>をご覧ください。</p></div></details>
-          <details><summary>録画や音声取得、外部送信をしますか。</summary><div class="faq-answer"><p>現在の0.2.0は音声を取得せず、画面フレームを録画ファイルへ保存せず、開発者へ送信しません。公式版では購入処理のためApple StoreKitがApp Storeへ接続する場合があります。詳しくは<a href="#privacy">プライバシー</a>をご覧ください。</p></div></details>
-          <details><summary>保存したマスクを消すには。</summary><div class="faq-answer"><p>Masksで個別に削除するか、「Delete All Masks」を使います。すべての保存設定と書き出したコピーの削除方法は<a href="#choices">保持、削除、利用者の選択</a>にまとめています。</p></div></details>
-        </div>
-        <div class="contact-card content-block prose-wide" id="contact"><h3>お問い合わせ</h3><p>日本語または英語で <a href="mailto:support@hinoshiba.com?subject=BlurFollow%20Support">support@hinoshiba.com</a> へお送りください。プライバシーに関する場合は件名を「BlurFollow Privacy」、脆弱性の可能性がある場合は「Security」としてください。</p><p>アプリとmacOSのバージョン、Macの種類、共有方式、対象アプリ、表示された状態、再現手順、期待した結果と実際の結果があると確認しやすくなります。実際の機密画面、窓タイトル、個人情報、認証情報は送らず、架空データで再現してください。脆弱性の詳細は公開issueへ書かないでください。</p></div>
-      </div>
-    </section>
-
-    <section class="section section-tint" id="open-source">
-      <div class="container">
-        <div class="section-heading"><p class="eyebrow">Open source</p><h2>コードを開き、境界も明記する。</h2><p class="section-intro">BlurFollowのコードと通常文書にはApache License 2.0を採用しています。ブランド資産と商標は別の条件です。</p></div>
-        <article class="prose prose-wide">
-          <section id="license"><h3>Apache License 2.0</h3><p>Brand Assetsと逐語の第三者法的文面を除き、BlurFollowのソースコードと通常文書はApache License, Version 2.0で提供します。このライセンスは、条件を守る限り、利用、変更、再配布、商用利用を認めます。再配布ではライセンスとNOTICEを保持し、変更したファイルを示し、必要な帰属を維持してください。特許条項とtermination条項も適用されます。</p><p>Apache-2.0の商用利用許可は、BlurFollowの名称、ロゴ、アイコンを商品ブランドとして使う許可ではありません。また、特定用途への適合や不具合の不存在を保証するものではありません。正確な条件はライセンス原文を優先してください。</p></section>
-          <section id="dependencies"><h3>現在の配布依存関係</h3><p>監査対象の0.2.0アプリには、bundleされた第三者ランタイムライブラリ、SDK、package、実行ファイル、model、font、分析SDK、広告SDK、updaterはありません。AppKit、SwiftUI、ScreenCaptureKit、Vision、Core Image、StoreKitなど、利用者のmacOSが提供するframeworkへリンクします。AppleのframeworkとSwift runtimeはBlurFollowのApache-2.0へ再ライセンスされません。</p><p>将来のreleaseでは、package、埋め込みframework、resource、font、build tool、CI actionを再監査し、実際に配布するものに応じて通知を更新します。</p></section>
-          <section id="brand"><h3>名称、ロゴ、アイコン</h3><p>BlurFollowの名称、ロゴ、アプリアイコンと、それらに紛らわしい識別表示は商標・ブランドポリシーの対象です。アイコン画像とその派生renditionはApache-2.0の対象外で、各権利者が権利を留保します。forkや再配布では、利用許可がない限り、自分の名称、bundle ID、アイコン、署名、サポート、プライバシー表示へ置き換えてください。</p><p>名称や図案の利用可能性は国・地域、商品・役務、類似性により変わります。ライセンス文書は商標clearanceや法的助言ではありません。</p></section>
-          <section id="documents"><h3>ライセンスと監査文書</h3><p>配布時点の原文をそのまま確認できるテキストとして掲載します。</p><div class="download-list"><a class="download-link" href="/oss/LICENSE">Apache-2.0 LICENSE</a><a class="download-link" href="/oss/NOTICE">NOTICE</a><a class="download-link" href="/oss/THIRD_PARTY_NOTICES.md">Third-party notices</a><a class="download-link" href="/oss/DEPENDENCIES.md">Dependencies audit</a><a class="download-link" href="/oss/TRADEMARKS.md">Trademark policy</a><a class="download-link" href="/oss/Brand/PROVENANCE.md">Brand provenance</a><a class="download-link" href="/oss/SECURITY.md">Security reporting policy</a></div></section>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div><strong>BlurFollow</strong><p class="footer-note">ぼかしが、ウインドウについてくる。macOS向けの視覚的な位置合わせ・共有前確認ツール。</p><p>© 2026 The BlurFollow Authors</p></div>
-      <nav class="footer-links" aria-label="フッターナビゲーション"><a href="#features">機能</a><a href="#guide">使い方</a><a href="#privacy">プライバシー</a><a href="#support">サポート</a><a href="#open-source">OSS</a><a href="/en/" lang="en">English</a></nav>
-    </div>
-  </footer>
+<details><summary>保存したマスクを消すには。</summary><div class="faq-answer"><p>Masksで個別に削除するか、「Delete All Masks」を使います。すべての保存設定と書き出したコピーの削除方法は<a href="#privacy">保持、削除、利用者の選択</a>にまとめています。</p></div></details>
+</div>
+<div class="contact-card content-block prose-wide" id="contact"><h3>購入とお問い合わせ</h3><p>無料枠と買い切りの上限解除を提供します。価格と購入条件はApp Storeの表示をご確認ください。</p><p><a href="https://support.apple.com/billing">Appleの請求・購入サポート</a> · <a href="https://reportaproblem.apple.com/">返金を申請</a></p><p>まずは上の使い方とFAQをご確認ください。解決しない製品の不具合・プライバシーのお問い合わせ：<a href="mailto:support@hinoshiba.com">support@hinoshiba.com</a></p></div>
+</div>
+</section>
+<section class="section section-tint" id="open-source">
+<div class="container">
+<div class="section-heading"><p class="eyebrow">Open source</p><h2>コードを開き、境界も明記する。</h2><p class="section-intro">BlurFollowのコードと通常文書にはApache License 2.0を採用しています。ブランド資産と商標は別の条件です。</p><p><a href="https://github.com/hinoshiba/BlurFollow">GitHub</a></p></div>
+<article class="prose prose-wide">
+<section id="license"><h3>Apache License 2.0</h3><p>Brand Assetsと逐語の第三者法的文面を除き、BlurFollowのソースコードと通常文書はApache License, Version 2.0で提供します。このライセンスは、条件を守る限り、利用、変更、再配布、商用利用を認めます。再配布ではライセンスとNOTICEを保持し、変更したファイルを示し、必要な帰属を維持してください。特許条項とtermination条項も適用されます。</p><p>Apache-2.0の商用利用許可は、BlurFollowの名称、ロゴ、アイコンを商品ブランドとして使う許可ではありません。また、特定用途への適合や不具合の不存在を保証するものではありません。正確な条件はライセンス原文を優先してください。</p></section>
+<section id="dependencies"><h3>現在の配布依存関係</h3><p>監査対象の0.2.0アプリには、bundleされた第三者ランタイムライブラリ、SDK、package、実行ファイル、model、font、分析SDK、広告SDK、updaterはありません。AppKit、SwiftUI、ScreenCaptureKit、Vision、Core Image、StoreKitなど、利用者のmacOSが提供するframeworkへリンクします。AppleのframeworkとSwift runtimeはBlurFollowのApache-2.0へ再ライセンスされません。</p><p>将来のreleaseでは、package、埋め込みframework、resource、font、build tool、CI actionを再監査し、実際に配布するものに応じて通知を更新します。</p></section>
+<section id="brand"><h3>名称、ロゴ、アイコン</h3><p>BlurFollowの名称、ロゴ、アプリアイコンと、それらに紛らわしい識別表示は商標・ブランドポリシーの対象です。アイコン画像とその派生renditionはApache-2.0の対象外で、各権利者が権利を留保します。forkや再配布では、利用許可がない限り、自分の名称、bundle ID、アイコン、署名、サポート、プライバシー表示へ置き換えてください。</p><p>名称や図案の利用可能性は国・地域、商品・役務、類似性により変わります。ライセンス文書は商標clearanceや法的助言ではありません。</p></section>
+<section id="documents"><h3>ライセンスと監査文書</h3><p>配布時点の原文をそのまま確認できるテキストとして掲載します。</p><div class="download-list"><a class="download-link" href="/oss/LICENSE">Apache-2.0 LICENSE</a><a class="download-link" href="/oss/NOTICE">NOTICE</a><a class="download-link" href="/oss/THIRD_PARTY_NOTICES.md">Third-party notices</a><a class="download-link" href="/oss/DEPENDENCIES.md">Dependencies audit</a><a class="download-link" href="/oss/TRADEMARKS.md">Trademark policy</a><a class="download-link" href="/oss/Brand/PROVENANCE.md">Brand provenance</a><a class="download-link" href="/oss/SECURITY.md">Security reporting policy</a></div></section>
+</article>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container footer-grid">
+<div><strong>BlurFollow</strong><p class="footer-note">ぼかしが、ウインドウについてくる。macOS向けの視覚的な位置合わせ・共有前確認ツール。</p><p>© 2026 The BlurFollow Authors</p></div>
+<nav aria-label="フッターナビゲーション" class="footer-links"><a href="#features">機能</a><a href="#guide">使い方</a><a href="#privacy">プライバシー</a><a href="#support">サポート</a><a href="#open-source">OSS</a><button type="button" class="language-link" data-language-switch="en" lang="en">English</button><a href="https://www.hinoshiba.com/products/">その他の作品</a></nav>
+</div>
+</footer>
+</div>
+<div data-page-language="en" lang="en" hidden data-page-title="BlurFollow — Window masks and Text Follow (Beta) for Mac">
+<a class="skip-link" href="#en-main">Skip to content</a>
+<header class="site-header">
+<div class="container nav-row">
+<a aria-label="BlurFollow page top" class="brand" href="#en-top">
+<img alt="" height="38" src="/assets/blurfollow-icon.png" width="38"/>
+<span>BlurFollow</span>
+</a>
+<nav aria-label="Main navigation" class="site-nav">
+<a href="#en-features">Features</a>
+<a href="#en-examples">Examples</a>
+<a href="#en-guide">Guide</a>
+<a href="#en-support">Support</a>
+<a href="#en-privacy">Privacy</a>
+<a href="#en-open-source">Open source</a>
+<button class="language-link" data-language-switch="ja" lang="ja" type="button">日本語</button>
+<a href="#en-contact">Purchases</a></nav>
+</div>
+</header>
+<main id="en-main">
+<section class="hero" id="en-top">
+<div class="container hero-grid">
+<div>
+<p class="eyebrow">Window-following blur for Mac</p>
+<h1>Blur that follows your window.</h1>
+<p class="lede">Pin a mask to a display, follow a selected window, or use Text Follow (Beta) with on-device OCR to mosaic every recognized block matching your text rule. Inspect the actual output before you share.</p>
+<div class="hero-actions">
+<a class="button" href="https://apps.apple.com/us/app/blurfollow/id6801985073">View on the Mac App Store</a>
+<a class="button secondary" href="#en-examples">See the screens</a>
+</div>
+<p class="compat">macOS 14.0 or later · Free: 10 Display / 5 Window / 2 Text Follow rules · One-time unlimited unlock · Apache-2.0</p>
+</div>
+<div aria-label="A proportional mask displayed in the same relative location after a window moves" class="product-visual" role="img">
+<div aria-hidden="true" class="mock-window back">
+<div class="mock-bar"></div>
+<div class="mock-lines">
+<div class="mock-line"></div>
+<div class="mock-line short"></div>
+<div class="mock-line"></div>
+</div>
+<div class="mask-block"></div>
+</div>
+<div aria-hidden="true" class="mock-window front">
+<div class="mock-bar"></div>
+<div class="mock-lines">
+<div class="mock-line"></div>
+<div class="mock-line short"></div>
+<div class="mock-line"></div>
+</div>
+<div class="mask-block"></div>
+</div>
+<div aria-hidden="true" class="motion-path">↘</div>
+</div>
+</div>
+</section>
+<section class="section" id="en-features">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Three masking modes</p>
+<h2>Pin a place. Follow a window. Follow text.</h2>
+<p class="section-intro">Display and Window Pins use saved geometry. Text Follow is a separate feature that matches recognized text on device.</p>
+</div>
+<div class="feature-grid">
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">D</div>
+<h3>Display Pin</h3>
+<p>For notification areas and fixed layouts. Place a mask at a proportional position on one display.</p>
+</article>
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">W</div>
+<h3>Window Pin</h3>
+<p>For moving windows. Update a mask's position and size from proportional window coordinates.</p>
+</article>
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">T</div>
+<h3>Text Follow (Beta)</h3>
+<p>Use Exact, Prefix, Contains, or Regular Expression with on-device Apple Vision OCR. Mosaic every recognized block that matches.</p>
+</article>
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">P</div>
+<h3>Share Preview</h3>
+<p>Composite matching Window Pins with completed matches from connected Text Follow rules for the selected source, all on your Mac.</p>
+</article>
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">G</div>
+<h3>Share Guide</h3>
+<p>See the different workflows for full-display, single-window, and browser-tab sharing.</p>
+</article>
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">3</div>
+<h3>Three visual styles</h3>
+<p>Choose Frost, Mosaic, or Redact. Desktop Mosaic pixelates the actual backdrop and becomes opaque if its filter is unavailable.</p>
+</article>
+<article class="feature-card">
+<div aria-hidden="true" class="feature-icon">L</div>
+<h3>Last-position cover</h3>
+<p>Optionally cover the latest position known to the app after tracking stops. It may not be current.</p>
+</article>
+</div>
+</div>
+</section>
+<section aria-labelledby="en-examples-title" class="section section-tint" id="en-examples">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Inside the app</p>
+<h2 id="en-examples-title">See the complete path before you share.</h2>
+<p class="section-intro">These are shipping BlurFollow screens, shown in the same order as the placement and verification workflow.</p>
+</div>
+<div class="screenshot-grid">
+<figure class="screenshot-card featured">
+<img alt="BlurFollow onboarding screen illustrating a proportional mask following a window as it moves and resizes" fetchpriority="high" height="900" src="/assets/screenshots/en-US/01-window-following.png" width="1440"/>
+<figcaption><strong>Blur that follows your window.</strong>A proportional mask updates as the selected window moves and resizes.</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="BlurFollow screen presenting Display Pin, Window Pin, and Text Follow as separate features" height="900" loading="lazy" src="/assets/screenshots/en-US/02-display-window-modes.png" width="1440"/>
+<figcaption><strong>Display, window, or matching text.</strong>Compare Display Pin, Window Pin, and Text Follow before choosing a masking method.</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="BlurFollow Share Guide explaining full-display, single-window, and browser-tab workflows" height="900" loading="lazy" src="/assets/screenshots/en-US/04-share-guide.png" width="1440"/>
+<figcaption><strong>Choose for your sharing method.</strong>Share Guide explains when to inspect desktop masks and when to use Share Preview.</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="BlurFollow pre-share review screen listing full-display, single-window, and browser-tab checks" height="900" loading="lazy" src="/assets/screenshots/en-US/03-share-preview-check.png" width="1440"/>
+<figcaption><strong>Check every mask before sharing.</strong>Inspect Window Pins and completed Text Follow results in Share Preview, then verify them again in the meeting application's preview.</figcaption>
+</figure>
+<figure class="screenshot-card">
+<img alt="BlurFollow screen showing independent free limits of 10 Display Pins, 5 Window Pins, and 2 Text Follow rules plus a one-time unlock" height="900" loading="lazy" src="/assets/screenshots/en-US/05-local-controls.png" width="1440"/>
+<figcaption><strong>Independent 10 · 5 · 2 free limits.</strong>One Text Follow rule still counts once when it matches many blocks. One purchase removes all three limits.</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="en-guide-title" class="section" id="en-guide">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Guide</p>
+<h2 id="en-guide-title">Place the mask, inspect the result, then share.</h2>
+<p class="section-intro">Choose the capture method first. Share Preview independently composites Window Pins and completed Text Follow results for its selected source.</p>
+</div>
+<div class="article-wrap">
+<nav aria-label="Guide topics" class="article-nav">
+<a href="#en-start">Basic use</a>
+<a href="#en-sharing">Sharing methods</a>
+</nav>
+<article class="prose">
+<section id="en-start">
+<h3>Basic use</h3>
+<h4>Pin to a display</h4>
+<ol>
+<li>Choose Display Pin from Home.</li>
+<li>Drag over the area on the target display.</li>
+<li>In Masks, choose Frost, Mosaic, or Redact. Adjust Strength for Frost or Mosaic, then inspect the position and appearance on the actual display. Redact remains opaque.</li>
+</ol>
+<h4>Follow a window</h4>
+<ol>
+<li>Choose Window Pin from Home.</li>
+<li>Select the source in Apple's system picker.</li>
+<li>Drag over an area inside the window. Move and resize the source to inspect the resulting mask position.</li>
+<li>If the source was recreated, its title changed, or its state becomes Select again, use Reconnect… in Masks. Inspect the layout again after reconnecting.</li>
+</ol>
+<h4>Use Text Follow (Beta)</h4>
+<ol>
+<li>Choose Text Follow from Home. This is separate from Window Pin.</li>
+<li>Enter a rule name, choose Exact, Prefix, Contains, or Regular Expression, enter the pattern, then select the source window in Apple's picker. Contains is case-sensitive.</li>
+<li>Inspect every recognized block receiving a Mosaic. Contains masks the entire Vision-recognized block, not only the matching substring. One saved pattern consumes one free-plan rule slot even when it matches several blocks.</li>
+<li>Recheck after navigation, scrolling, resizing, font or contrast changes, and rapid updates. OCR can miss, misread, split, merge, lag, or produce an unintended match.</li>
+</ol>
+<h4>Adjust an existing mask</h4>
+<ol>
+<li>Open the mask in Masks. Strength changes the appearance of Frost and Mosaic; Granularity changes Mosaic tile size. Redact remains opaque.</li>
+<li>To change its position, choose Move…, then drag the mask itself on screen. Release the mouse or trackpad to save the position; press Esc before saving to cancel. Move… is available when masks are shown, that mask is on, and its position is known.</li>
+<li>Open the BlurFollow menu-bar icon to identify each Display Pin or Window Pin by name and state, then switch that mask on or off. Show Masks is the master switch for desktop overlays; when it is off, no desktop mask is displayed even if its individual setting is on. Share Preview uses individually enabled Window Pins plus connected, enabled Text Follow rules related to the selected source, so inspect it separately.</li>
+</ol>
+<p>A Window Pin updates its displayed position as its source moves or resizes. Text Follow replaces its detected Mosaic panels with the current OCR generation as the source changes. Neither update guarantees zero latency, complete recognition, exact alignment, correct mask placement, or correct shared content. Strict safety is on by default and covers the current or last trusted window while recognition or metadata is uncertain and after OCR completes with zero matches. Turning it off retains prior desktop masks during uncertainty and permits a coherent zero-match preview, avoiding full-window flashes but reducing resistance to OCR misses and moved or newly appearing text. Share Preview still clears and fully covers the previous image for every unconnected, reconnecting, connecting, scanning, failed, unavailable, or inconsistent relevant rule regardless of that preference.</p>
+</section>
+<section id="en-sharing">
+<h3>Choose a sharing method</h3>
+<h4>Full display</h4>
+<p>Inspect all desktop masks, including every current Text Follow match, choose the full display in the meeting app, and inspect that app's own preview. Watch for notifications, other Spaces, full-screen changes, and OCR updates after navigation.</p>
+<h4>Single window</h4>
+<p>An overlay drawn by another app is normally excluded from single-window capture. Share Preview independently composites matching Window Pins and every completed match from connected, enabled Text Follow rules for the selected source. OCR and preview both exclude separate child windows. Inspect Share Preview, then select BlurFollow Share Preview instead of the original window.</p>
+<h4>Browser tab</h4>
+<p>Tab sharing also excludes desktop overlays. A Share Preview created from the browser window can independently composite its Window Pins and completed Text Follow matches, but both OCR and preview exclude separate child windows. Inspect whether browser chrome or content outside the intended tab is visible and verify the receiving preview.</p>
+<div class="notice">
+<h4>Before pressing Share</h4>
+<p>Following, Placed, Recognizing, and Preview active describe technical state observed by BlurFollow. They do not certify the content or OCR completeness. Recheck BlurFollow and the meeting app after navigation, scrolling, zooming, moving, reconnecting, or editing a mask or rule.</p>
+</div>
+</section>
+</article>
+</div>
+</div>
+</section>
+<section aria-labelledby="en-support-title" class="section" id="en-support">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Support</p>
+<h2 id="en-support-title">Permissions, limitations, and troubleshooting.</h2>
+<p class="section-intro">BlurFollow reports technical state, but you remain responsible for checking the actual image shown to the receiver.</p>
+</div>
+<div class="article-wrap">
+<nav aria-label="Support topics" class="article-nav">
+<a href="#en-permissions">Permissions</a>
+<a href="#en-limitations">Limitations</a>
+<a href="#en-faq">FAQ</a>
+<a href="#en-contact">Contact</a>
+</nav>
+<article class="prose">
+<section id="en-permissions">
+<h3>Screen Recording permission</h3>
+<ul>
+<li><strong>Display Pin:</strong> does not require Screen Recording permission.</li>
+<li><strong>macOS 15.2 or later:</strong> Window Pin, Text Follow, and Share Preview use authorization for the window selected in Apple's system picker.</li>
+<li><strong>macOS 14 through 15.1:</strong> the compatibility path requires broader Screen Recording permission to identify the selected window without guessing. After granting access in System Settings, quit and reopen BlurFollow.</li>
+</ul>
+<p>If access is denied, Window Pin, Text Follow, and Share Preview stop instead of guessing a window. Check System Settings → Privacy &amp; Security → Screen Recording. On macOS 14 through 15.1, revoke the broader permission there when it is no longer needed.</p>
+<p>BlurFollow does not request Accessibility, Full Disk Access, camera, or microphone permission.</p>
+</section>
+<section id="en-limitations">
+<h3>Limits of a visual aid</h3>
+<p>BlurFollow assists with mask placement and pre-share inspection; it is not a security control. Text Follow searches OCR output for a user-supplied pattern, but it does not determine what is confidential or guarantee that every intended string was recognized. BlurFollow does not guarantee mask placement, blur or mosaic unreadability, or inclusion in a shared output. Navigation, scrolling, zoom, layout changes, child windows, OCR errors or delay, tracking loss, and capture method can change what appears. Remove secrets from the source where possible and visually inspect the actual receiving output every time.</p>
+</section>
+<section id="en-faq">
+<h3>Frequently asked questions</h3>
+<div class="faq-list">
+<details>
+<summary>The desktop mask is missing when I share a Chrome window or tab.</summary>
+<div class="faq-answer"><p>Single-window and tab capture normally excludes another app's desktop overlay. Composite the browser window, matching Window Pins, and completed matches from connected Text Follow rules in Share Preview, then select BlurFollow Share Preview as the meeting app's sharing target.</p></div>
+</details>
+<details>
+<summary>A Window Pin no longer follows its window.</summary>
+<div class="faq-answer"><p>The window may have closed, become hidden, been recreated, or become ambiguous among similar candidates. Check Masks and use Reconnect… to choose it again with Apple's picker. Proportional coordinates remain, but visually inspect whether the content layout changed.</p></div>
+</details>
+<details>
+<summary>Text Follow misses text or covers an unexpected block.</summary>
+<div class="faq-answer"><p>Vision OCR can miss, misread, split, merge, or lag because of font, size, contrast, language, motion, scrolling, or layout. Review the Exact, Prefix, Contains, or Regular Expression pattern, then inspect every transition. Contains is case-sensitive and masks the entire recognized block rather than only the substring. One saved pattern uses one free-plan rule slot regardless of how many blocks it currently matches.</p></div>
+</details>
+<details>
+<summary>Text Follow is missing from single-window or tab output.</summary>
+<div class="faq-answer"><p>Desktop Text Follow panels are normally excluded from direct single-window and tab capture. Share Preview does not capture those panels; it independently composites the completed geometry from connected, enabled rules related to the same selected source together with Window Pins. OCR and preview use the same parent-window boundary and exclude separate child windows. Verify the actual receiving output for either a full display or BlurFollow Share Preview.</p></div>
+</details>
+<details>
+<summary>What is Last-position cover?</summary>
+<div class="faq-answer"><p>When window position becomes unavailable, it can cover the latest position BlurFollow had available. That may not be the source's current position and does not replace reconnecting or checking the shared output.</p></div>
+</details>
+<details>
+<summary>Share Preview says Preview paused or shows a covered frame.</summary>
+<div class="faq-answer"><p>BlurFollow immediately clears the old frame and shows a full opaque cover if the source or frame cannot be validated, restored settings need acknowledgement, capture stopped, or any relevant enabled Text Follow rule is unconnected, reconnecting, connecting, scanning, failed, unavailable, or inconsistent. This fail-closed behavior applies regardless of the strict-safety preference. Strict safety is on by default and also covers a completed zero-match result. Turning it off lets a coherent zero-match result render and avoids that full-frame flash, but lowers resistance to OCR misses. Follow the reason shown to reconnect the rule or Window Pin, review settings, or select the source again. Zero matches are not proof that OCR missed nothing.</p></div>
+</details>
+<details>
+<summary>Do blur and mosaic make information unreadable?</summary>
+<div class="faq-answer"><p>See <a href="#en-limitations">Limits of a visual aid</a> for why opaque Redact and receiver-side inspection may be more appropriate.</p></div>
+</details>
+<details>
+<summary>Does BlurFollow record or upload screen content or audio?</summary>
+<div class="faq-answer"><p>See <a href="#privacy">the privacy summary</a> and <a href="#en-privacy">Screen frames</a> for the exact behavior of version 0.2.0, StoreKit's separate role, and the separate role of a meeting app.</p></div>
+</details>
+<details>
+<summary>How do I delete stored masks?</summary>
+<div class="faq-answer"><p>See <a href="#en-privacy">Retention, deletion, and choices</a> for individual masks, all app settings, exported settings, and backups.</p></div>
+</details>
+</div>
+</section>
+<section id="en-contact"><h3>Purchases and contact</h3><p>The app offers free allowances and a one-time unlock. See the App Store for current pricing and purchase terms.</p><p><a href="https://support.apple.com/billing">Apple billing and purchase support</a> · <a href="https://reportaproblem.apple.com/">Request a refund</a></p><p>Start with the guide and FAQ above. For unresolved product issues or privacy inquiries: <a href="mailto:support@hinoshiba.com">support@hinoshiba.com</a></p></section>
+</article>
+</div>
+</div>
+</section>
+<section aria-label="Privacy policy" class="section section-tint" id="en-privacy"><div class="container"><div class="section-heading"><p class="eyebrow">Privacy policy</p><h2>Privacy</h2><p>Updated September 6, 2026</p></div><div class="policy-copy"><article><h3>Screen and saved data</h3><p>Text Follow and Share Preview process selected-window frames on the Mac. Frames and recognized text are not saved to files or sent to the developer. Audio is not captured. Masks, patterns, window titles and other identifying metadata, settings, recovery copies, and rating-prompt preferences are stored on the device.</p></article><article><h3>Deletion and permissions</h3><p>Use Masks to delete individual or all masks. To remove all saved settings and recovery copies, quit the app and delete its BlurFollow configuration folder inside the app container. Separately remove any exported settings and backups. Manage Screen Recording permission in macOS System Settings.</p></article><article><h3>Apple, sharing, and contact</h3><p>Purchases, restoration, and rating prompts use Apple services. Sharing Share Preview through a meeting or recording app follows that service’s privacy policy. Product and privacy inquiries: <a href="mailto:support@hinoshiba.com">support@hinoshiba.com</a>. Email addresses, messages, and attachments are received through our email provider and retained only as needed to respond or meet legal obligations. You may request deletion at the same address.</p><p>This website is hosted on GitHub Pages; access information follows <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub’s Privacy Statement</a>.</p></article></div></div></section>
+<section aria-labelledby="en-open-source-title" class="section" id="en-open-source">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow">Open source</p>
+<h2 id="en-open-source-title">Open code. Explicit boundaries.</h2>
+<p class="section-intro">BlurFollow code and ordinary documentation use the Apache License 2.0. Brand Assets and trademarks have separate terms.</p>
+<p><a href="https://github.com/hinoshiba/BlurFollow">GitHub</a></p></div>
+<div class="article-wrap">
+<nav aria-label="Open-source topics" class="article-nav">
+<a href="#en-license">License</a>
+<a href="#en-dependencies">Dependencies</a>
+<a href="#en-brand">Brand</a>
+<a href="#en-documents">Documents</a>
+</nav>
+<article class="prose">
+<section id="en-license">
+<h3>Apache License 2.0</h3>
+<p>Except for Brand Assets and verbatim third-party legal texts, BlurFollow source code and ordinary documentation are provided under the Apache License, Version 2.0. Subject to its conditions, the license permits use, modification, redistribution, and commercial use. Redistributors must retain the license and NOTICE, identify modified files, and preserve required attribution. Patent and termination provisions also apply.</p>
+<p>Apache-2.0 commercial-use permission does not grant permission to use the BlurFollow name, logo, or icon as a product brand. It also provides no warranty of fitness or absence of defects. The full license text controls.</p>
+</section>
+<section id="en-dependencies">
+<h3>Current distribution dependencies</h3>
+<p>The audited 0.2.0 app bundles no third-party runtime library, SDK, package, executable, model, font, analytics SDK, advertising SDK, or updater. It links to frameworks supplied by macOS, including AppKit, SwiftUI, ScreenCaptureKit, Vision, Core Image, and StoreKit. Apple frameworks and the Swift runtime are not relicensed under BlurFollow's Apache-2.0 terms.</p>
+<p>Each future release must re-audit packages, embedded frameworks, resources, fonts, build tools, and CI actions, then update notices for what is actually distributed.</p>
+</section>
+<section id="en-brand">
+<h3>Name, logo, and icon</h3>
+<p>The BlurFollow name, logo, app icon, and confusingly similar source identifiers are governed by the trademark and brand policy. Icon artwork and derived renditions are excluded from Apache-2.0; their respective rights holders reserve all rights. Unless separately authorized, a fork or redistribution should use its own name, bundle ID, icon, signing identity, support contact, and privacy statement.</p>
+<p>Availability of a name or design varies by territory, goods and services, and similarity. These documents are not trademark clearance or legal advice.</p>
+</section>
+<section id="en-documents">
+<h3>License and audit documents</h3>
+<p>These downloads reproduce the texts included with the distribution.</p>
+<div class="download-list">
+<a class="download-link" href="/oss/LICENSE">Apache-2.0 LICENSE</a>
+<a class="download-link" href="/oss/NOTICE">NOTICE</a>
+<a class="download-link" href="/oss/THIRD_PARTY_NOTICES.md">Third-party notices</a>
+<a class="download-link" href="/oss/DEPENDENCIES.md">Dependencies audit</a>
+<a class="download-link" href="/oss/TRADEMARKS.md">Trademark policy</a>
+<a class="download-link" href="/oss/Brand/PROVENANCE.md">Brand provenance</a>
+<a class="download-link" href="/oss/SECURITY.md">Security reporting policy</a>
+</div>
+</section>
+</article>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container footer-grid">
+<div>
+<strong>BlurFollow</strong>
+<p class="footer-note">Blur that follows your window. A macOS visual placement and pre-share inspection utility.</p>
+<p>© 2026 The BlurFollow Authors</p>
+</div>
+<nav aria-label="Footer navigation" class="footer-links">
+<a href="#en-guide">Guide</a>
+<a href="#en-support">Support</a>
+<a href="#en-privacy">Privacy</a>
+<a href="#en-open-source">Open source</a>
+<button class="language-link" data-language-switch="ja" lang="ja" type="button">日本語</button>
+<a href="https://www.hinoshiba.com/products/">More products</a></nav>
+</div>
+</footer>
+</div>
+<script src="/assets/language.js" defer></script>
 </body>
 </html>

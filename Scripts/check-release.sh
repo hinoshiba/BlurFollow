@@ -10,13 +10,6 @@ if [[ $# -ne 0 ]]; then
 fi
 
 /bin/zsh -n "$ROOT_DIR/build.sh" "$ROOT_DIR"/Scripts/*.sh
-/bin/sh -n "$ROOT_DIR"/ci_scripts/*.sh
-for cloud_script in "$ROOT_DIR"/ci_scripts/*.sh; do
-    if [[ ! -x "$cloud_script" ]]; then
-        print -u2 "Xcode Cloud script is not executable: $cloud_script"
-        exit 1
-    fi
-done
 plutil -lint "$ROOT_DIR/BlurFollow/Resources/Info.plist" \
     "$ROOT_DIR/BlurFollow/Resources/BlurFollow.entitlements" \
     "$ROOT_DIR/BlurFollow/Resources/PrivacyInfo.xcprivacy"

@@ -185,7 +185,7 @@ Xcode projectを再生成する場合:
     xcodegen generate
     open BlurFollow.xcodeproj
 
-build.shはad-hoc署名したローカル開発用app bundleをdistへ作ります。公開用buildは、review済みのsemantic-version tagからXcode Cloudが作成し、App Store Connectへ送ります。
+build.shはad-hoc署名したローカル開発用app bundleをdistへ作ります。公開用buildは、review済みのコミットをローカルXcodeでArchiveし、OrganizerからApp Store Connectへ送ります。release runbookに従って旧外部ワークフローを停止した後は、タグのpushでリリースは実行されません。
 
 ### 文書
 

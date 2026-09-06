@@ -6,7 +6,7 @@ cd "$ROOT_DIR"
 
 if [[ $# -ne 0 ]]; then
     print -u2 "Usage: ./build.sh"
-    print -u2 "Official releases are built from v<version> tags by Xcode Cloud."
+    print -u2 "Official releases are archived and uploaded with local Xcode; see Docs/RELEASE.md."
     exit 64
 fi
 

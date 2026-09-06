@@ -908,3 +908,20 @@ main [id] {
     scroll-behavior: auto;
   }
 }
+
+/* Single-page language panels and accessible compact navigation. */
+[hidden] { display: none !important; }
+button.language-link { color: inherit; font: inherit; cursor: pointer; white-space: nowrap; }
+.policy-copy { max-width: 900px; }
+.policy-copy article + article { margin-top: 24px; }
+.policy-copy h3 { font-size: 1.2rem; margin-bottom: 10px; }
+a, p { overflow-wrap: anywhere; }
+button:focus-visible { outline: 3px solid #e97c44; outline-offset: 4px; }
+.support-card aside a { color: inherit; }
+@media (max-width: 1040px) {
+ .nav-wrap, .nav-row { flex-wrap: wrap; gap: 10px; padding-block: 12px; }
+ .main-nav, .site-nav { flex-wrap: wrap; justify-content: flex-start; width: 100%; overflow: visible; gap: 10px 14px; }
+ .main-nav a:nth-child(n) { display: block; }
+ html { scroll-padding-top: 180px; }
+ main [id] { scroll-margin-top: 180px; }
+}
