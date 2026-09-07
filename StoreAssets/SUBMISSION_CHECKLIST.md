@@ -69,9 +69,9 @@ from a source-tree assumption.
   uses `Text Follow (Beta)` in English and `Text Follow（ベータ）` in Japanese.
   The Beta label is attached only to that feature, never to BlurFollow as a
   whole or to the submitted distribution.
-- [ ] Description and screenshots clearly disclose the three independent free
+- [ ] The description clearly discloses the three independent free
   creation allowances: 10 Display Pins, 5 Window Pins, and 2 Text Follow rules.
-  They also state that one rule remains one plan item when it matches several
+  It also states that one rule remains one plan item when it matches several
   simultaneous text blocks, and that the one-time In-App Purchase removes all
   three limits.
 - [ ] The localized What's New fields describe Text Follow, the independent free
@@ -191,12 +191,18 @@ from a source-tree assumption.
 
 - [ ] Capture the exact shipping build with fabricated content only.
 - [ ] Discard the pre-Text-Follow/legacy-allowance screenshot set. Recapture all
-  five scenes from the current shipping UI after the new feature and independent
-  allowance copy are final; changing captions alone is not acceptable evidence.
+  five scenes from the current shipping UI with neutral feature and local-control
+  captions; changing captions alone is not acceptable evidence.
 - [ ] Add all ten files specified by `screenshot_manifest.json` at one accepted
   16:10 Mac size, then run the validator with `--require-screenshots`.
 - [ ] Inspect every image at actual storefront size for legibility, clipping,
   personal menu-bar data, notifications, and stale UI terminology.
+- [ ] Follow App Review Guideline 2.3.7: app names, subtitles, icons, and
+  storefront screenshots contain no pricing or free-service claims. Check both
+  captions and visible captured UI in every locale for free allowances,
+  discounts, and one-time purchase or unlock promotions, even without a numeric
+  price. Select capture regions without those panels; the metadata validator
+  does not inspect screenshot text.
 - [ ] Ensure Japanese and English images have equivalent scenes and accurate
   localized headlines.
 - [ ] App Review Notes reproduce from a clean macOS account using only the
