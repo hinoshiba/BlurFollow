@@ -9,7 +9,8 @@
     const url = new URL(location.href);
     if (language === 'en') url.searchParams.set('lang', 'en');
     else url.searchParams.delete('lang');
-    url.hash = baseHash && language === 'en' ? '#en-' + baseHash.slice(1) : baseHash;
+    const localizedHash = baseHash && language === 'en' ? '#en-' + baseHash.slice(1) : baseHash;
+    url.hash = document.getElementById(localizedHash.slice(1)) ? localizedHash : baseHash;
     history.replaceState(null, '', url);
     if (moveFocus) panel.querySelector('[data-language-switch]').focus({ preventScroll: true });
     if (url.hash) requestAnimationFrame(() => document.getElementById(url.hash.slice(1))?.scrollIntoView());
