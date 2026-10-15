@@ -42,9 +42,19 @@ rule allowances. Treat every existing raw and final image as a layout reference
 only. Recapture all five scenes from the exact shipping build in both locales,
 then regenerate every final image. In particular, shot 2 must show Text Follow as
 separate from Window Pin, any visible Text Follow editor must include Exact,
-Prefix, Contains, and Regular Expression, and shot 5 must show all three
-allowances plus the current safety control. The old two-mode and
-single-combined-allowance images are not valid for submission.
+Prefix, Contains, and Regular Expression. Shot 5 must focus on local data,
+capture permissions, and support controls. If its safety control is visible,
+show the current state accurately. The old two-mode and Settings images are
+not valid for submission.
+
+Follow [App Review Guideline 2.3.7](https://developer.apple.com/app-store/review/guidelines/#accurate-metadata):
+exclude pricing and free-service claims from both screenshot captions and
+visible captured UI. This includes free allowances, discounts, and one-time
+purchase or unlock promotions, even without a numeric price. Select a capture
+region that omits those panels while preserving the genuine UI. Inspect every
+final image in every submitted locale; changing a headline does not remove
+pricing text inside the app capture. Keep commerce disclosures in the app
+description and purchase review notes.
 
 Raw-to-final mapping:
 
@@ -61,3 +71,6 @@ Validate the complete set before upload:
 ```sh
 python3 StoreAssets/Scripts/validate_metadata.py --require-screenshots
 ```
+
+The validator checks image files and dimensions; it does not read screenshot
+text or establish that the captured UI is current. Visual review is required.

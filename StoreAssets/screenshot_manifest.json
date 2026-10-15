@@ -78,15 +78,14 @@
     },
     {
       "filename": "05-local-controls.png",
-      "ja_headline": "10・5・2の独立枠。追加は買い切り。",
-      "en_headline": "Independent 10 · 5 · 2 free limits.",
+      "ja_headline": "設定は、Mac内で管理。",
+      "en_headline": "Manage settings on your Mac.",
       "raw_filename": "04-settings.jpg",
-      "scene": "The current shipping Settings or plan screen showing the independent free allowances (10 Display Pins, 5 Window Pins, and 2 Text Follow (Beta) rules), the one-time unlock entry, support links, permission state, local export/deletion, version, and license summary.",
+      "scene": "The current shipping Settings screen showing local data controls, capture permissions, and support links, with version and license information where visible. Select a capture region without pricing or commerce promotions.",
       "assertions": [
-        "Recapture after the independent allowances and Text Follow (Beta) UI ship; the prior single-combined-allowance Settings capture is obsolete.",
-        "Show all three independent free allowances and the one-time unlock without a fixed price.",
-        "State that one saved Text Follow (Beta) rule counts once even when it matches multiple blocks.",
-        "Show the current strict-safety control and do not imply that turning it off preserves the same leak resistance.",
+        "Recapture the current shipping Settings UI; the prior Settings capture is a reference only and contains obsolete pricing promotions.",
+        "Keep free allowances, discounts, prices, and one-time purchase or unlock claims out of both captions and visible captured UI.",
+        "If the strict-safety control is visible, show its current state and do not imply that turning it off preserves the same leak resistance.",
         "Keep the support, local-data, permission, and version sections legible.",
         "Do not imply that local processing controls what a meeting app does after sharing."
       ]
@@ -102,7 +101,8 @@
     "Use each locale's headline; do not place both languages in one image.",
     "Use legible text, sufficient contrast, and safe margins at every accepted size.",
     "Do not use absolute claims such as guaranteed, leak-proof, secure, or always hidden.",
-    "Do not include competitor names, ratings, prices, unavailable features, or an App Store badge."
+    "Do not include competitor names, ratings, unavailable features, or an App Store badge.",
+    "Follow App Review Guideline 2.3.7: no pricing or free-service claims, including free allowances, discounts, or one-time purchase or unlock promotions, in screenshot captions or visible captured UI. Check every image in every submitted locale."
   ],
   "raw_capture_directories": {
     "ja-JP": "screenshots/raw/ja-JP/",
